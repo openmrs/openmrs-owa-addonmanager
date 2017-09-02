@@ -1,0 +1,19 @@
+{
+  "version": "0.1.0",
+  "name": "openmrs-addOnManager",
+  "description": "This will help in uploading the openmrs open web apps and omod files",
+  "launch_path": "index.html",
+  "icons": {
+    "48": "/img/omrs-button.png"
+  },
+  "developer": {
+    "name": "wanjikum",
+    "url": "https://github.com/wanjikum/openmrs-owa-addonmanager"
+  },
+  "default_locale": "en",
+    "activities": {
+      "openmrs": {
+        "href": "*"
+      }
+    }
+}

@@ -1,0 +1,13 @@
+node_modules
+bower_components
+dist
+config.json
+*.zip
+package-lock.json
+webpack.config.js
+openmrs-addonmanager.zip
+~/
+coverage
+libs
+.DS_STORE
+package-lock.json
