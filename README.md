@@ -1,15 +1,51 @@
 <img src="https://cloud.githubusercontent.com/assets/668093/12567089/0ac42774-c372-11e5-97eb-00baf0fccc37.jpg" alt="OpenMRS"/>
 
-# openmrs-addOnManager
+# OpenMRS Add-Ons Manager
 
 This repository contains the openmrs-addOnManager OpenMRS Open Web App.
 
-> Add a description of what your app does here.
+> The OpenMRS Add-Ons Manager is a tool used for uploading, listing, and deleting existing OWAs and modules.
 
 For further documentation about OpenMRS Open Web Apps see
 [the wiki page](https://wiki.openmrs.org/display/docs/Open+Web+Apps+Module).
 
 ## Development
+
+### Local Setup Instructions
+
+```
+# Get the project
+git clone https://github.com/openmrs/openmrs-owa-addonmanager.git
+
+# Move into the project directory
+cd into openmrs-owa-addonmanager
+
+# Install the dependencies
+npm install
+
+# Copy the webpack configuration from webpack.config.sample.js to webpack.config.js
+cp webpack.sample.config.js webpack.config.js
+
+# Locate the 'appdata/owa' directory and type the following command to get the path to the 'appdata/owa' directory and copy it to the clipboard.
+pwd | pbcopy
+
+An example of the path is: /Users/name/downloads/referenceapplication-standalone-2.6.0/appdata\owa
+
+Modify the path to look like: /Users/name/downloads/referenceapplication-standalone-2.6.0/appdata\\owa/
+
+Copy the path.
+
+# Open the webpack.config.js file, locate the getConfig function and update the config object with the following
+{
+  "LOCAL_OWA_FOLDER": "PASTE_THE_PATH_YOU_COPIED_HERE",
+  "APP_ENTRY_POINT": "http://localhost:8081/openmrs-standalone/owa/openmrs-addonmanager/index.html"
+}
+
+Note: Start your cohort builder standalone server locally. Make sure you tomcat port is 8081, if not, change the APP_ENTRY_POINT localhost port to be the same as your tomcat port.
+
+# Run the app
+npm run watch
+```
 
 ### Production Build
 
@@ -27,7 +63,7 @@ Build the distributable using [Webpack](https://webpack.github.io/) as follows:
 npm run build:prod
 ````
 
-This will create a file called `openmrs-addonmanager.zip` file in the `dist` directory,
+This will create a file called `openmrs-addonmanager.zip` file in the `root` directory,
 which can be uploaded to the OpenMRS Open Web Apps module.
 
 ### Local Deploy
@@ -38,20 +74,21 @@ To deploy directly to your local Open Web Apps directory, run:
 npm run build:deploy
 ````
 
-This will build and deploy the app to the `/Users/millicent/downloads/referenceapplication-standalone-2.6.0/appdata/owa`
+This will build and deploy the app to the `/Users/name/downloads/referenceapplication-standalone-2.6.0/appdata/owa`
 directory. To change the deploy directory, edit the `LOCAL_OWA_FOLDER` entry in
 `config.json`. If this file does not exists, create one in the root directory
 that looks like:
 
 ```js
 {
-  "LOCAL_OWA_FOLDER": "/Users/millicent/downloads/referenceapplication-standalone-2.6.0/appdata/owa"
+  "LOCAL_OWA_FOLDER": "/home/sims01/openmrs/openmrs-server/owa/",
+  "APP_ENTRY_POINT": "http://localhost:8081/openmrs/owa/openmrs-addonmanager/index.html"
 }
 ```
 
 ### Live Reload
 
-To use [Browersync](https://www.browsersync.io/) to watch your files and reload
+To use [BrowserSync](https://www.browsersync.io/) to watch your files and reload
 the page, inject CSS or synchronize user actions across browser instances, you
 will need the `APP_ENTRY_POINT` entry in your `config.json` file:
 
