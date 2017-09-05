@@ -11,3 +11,5 @@ coverage
 libs
 .DS_STORE
 package-lock.json
+# Vscode autogen folders
+.vscode/
