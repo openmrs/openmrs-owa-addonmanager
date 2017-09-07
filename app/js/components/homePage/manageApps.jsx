@@ -6,24 +6,13 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-import React, { Component } from 'react'
-import HomePage from '../components/homePage/homePage';
-import BreadCrumbComponent from '../components/breadCrumb/breadCrumbComponent';
-import Header from '../components/common/header';
+import React from 'react';
 
-export default class App extends React.Component {
-  constructor(props){
-    super(props);
-  }
-
+export default class ManageApps extends React.Component {
   render() {
     return (
       <div>
-        <Header/>
-        <BreadCrumbComponent />
-        <div id="body-wrapper"> 
-         {this.props.children} 
-        </div>
+        <h2>Welcome to add on Manager App</h2>
       </div>
     )
   }
