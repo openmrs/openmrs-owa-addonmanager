@@ -70,3 +70,125 @@ header .logo img {
     align-self: center;
 }
 
+.nav-header li {
+    color: #eeeeee;
+    font-size: 15px;
+    padding-right: 20px;
+    display: inline;
+    list-style: none;
+}
+
+header>ul,
+a {
+    color: #eeeeee;
+    padding-right: 2px;
+    margin-top: 15px;
+}
+
+.glyphicon {
+    color: #eeeeee;
+    font-size: 12px;
+}
+
+li>a:hover {
+    color: #eeeeee;
+    cursor: pointer;
+    text-decoration: none;
+    border-bottom: 1px solid gold;
+}
+
+li>a:focus {
+    color: gold;
+}
+.table thead {
+    position: -webkit-sticky;
+    position: -moz-sticky;
+    position: -ms-sticky;
+    position: -o-sticky;
+    position: sticky;
+    top: 0;
+    background-color: #FFF;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.dropdown-large {
+    position: static !important;
+}
+
+.dropdown-menu-large {
+    margin-left: 16px;
+    margin-right: 16px;
+    padding: 20px 0px;
+}
+
+.dropdown-menu-large>li>a:hover {
+    background-color: transparent;
+    margin-right: 0px;
+    border-bottom: 0px;
+    color: purple;
+}
+
+.main-home-page h2{
+    font-size: 1.3em;
+    color: #009384;
+    margin-left: 5px;
+}
+
+.home-page-body{
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    height: 150px !important;
+    padding: 0px;
+    margin-left: 25px;
+    text-align: center;
+}
+
+.manage-app-button{
+    position: relative;
+    left: 5px;
+    bottom: 5px;
+    right: 70%;
+    height: 90%;
+    width: 16%;
+}
+
+.manage-settings-button{
+    position: relative;
+    left: 15px;
+    bottom: 5px;
+    right: 70%;
+    height: 90%;
+    width: 16%;
+}
+
+.button{
+    width:100%;
+    height:100%;
+}
+
+.button-icon{
+    color:#363463;
+    font-size: 40px;
+    text-decoration: inherit;
+    display: inline-block; 
+    margin-bottom: 10px;
+    margin-top: -5px;
+}
+
+button h5{
+   color: #363463;
+   font-size: 20px;
+   width: 5em;
+   word-wrap: break-word;
+   text-align: center;
+   margin: 0 auto;
+}
+
+.button:hover {
+    background-color:#dddddd;
+    border: 0px;
+}

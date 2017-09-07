@@ -64,18 +64,6 @@ let getConfig = function () {
 };
 let config = getConfig();
 
-let resolveBrowserSyncTarget = function () {
-  if (targetPort != null && targetPort != 'null') {
-    return config.APP_ENTRY_POINT.substr(0, 'http://localhost:'.length)
- + targetPort
- + config.APP_ENTRY_POINT.substr('http://localhost:'.length + targetPort.toString().length, config.APP_ENTRY_POINT.length);
-  }
-  else {
-    return config.APP_ENTRY_POINT;
-  }
-};
-let browserSyncTarget = resolveBrowserSyncTarget();
-
 /** Minify for production */
 if (env === 'production') {
 
@@ -90,8 +78,8 @@ if (env === 'production') {
     }
   }));
   plugins.push(new DedupePlugin());
-  outputFile = `${outputFile}.min.[chunkhash].js`;
-  vendorOutputFile = "vendor.bundle.[chunkhash].js";
+  outputFile = `${outputFile}.min.js`;
+  vendorOutputFile = "vendor.bundle.js";
   outputPath = `${__dirname}/dist/`;
   plugins.push(new WebpackOnBuildPlugin(function(stats){
     //create zip file
@@ -129,7 +117,7 @@ if (env === 'production') {
 
 plugins.push(new BrowserSyncPlugin({
   proxy: {
-    target : browserSyncTarget
+    target : config.APP_ENTRY_POINT
   }
 }));
 
@@ -149,7 +137,10 @@ plugins.push(new CopyWebpackPlugin([{
 
 plugins.push(new CopyWebpackPlugin([{
   from: './app/img/omrs-button.png',
-  to: 'img/omrs-button.png'
+  to: 'img/omrs-button.png'},
+{ 
+  from: 'libs',
+  to: 'libs'
 }]));
 
 
@@ -203,3 +194,4 @@ let webpackConfig = {
 };
 
 module.exports = webpackConfig;
+

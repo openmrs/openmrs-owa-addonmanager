@@ -31,7 +31,7 @@ export class ApiHelper {
         body: JSON.stringify(requestData)
       };
     }
-    this.requestOptions = options;
+    this.requestOptions = Object.assign({}, this.requestOptions, options);
     return this;
   }
 
