@@ -192,3 +192,55 @@ button h5{
     background-color:#dddddd;
     border: 0px;
 }
+
+#manageApps{
+    font-size: 1.3em;
+    color: #009384;
+    margin-left: 5px;
+
+}
+
+.manage-app-buttons{
+    display: flex;
+    height: 45px;
+    margin-top: 18px; 
+    height: 40px !important;
+    position: relative;
+    text-align: center;
+}
+
+.span-icon{
+    display: relative;
+    color: black;
+    font-size: 17px !important;
+}
+
+.button-add-module{
+    position: relative;
+    margin-left: 12px;
+    text-align: center;
+}
+
+.button-add-module:hover{
+    background-color:#dddddd;
+    border: 0px;
+}
+
+.button-search-module{
+    position: relative;
+    margin-left: 10px;
+    text-align: center;
+}
+ 
+.button-search-module:hover{
+    background-color:#dddddd;
+    border: 0px;
+}
+
+.manage-app-table{
+    margin-top: 20px;
+}
+
+.search-icon{
+    margin-right: 10px !important;
+}

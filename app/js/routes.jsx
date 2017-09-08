@@ -10,7 +10,7 @@ import React, { Component } from 'react'
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router'
 import App from './components/App'
 import HomePage from './components/homePage/homePage';
-import ManageApps from './components/homePage/manageApps';
+import ManageApps from './components/homePage/manageApps/manageApps';
 import ManageSettings from './components/homePage/manageSettings';
 
 export default () => {
