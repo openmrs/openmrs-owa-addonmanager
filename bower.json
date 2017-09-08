@@ -1,0 +1,28 @@
+{
+  "name": "openmrs-addonmanager",
+  "description": "This will help in uploading the openmrs open web apps and omod files",
+  "main": "",
+  "authors": [
+    "andela-odaniel, wanjikum, andela-jomadoye, andela-pupendo, kingisaac95"
+  ],
+  "license": "MPL-2.0",
+  "keywords": [
+    "OpenMRS",
+    "Open",
+    "Web",
+    "App"
+  ],
+  "homepage": "https://github.com/openmrs/openmrs-owa-addonmanager",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "3.3.7"
+  }
+}
