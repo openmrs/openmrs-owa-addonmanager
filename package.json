@@ -59,6 +59,7 @@
   },
   "scripts": {
     "clean": "rimraf dist && rimraf coverage*",
+    "postinstall": "bower install",
     "build": "npm run clean && webpack --progress --colors --mode=production --target=web",
     "build:dev": "npm run clean && webpack --progress --colors --mode=dev --target=web",
     "build:prod": "npm run build",
