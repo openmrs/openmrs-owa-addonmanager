@@ -23,7 +23,7 @@ class BreadCrumbComponent extends Component{
         </a>
         <Link to="/">
           <span className="glyphicon glyphicon-chevron-right breadcrumb-item separator"
-                aria-hidden="true" />
+            aria-hidden="true" />
           <span className="title breadcrumb-item">Add-On Manager</span>
         </Link>
       </div>
