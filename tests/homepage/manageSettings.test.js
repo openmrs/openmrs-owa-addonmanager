@@ -36,9 +36,10 @@ describe('<ManageSettings />', () => {
     });
 
     it('Should render H6 tags', () => {
-        expect(renderedComponent.find("h6")).to.have.length(2);
-        expect(renderedComponent.find("h6").getNodes()[0].props.children).equals('The default location where the apps are stored on disk');
-        expect(renderedComponent.find("h6").getNodes()[1].props.children).equals('The default URL for the OpenMRS appstore');
+        expect(renderedComponent.find("h6")).to.have.length(3);
+        expect(renderedComponent.find("h6").getNodes()[0].props.children).equals('The base URL from where the Open Web Apps are hosted');
+        expect(renderedComponent.find("h6").getNodes()[1].props.children).equals('The default location where the apps are stored on disk');
+        expect(renderedComponent.find("h6").getNodes()[2].props.children).equals('The default URL for the OpenMRS appstore');
     });
 
     it('Should render a Legend with text of `Manage OWA Settings`', () => {
