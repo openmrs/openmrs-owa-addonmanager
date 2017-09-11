@@ -7,6 +7,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 import React from 'react';
+import { Link } from 'react-router';
 
 export default class ManageSettings extends React.Component {
   constructor(props) {
@@ -18,14 +19,55 @@ export default class ManageSettings extends React.Component {
     };
 
     this.onChange = this.onChange.bind(this);
-    this.onCancel = this.onCancel.bind(this);
+    this.setDefault = this.setDefault.bind(this);
+    this.getDefaultSettings = this.getDefaultSettings.bind(this);
   }
 
   componentWillMount() {
-    this.setState({
-      AppFolderPathValue: 'appdata/owa',
-      AppStoreURLValue: 'http://modules.openmrs.org'
+    this.getDefaultSettings();
+  }
+
+  settingsData () {
+    const applicationDistribution = location.href.split('/')[3];
+    const settingsURL = `/${applicationDistribution}/ws/rest/owa/settings`; 
+    global.$ = require('jquery');
+    
+    const data =  $ .ajax({
+      type: "GET",
+      url: settingsURL,
+      dataType: "xml",
+      async: false
+    }).responseText;
+
+    const parser = require('xml2js').parseString;
+    let jsonData;
+
+    parser(data, function(err, result){
+      jsonData = result;
     });
+
+    try {
+      return jsonData.list["org.openmrs.GlobalProperty"];
+    } catch(e) {
+      if(e instanceof TypeError) {
+        e;
+      }
+    }
+  }
+
+  getDefaultSettings () {
+    const settingsPaths = this.settingsData();
+    const appFolderPath = String.raw`appdata\owa`;
+    this.setState({ 
+      AppFolderPathValue: settingsPaths != undefined ? settingsPaths[0].propertyValue : appFolderPath,
+      AppBaseURLValue: settingsPaths != undefined ? settingsPaths[1].propertyValue : '/owa',
+      AppStoreURLValue: settingsPaths != undefined ? settingsPaths[2].propertyValue : 'http://modules.openmrs.org'
+    });
+  }
+
+  setDefault() {
+    event.preventDefault();
+    this.getDefaultSettings();
   }
 
   onChange(event) {
@@ -33,15 +75,6 @@ export default class ManageSettings extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   }
   
-  onCancel() {
-    event.preventDefault();
-    this.setState({ 
-      AppBaseURLValue: '',
-      AppFolderPathValue: 'appdata/owa',
-      AppStoreURLValue: 'http://modules.openmrs.org'
-    });
-  }
-
   render() {
     let { 
       AppBaseURLValue,
@@ -100,11 +133,13 @@ export default class ManageSettings extends React.Component {
                 <div className="btn-toolbar">
                   <button 
                     className="btn btn-success"
+                    onClick={this.setDefault}
                   >Save</button>
-                  <button 
-                    className="btn btn-default"
-                    onClick={this.onCancel}
-                  >Cancel</button>
+                  <Link to="/">
+                    <button 
+                      className="btn btn-default"
+                    >Cancel</button>
+                  </Link>
                 </div>
               </div>
             </div>
