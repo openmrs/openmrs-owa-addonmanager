@@ -6,9 +6,9 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-import React, { Component } from 'react'
-import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router'
-import App from './components/App'
+import React, { Component } from 'react';
+import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
+import App from './components/App';
 import HomePage from './components/homePage/homePage';
 import ManageApps from './components/homePage/manageApps/manageApps';
 import ManageSettings from './components/homePage/manageSettings';
@@ -16,11 +16,11 @@ import ManageSettings from './components/homePage/manageSettings';
 export default () => {
   return (
     <Router history={hashHistory}>
-      <Route path='/' component={App} >
+      <Route path="/" component={App} >
         <IndexRoute component={HomePage}/>
-        <Route path='manageSettings' component={ManageSettings} />
-        <Route path='manageApps' component={ManageApps} />
+        <Route path="manageSettings" component={ManageSettings} />
+        <Route path="manageApps" component={ManageApps} />
       </Route>
     </Router>
   );
-}
+};
