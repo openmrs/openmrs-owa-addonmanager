@@ -7,6 +7,7 @@
     "url": "https://github.com/openmrs/openmrs-owa-addonmanager"
   },
   "dependencies": {
+    "bower": "^1.8.0",
     "eslint-plugin-import": "^2.7.0",
     "extract-loader": "^1.0.1",
     "react": "^15.4.1",
@@ -26,6 +27,7 @@
     "chai": "^4.1.2",
     "cheerio": "^1.0.0-rc.2",
     "copy-webpack-plugin": "^4.0.1",
+    "coveralls": "^2.13.1",
     "css-loader": "^0.23.1",
     "enzyme": "^2.9.1",
     "eslint": "^4.5.0",
@@ -35,6 +37,7 @@
     "file-loader": "^0.8.5",
     "html-loader": "^0.4.5",
     "html-webpack-plugin": "^2.24.1",
+    "istanbul": "^0.4.5",
     "jasmine-core": "^2.6.4",
     "jsdom": "^9.10.0",
     "karma": "^1.7.0",
@@ -67,7 +70,9 @@
     "watch": "webpack --progress --colors --watch --mode=deploy --target=web",
     "lint": "node_modules/.bin/esw webpack.config.* app",
     "lint:watch": "npm run lint -- --watch",
-    "test": "node_modules/.bin/mocha tests/**/*.test.* --require tests/setup.js"
+    "test": "node_modules/.bin/mocha tests/**/*.test.* --require tests/setup.js",
+    "coverage": "rimraf coverage && istanbul cover _mocha tests/*.test.* tests/**/*.test.* -- --require tests/setUp.js -R spec",
+    "coveralls": "npm run coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "keywords": [
     "OpenMRS",
