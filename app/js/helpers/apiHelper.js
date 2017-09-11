@@ -1,7 +1,7 @@
 import fetchPolyfill from 'whatwg-fetch';
 
 const applicationDistribution = location.href.split('/')[3];
-const apiBaseUrl = `/${applicationDistribution}/ws/rest/v1`; 
+let apiBaseUrl = `/${applicationDistribution}/ws/rest/v1`; 
 
 export class ApiHelper {
   constructor(requestLibrary) {
@@ -37,6 +37,7 @@ export class ApiHelper {
 
   send() {
     const request = this.requestLibrary;
+    this.requestUrl === '/owa/applist' ? apiBaseUrl = `/${applicationDistribution}/ws/rest` : null;
     const response = request(`${apiBaseUrl}${this.requestUrl}`, this.requestOptions)
       .then((data)=>{
         return this.mocked ? data : data.json();
