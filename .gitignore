@@ -8,6 +8,7 @@ webpack.config.js
 openmrs-addonmanager.zip
 ~/
 coverage
+.coveralls.yml
 libs
 .DS_STORE
 package-lock.json

@@ -14,7 +14,7 @@ export class ApiHelper {
   }
 
   build(requestUrl, requestType, requestData = {}) {
-    if (requestType && !this.ALLOWED_TYPES.includes(requestType)){
+    if (requestType && (this.ALLOWED_TYPES.indexOf(requestType) == -1)){
       throw new Error('Invalid Request Type');
     }
 

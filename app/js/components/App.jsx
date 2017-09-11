@@ -6,7 +6,7 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import HomePage from '../components/homePage/homePage';
 import BreadCrumbComponent from '../components/breadCrumb/breadCrumbComponent';
 import Header from '../components/common/header';
@@ -22,9 +22,9 @@ export default class App extends React.Component {
         <Header/>
         <BreadCrumbComponent />
         <div id="body-wrapper"> 
-         {this.props.children} 
+          {this.props.children} 
         </div>
       </div>
-    )
+    );
   }
 }
