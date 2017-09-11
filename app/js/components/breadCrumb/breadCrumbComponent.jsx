@@ -9,7 +9,7 @@
  */
 
 import React, {Component} from 'react';
-import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router'
+import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
 import './breadCrumb.css';
 
 class BreadCrumbComponent extends Component{
