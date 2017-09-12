@@ -7,22 +7,57 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 import React from 'react';
+import fetchPolyfill from 'whatwg-fetch';
+import AddAddon from '../manageApps/AddAddon.jsx';
+import { ApiHelper } from '../../../helpers/apiHelper';
 
 export default class ManageApps extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleClear = this.handleClear.bind(this);
+    this.handleUpload = this.handleUpload.bind(this);  
+  }
+  
+  componentDidMount() {
+    $(":file").filestyle({btnClass: "btn-primary"});
+  }
+
+  handleUpload() {
+    const applicationDistribution = location.href.split('/')[2];
+    const url = location.href.split('/')[3];
+    let apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
+    this.requestUrl ='/owa/addapp';
+
+    const addonFile = new FormData();
+    addonFile.append('file', document.getElementById('fileInput').files[0]);
+    $.ajax({
+      type: "POST",
+      url: `https:/${apiBaseUrl}${this.requestUrl}`,
+      data: addonFile,
+      contentType: false,
+      processData: false,
+      cache: false,
+      success: function (result) {                  
+        $(":file").filestyle('clear');
+      }
+    });
+  }
+
+  handleClear() {
+    $(":file").filestyle('clear');
+  }
+
   render() {
     return (
-      <div>
-        <h3 id="manageApps">Manage Add Ons</h3>
-        <div className="manage-app-buttons">
-          <button type="button" className="button-add-module ">
-            <span className="glyphicon glyphicon-plus span-icon"></span>  Add/Upgrade Add ons
-          </button> 
-          <button type="button" className="button-search-module">
-            <span className="glyphicon glyphicon-search span-icon search-icon"></span>Search Add ons
-          </button> 
-        </div>
-        <div className="manage-app-table col-sm-10">
-          <table className="table table-bordered">
+      <div className="container-fluid">
+        <h3 id="manageApps">Addon Manager</h3>
+        <AddAddon 
+          handleClear={this.handleClear}
+          handleUpload={this.handleUpload}
+        />
+        <div className="manage-app-table col-sm-12">
+          <table className="table table-bordered table-striped">
             <thead>
               <tr>
                 <th>Logo</th>
@@ -33,12 +68,11 @@ export default class ManageApps extends React.Component {
               </tr>
             </thead>
             <tbody>
-              <tr>
-              </tr>
+              <tr />
             </tbody>
           </table>
         </div>
       </div>
-    )
+    );
   }
 }
