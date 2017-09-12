@@ -278,3 +278,25 @@ legend.scheduler-border {
 td {
     cursor: pointer;
 }
+
+.search-add-on{
+    position: relative;
+    width: 100%;
+}
+
+.search-add-on .glyphicon{
+     position: relative;
+     text-align: center;
+     font-size: 20px;
+     left: 10px;
+     color: #363463;
+}
+
+#search-input{
+    font-size: 16px; /* Increase font-size */
+    padding: 12px 20px 12px 40px; /* Add some padding */
+    border: 1px solid #ddd; /* Add a grey border */
+    margin-bottom: 12px; /* Add some space below the input */
+    border-radius: 10px;
+    margin-left: -20px ;
+}

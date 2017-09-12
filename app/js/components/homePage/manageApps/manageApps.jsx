@@ -16,12 +16,14 @@ export default class ManageApps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      appList: []
+      appList: [],
+      staticAppList: []
     };
 
     this.openPage = this.openPage.bind(this);
     this.handleClear = this.handleClear.bind(this);
-    this.handleUpload = this.handleUpload.bind(this);  
+    this.handleUpload = this.handleUpload.bind(this);
+    this.searchAddOn = this.searchAddOn.bind(this);  
   }
 
   componentWillMount() {
@@ -30,7 +32,8 @@ export default class ManageApps extends React.Component {
       if (response.error) throw response.error.message;
       this.setState((prevState, props) => {
         return {
-          appList: response
+          appList: response,
+          staticAppList: response
         };
       });
     });
@@ -69,6 +72,16 @@ export default class ManageApps extends React.Component {
     return location.href = `/${location.href.split('/')[3]}/owa/${app.folderName}/${app.launch_path}`;
   }
 
+  searchAddOn(event){
+    event.preventDefault();
+    if(event.target.value.length >= 1){
+      let addOnFound = this.state.appList.filter((app) => app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1);
+      this.setState({appList: addOnFound});
+    }else{
+      this.setState({appList: this.state.staticAppList})
+    }
+  }
+
   render() {
     return (
       <div className="container-fluid">
@@ -78,6 +91,10 @@ export default class ManageApps extends React.Component {
           handleUpload={this.handleUpload}
         />
         <div className="manage-app-table col-sm-12">
+          <div className="search-add-on">
+            <i className="glyphicon glyphicon-search"></i>
+            <input type="text" id="search-input" onKeyUp={this.searchAddOn} placeholder="Search for an add on.."/>
+          </div>
           <table className="table table-bordered table-striped">
             <thead>
               <tr>
