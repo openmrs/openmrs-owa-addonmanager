@@ -10,13 +10,30 @@ import React from 'react';
 import fetchPolyfill from 'whatwg-fetch';
 import AddAddon from '../manageApps/AddAddon.jsx';
 import { ApiHelper } from '../../../helpers/apiHelper';
+import { AddonList } from './addonList';
 
 export default class ManageApps extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      appList: []
+    };
 
+    this.openPage = this.openPage.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.handleUpload = this.handleUpload.bind(this);  
+  }
+
+  componentWillMount() {
+    const apiHelper = new ApiHelper(null);
+    apiHelper.get('/owa/applist').then(response => {
+      if (response.error) throw response.error.message;
+      this.setState((prevState, props) => {
+        return {
+          appList: response
+        };
+      });
+    });
   }
   
   componentDidMount() {
@@ -46,6 +63,10 @@ export default class ManageApps extends React.Component {
 
   handleClear() {
     $(":file").filestyle('clear');
+  }  
+
+  openPage(app) {
+    return location.href = `/${location.href.split('/')[3]}/owa/${app.folderName}/${app.launch_path}`;
   }
 
   render() {
@@ -67,9 +88,7 @@ export default class ManageApps extends React.Component {
                 <th>Delete</th>
               </tr>
             </thead>
-            <tbody>
-              <tr />
-            </tbody>
+            <AddonList appList={this.state.appList} openPage={this.openPage}/>
           </table>
         </div>
       </div>

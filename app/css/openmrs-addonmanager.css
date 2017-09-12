@@ -53,6 +53,7 @@ header .logo img {
     border-radius: 5px;
     min-height: 500px;
     justify-content: center;
+    overflow: auto;
 }
 
 .app-title {
@@ -259,4 +260,21 @@ legend.scheduler-border {
     width:inherit; /* Or auto */
     padding:0 10px; /* To give a bit of padding on the left and right */
     border-bottom:none;
+}
+
+.addon-name {
+    font-weight: bold;
+}
+
+.addon-description {
+    margin-top: 3px;
+}
+
+.delete-icon {
+    font-size: 20px;
+    color: #a94442;
+}
+
+td {
+    cursor: pointer;
 }
