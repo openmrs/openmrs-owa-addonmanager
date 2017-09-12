@@ -197,7 +197,7 @@ button h5{
 #manageApps{
     font-size: 1.3em;
     color: #009384;
-    margin-left: 5px;
+    padding-left: 15px;
 
 }
 
@@ -270,6 +270,10 @@ legend.scheduler-border {
     margin-top: 3px;
 }
 
+#delete-icon-wrapper {
+    padding: 25px;
+}
+
 .delete-icon {
     font-size: 20px;
     color: #a94442;
@@ -277,4 +281,8 @@ legend.scheduler-border {
 
 td {
     cursor: pointer;
+}
+
+.close {
+    margin: 0
 }
