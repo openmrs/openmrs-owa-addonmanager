@@ -1,6 +1,7 @@
 import React from 'react';
+import DeleteAddonModal from '../manageApps/deleteAddonModal.jsx';
 
-export const AddonList = ({appList, openPage}) => {
+export const AddonList = ({appList, openPage, handleDelete}) => {
   return (
     <tbody>
       {
@@ -23,15 +24,22 @@ export const AddonList = ({appList, openPage}) => {
               <td onClick={() => openPage(app)}>
                 {app.version}
               </td>
-              <td className="text-center">
-                <a href="#">
-                  <i className="glyphicon glyphicon-trash text-danger delete-icon"/>
-                </a>
+              <td
+                className="text-center"
+                id="delete-icon-wrapper"
+                data-toggle="modal"
+                data-target={`#formModal${app.folderName}`}
+              >
+                <i className="glyphicon glyphicon-trash text-danger delete-icon"/>
               </td>
+              
+              <DeleteAddonModal app={app} handleDelete={handleDelete} />
             </tr>
+
           );
         })
       }
+      
     </tbody>
   );
 };
@@ -39,4 +47,5 @@ export const AddonList = ({appList, openPage}) => {
 AddonList.propTypes = {
   appList: React.PropTypes.array.isRequired,
   openPage: React.PropTypes.func.isRequired,
+  handleDelete: React.PropTypes.func.isRequired,
 };

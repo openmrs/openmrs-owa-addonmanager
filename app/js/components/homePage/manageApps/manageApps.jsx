@@ -7,8 +7,9 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 import React from 'react';
-import fetchPolyfill from 'whatwg-fetch';
+import axios from 'axios';
 import AddAddon from '../manageApps/AddAddon.jsx';
+import DeleteAddonModal from '../manageApps/deleteAddonModal.jsx';
 import { ApiHelper } from '../../../helpers/apiHelper';
 import { AddonList } from './addonList';
 
@@ -16,18 +17,23 @@ export default class ManageApps extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      appList: []
+      appList: [],
+      msgType: 'success',
+      msgBody: 'baba',
+      showMsg: false
     };
+
+    this.apiHelper = new ApiHelper(null);
+    this.alertMessage = '';
 
     this.openPage = this.openPage.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.handleUpload = this.handleUpload.bind(this);  
+    this.handleDelete = this.handleDelete.bind(this);  
   }
 
   componentWillMount() {
-    const apiHelper = new ApiHelper(null);
-    apiHelper.get('/owa/applist').then(response => {
-      if (response.error) throw response.error.message;
+    this.apiHelper.get('/owa/applist').then(response => {
       this.setState((prevState, props) => {
         return {
           appList: response
@@ -55,7 +61,7 @@ export default class ManageApps extends React.Component {
       contentType: false,
       processData: false,
       cache: false,
-      success: function (result) {                  
+      success: function (result) {
         $(":file").filestyle('clear');
       }
     });
@@ -63,16 +69,43 @@ export default class ManageApps extends React.Component {
 
   handleClear() {
     $(":file").filestyle('clear');
-  }  
+  }
+
+  handleDelete(name) {
+    const applicationDistribution = location.href.split('/')[3];
+
+    axios.get(`/${applicationDistribution}/module/owa/deleteApp.form?appName=${name}`).then(response => {
+      this.setState((prevState, props) => {
+        return {
+          appList: response.data.appList,
+          msgType: 'success',
+          msgBody: 'App deleted successfully.',
+          showMsg: true
+        };
+      });
+    }).catch(error => {
+      toastr.error(error);
+    });
+  }
 
   openPage(app) {
     return location.href = `/${location.href.split('/')[3]}/owa/${app.folderName}/${app.launch_path}`;
   }
 
   render() {
+    const alert = (
+      <div className={`col-sm-12 alert alert-${this.state.msgType} alert-dismissable`}>
+        <a href="#" className="close" data-dismiss="alert" aria-label="close" >×</a>
+        {this.state.msgBody}
+      </div>
+    );
+
     return (
       <div className="container-fluid">
+        {this.state.showMsg ? alert : null}
+
         <h3 id="manageApps">Addon Manager</h3>
+
         <AddAddon 
           handleClear={this.handleClear}
           handleUpload={this.handleUpload}
@@ -88,7 +121,11 @@ export default class ManageApps extends React.Component {
                 <th>Delete</th>
               </tr>
             </thead>
-            <AddonList appList={this.state.appList} openPage={this.openPage}/>
+            <AddonList
+              appList={this.state.appList}
+              openPage={this.openPage}
+              handleDelete={this.handleDelete}
+            />
           </table>
         </div>
       </div>

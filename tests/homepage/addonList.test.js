@@ -50,7 +50,7 @@ describe('<AddonList />', () => {
     });
     
     it('should render div tags', () => {
-        expect(addonList.find("div")).to.have.length(2);
+        expect(addonList.find("div")).to.have.length(8);
     });
 
     it('should render a h2 tag', () => {
@@ -59,9 +59,5 @@ describe('<AddonList />', () => {
 
     it('should render a image tag', () => {
         expect(addonList.find("img")).to.have.length(1);
-    });
-    
-    it('should render an anchor tag', () => {
-        expect(addonList.find("a")).to.have.length(1);
     });
 });
