@@ -8,6 +8,7 @@
  */
 import React from 'react';
 import { Link } from 'react-router';
+import logger from '../../helpers/logger';
 
 export default class ManageSettings extends React.Component {
   constructor(props) {
@@ -17,6 +18,8 @@ export default class ManageSettings extends React.Component {
       AppFolderPathValue: '',
       AppStoreURLValue: ''
     };
+
+    this.Logger = new logger();
 
     this.onChange = this.onChange.bind(this);
     this.setDefault = this.setDefault.bind(this);
@@ -66,8 +69,10 @@ export default class ManageSettings extends React.Component {
   }
 
   setDefault() {
+    const Logger = this.Logger;
     event.preventDefault();
     this.getDefaultSettings();
+    this.Logger.info("Saved managed Addon setting information");
   }
 
   onChange(event) {
@@ -131,8 +136,8 @@ export default class ManageSettings extends React.Component {
             <div className="form-group"> 
               <div className="col-sm-offset-3 col-sm-9">
                 <div className="btn-toolbar">
-                  <button 
-                    className="btn btn-success"
+                  <button
+                    className="btn btn-success save-button"
                     onClick={this.setDefault}
                   >Save</button>
                   <Link to="/">

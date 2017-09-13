@@ -311,3 +311,7 @@ td {
 table h4{
     text-align: center;
 }
+
+.save-button {
+    margin-right: 10px;
+}
