@@ -19,9 +19,11 @@ export default class ManageApps extends React.Component {
     this.state = {
       appList: [],
       msgType: 'success',
-      msgBody: 'baba',
       showMsg: false,
-      staticAppList: []
+      staticAppList: [],
+      msgBody: '',
+      uploadStatus: 0,
+      showProgress: false
     };
 
     this.apiHelper = new ApiHelper(null);
@@ -32,6 +34,8 @@ export default class ManageApps extends React.Component {
     this.handleUpload = this.handleUpload.bind(this);  
     this.handleDelete = this.handleDelete.bind(this);  
     this.searchAddOn = this.searchAddOn.bind(this);  
+    this.handleProgress = this.handleProgress.bind(this);
+    this.handleAlertBehaviour = this.handleAlertBehaviour.bind(this);
   }
 
   componentWillMount() {
@@ -54,10 +58,20 @@ export default class ManageApps extends React.Component {
     const url = location.href.split('/')[3];
     let apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
     this.requestUrl ='/owa/addapp';
+    let that = this;
 
     const addonFile = new FormData();
     addonFile.append('file', document.getElementById('fileInput').files[0]);
-    $.ajax({
+  
+    const response = $.ajax({
+      xhr: function(){
+        let xhrRequest = $.ajaxSetup().xhr();
+        if(xhrRequest.upload){
+          xhrRequest.upload.addEventListener('progress',that.handleProgress, false);
+        }
+        return xhrRequest;
+       
+      },
       type: "POST",
       url: `https:/${apiBaseUrl}${this.requestUrl}`,
       data: addonFile,
@@ -65,11 +79,59 @@ export default class ManageApps extends React.Component {
       processData: false,
       cache: false,
       success: function (result) {
+        this.setState({
+          msgBody: "App has been successfully installed",
+          msgType: "success",
+          showMsg: true,
+          appList: result,
+          staticAppList: result
+        });
+
+        if(that.state.showMsg === true) {
+          setTimeout(that.handleAlertBehaviour, 2000);
+        }
+        
+      }.bind(this),
+      error: function(xhr, status, error) {
+        this.setState({
+          msgBody: "App has not been installed",
+          msgType: "warning",
+          showMsg: true
+        });
+
+        if(that.state.showMsg === true) {
+          setTimeout(that.handleAlertBehaviour, 2000);
+        }
+      }.bind(this),
+      complete: function(result){
         $(":file").filestyle('clear');
-        this.setState({appList: result, staticAppList: result});
-        }.bind(this)
-      })
-    };
+        this.setState({
+          uploadStatus: 0,
+          showProgress: false,
+        });
+      }.bind(this)
+    });
+  }
+
+  handleProgress(e){
+    
+    if(e.lengthComputable){
+      let max = e.total;
+      let current = e.loaded;
+      
+      let Percentage = Math.round((current * 100)/max);   
+      this.setState({
+        showProgress: true,
+        uploadStatus: Percentage
+      });
+    }
+  }
+
+  handleAlertBehaviour() {
+    this.setState({
+      showMsg: false,
+    });
+  }
 
   handleClear() {
     $(":file").filestyle('clear');
@@ -82,9 +144,7 @@ export default class ManageApps extends React.Component {
       this.setState((prevState, props) => {
         return {
           appList: response.data.appList,
-          msgType: 'success',
-          msgBody: 'App deleted successfully.',
-          showMsg: true
+          msgType: 'success' 
         };
       });
     }).catch(error => {
@@ -102,21 +162,29 @@ export default class ManageApps extends React.Component {
       let addOnFound = this.state.appList.filter((app) => app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1);
       this.setState({appList: addOnFound});
     }else{
-      this.setState({appList: this.state.staticAppList})
+      this.setState({appList: this.state.staticAppList});
     }
   }
 
   render() {
     const alert = (
       <div className={`col-sm-12 alert alert-${this.state.msgType} alert-dismissable`}>
-        <a href="#" className="close" data-dismiss="alert" aria-label="close" >×</a>
+        <button className="close" data-dismiss="alert" aria-label="close">×</button>
         {this.state.msgBody}
+      </div>
+    );
+    const { showProgress, uploadStatus} = this.state;
+    const progressBar = (
+      <div className="progress">
+        <div className="progress-bar" style={{width: uploadStatus + "%"}} />
+        <span>{uploadStatus + "%"} Complete</span>
       </div>
     );
 
     return (
       <div className="container-fluid">
         {this.state.showMsg ? alert : null}
+        {showProgress === true ? progressBar : null}
 
         <h3 id="manageApps">Addon Manager</h3>
 
@@ -140,11 +208,11 @@ export default class ManageApps extends React.Component {
               </tr>
             </thead>
             {this.state.appList.length < 1 ? <tr><th colSpan="5"><h4>No apps found</h4></th></tr>: 
-            <AddonList
-              appList={this.state.appList}
-              openPage={this.openPage}
-              handleDelete={this.handleDelete}
-            />}
+              <AddonList
+                appList={this.state.appList}
+                openPage={this.openPage}
+                handleDelete={this.handleDelete}
+              />}
           </table>
         </div>
       </div>
