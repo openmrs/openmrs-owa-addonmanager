@@ -20,7 +20,8 @@ export default class ManageApps extends React.Component {
       appList: [],
       msgType: 'success',
       msgBody: 'baba',
-      showMsg: false
+      showMsg: false,
+      staticAppList: []
     };
 
     this.apiHelper = new ApiHelper(null);
@@ -30,13 +31,15 @@ export default class ManageApps extends React.Component {
     this.handleClear = this.handleClear.bind(this);
     this.handleUpload = this.handleUpload.bind(this);  
     this.handleDelete = this.handleDelete.bind(this);  
+    this.searchAddOn = this.searchAddOn.bind(this);  
   }
 
   componentWillMount() {
     this.apiHelper.get('/owa/applist').then(response => {
       this.setState((prevState, props) => {
         return {
-          appList: response
+          appList: response,
+          staticAppList: response
         };
       });
     });
@@ -92,6 +95,16 @@ export default class ManageApps extends React.Component {
     return location.href = `/${location.href.split('/')[3]}/owa/${app.folderName}/${app.launch_path}`;
   }
 
+  searchAddOn(event){
+    event.preventDefault();
+    if(event.target.value.length >= 1){
+      let addOnFound = this.state.appList.filter((app) => app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1);
+      this.setState({appList: addOnFound});
+    }else{
+      this.setState({appList: this.state.staticAppList})
+    }
+  }
+
   render() {
     const alert = (
       <div className={`col-sm-12 alert alert-${this.state.msgType} alert-dismissable`}>
@@ -111,6 +124,10 @@ export default class ManageApps extends React.Component {
           handleUpload={this.handleUpload}
         />
         <div className="manage-app-table col-sm-12">
+          <div className="search-add-on">
+            <i className="glyphicon glyphicon-search"></i>
+            <input type="text" id="search-input" onKeyUp={this.searchAddOn} placeholder="Search for an add on.."/>
+          </div>
           <table className="table table-bordered table-striped">
             <thead>
               <tr>
@@ -121,11 +138,12 @@ export default class ManageApps extends React.Component {
                 <th>Delete</th>
               </tr>
             </thead>
+            {this.state.appList.length < 1 ? <tr><th colSpan="5"><h4>No apps found</h4></th></tr>: 
             <AddonList
               appList={this.state.appList}
               openPage={this.openPage}
               handleDelete={this.handleDelete}
-            />
+            />}
           </table>
         </div>
       </div>
