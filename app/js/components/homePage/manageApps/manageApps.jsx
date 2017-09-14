@@ -66,9 +66,10 @@ export default class ManageApps extends React.Component {
       cache: false,
       success: function (result) {
         $(":file").filestyle('clear');
-      }
-    });
-  }
+        this.setState({appList: result, staticAppList: result});
+        }.bind(this)
+      })
+    };
 
   handleClear() {
     $(":file").filestyle('clear');
