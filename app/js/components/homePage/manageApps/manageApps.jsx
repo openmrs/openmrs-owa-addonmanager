@@ -12,6 +12,7 @@ import AddAddon from '../manageApps/AddAddon.jsx';
 import DeleteAddonModal from '../manageApps/deleteAddonModal.jsx';
 import { ApiHelper } from '../../../helpers/apiHelper';
 import { AddonList } from './addonList';
+import logger from '../../../helpers/logger';
 
 export default class ManageApps extends React.Component {
   constructor(props) {
@@ -23,7 +24,7 @@ export default class ManageApps extends React.Component {
       showMsg: false,
       staticAppList: []
     };
-
+    this.Logger = new logger();
     this.apiHelper = new ApiHelper(null);
     this.alertMessage = '';
 
@@ -50,6 +51,7 @@ export default class ManageApps extends React.Component {
   }
 
   handleUpload() {
+    const Logger = this.Logger;
     const applicationDistribution = location.href.split('/')[2];
     const url = location.href.split('/')[3];
     let apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
@@ -67,16 +69,22 @@ export default class ManageApps extends React.Component {
       success: function (result) {
         $(":file").filestyle('clear');
         this.setState({appList: result, staticAppList: result});
-        }.bind(this)
-      })
-    };
+        Logger.info("Addon uploaded successfully");
+      }.bind(this),
+      error: function (error) {
+        Logger.error("Error uploading Oaddon", error);
+      }
+    });
+  }
 
   handleClear() {
     $(":file").filestyle('clear');
+    this.Logger.info("Addon upload cancelled");
   }
 
   handleDelete(name) {
     const applicationDistribution = location.href.split('/')[3];
+    const Logger = this.Logger;
 
     axios.get(`/${applicationDistribution}/module/owa/deleteApp.form?appName=${name}`).then(response => {
       this.setState((prevState, props) => {
@@ -87,7 +95,9 @@ export default class ManageApps extends React.Component {
           showMsg: true
         };
       });
+      this.Logger.info("Addon deleted successfully");
     }).catch(error => {
+      Logger.error("Error deleting Oaddon", error);
       toastr.error(error);
     });
   }
@@ -101,8 +111,9 @@ export default class ManageApps extends React.Component {
     if(event.target.value.length >= 1){
       let addOnFound = this.state.appList.filter((app) => app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1);
       this.setState({appList: addOnFound});
+      this.Logger.info("Started searching for Addon");
     }else{
-      this.setState({appList: this.state.staticAppList})
+      this.setState({appList: this.state.staticAppList});
     }
   }
 
@@ -126,7 +137,7 @@ export default class ManageApps extends React.Component {
         />
         <div className="manage-app-table col-sm-12">
           <div className="search-add-on">
-            <i className="glyphicon glyphicon-search"></i>
+            <i className="glyphicon glyphicon-search" />
             <input type="text" id="search-input" onKeyUp={this.searchAddOn} placeholder="Search for an add on.."/>
           </div>
           <table className="table table-bordered table-striped">
@@ -140,11 +151,11 @@ export default class ManageApps extends React.Component {
               </tr>
             </thead>
             {this.state.appList.length < 1 ? <tr><th colSpan="5"><h4>No apps found</h4></th></tr>: 
-            <AddonList
-              appList={this.state.appList}
-              openPage={this.openPage}
-              handleDelete={this.handleDelete}
-            />}
+              <AddonList
+                appList={this.state.appList}
+                openPage={this.openPage}
+                handleDelete={this.handleDelete}
+              />}
           </table>
         </div>
       </div>
