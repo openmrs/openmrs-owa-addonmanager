@@ -98,8 +98,12 @@ export default class ManageApps extends React.Component {
 
   searchAddOn(event){
     event.preventDefault();
-    if(event.target.value.length >= 1){
-      let addOnFound = this.state.appList.filter((app) => app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1);
+    if(event.target.value.length >= 1){     
+      let addOnFound = this.state.staticAppList.filter((app) => 
+      app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
+      || app.description.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1 
+      || app.developer["name"].toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1 
+      || app.version.indexOf(event.target.value) !== -1);
       this.setState({appList: addOnFound});
     }else{
       this.setState({appList: this.state.staticAppList})
@@ -127,9 +131,9 @@ export default class ManageApps extends React.Component {
         <div className="manage-app-table col-sm-12">
           <div className="search-add-on">
             <i className="glyphicon glyphicon-search"></i>
-            <input type="text" id="search-input" onKeyUp={this.searchAddOn} placeholder="Search for an add on.."/>
+            <input type="text" id="search-input" onChange={this.searchAddOn} placeholder="Search for an add on.."/>
           </div>
-          <table className="table table-bordered table-striped">
+          <table className="table table-bordered table-striped table-hover">
             <thead>
               <tr>
                 <th>Logo</th>
