@@ -85,7 +85,6 @@ export default class ManageSettings extends React.Component {
     return (
       <div>
         <BreadCrumbComponent />
-        <br />
         <div className="container-fluid">
           <form className="form-horizontal">
             <fieldset className="scheduler-border">

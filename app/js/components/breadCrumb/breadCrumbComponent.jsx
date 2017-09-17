@@ -56,40 +56,24 @@ class BreadCrumbComponent extends Component{
         <a href="../../" className="breadcrumb-item">
           <span className="glyphicon glyphicon-home breadcrumb-item" aria-hidden="true" />
         </a>
-        {
-          manageAddonPage || manageSettingsPage ?
-            <Link to="/">
-              <span className="glyphicon glyphicon-chevron-right breadcrumb-item separator"
-                aria-hidden="true" />
-              <span className="title breadcrumb-item">
-                <u>Add-On Manager</u>
-              </span>
-            </Link> :
-            <Link to="/">
-              <span className="glyphicon glyphicon-chevron-right breadcrumb-item separator"
-                aria-hidden="true" />
-              <span className="title breadcrumb-item">
-                <strong>Add-On Manager</strong>
-              </span>
-            </Link>
-        }
+        <Link to="/">
+          <span className="glyphicon glyphicon-chevron-right breadcrumb-item separator"
+            aria-hidden="true" />
+          <span className="title breadcrumb-item">Add-On Manager</span>
+        </Link>
         {
           manageAddonPage && 
           <Link to="manageApps">
             <span className="glyphicon glyphicon-chevron-right breadcrumb-item separator"
               aria-hidden="true" />
-            <span className="title breadcrumb-item">
-              <strong>Manage addon</strong>
-            </span>
+            <span className="title breadcrumb-item">Manage addon</span>
           </Link>}
         {
           manageSettingsPage && 
           <Link to="manageSettings">
             <span className="glyphicon glyphicon-chevron-right breadcrumb-item separator"
               aria-hidden="true" />
-            <span className="title breadcrumb-item">
-              <strong>Settings</strong>
-            </span>
+            <span className="title breadcrumb-item">Settings</span>
           </Link>
         }
       </div>

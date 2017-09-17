@@ -204,7 +204,7 @@ export default class ManageApps extends React.Component {
               <i className="glyphicon glyphicon-search" />
               <input type="text" id="search-input" onKeyUp={this.searchAddOn} placeholder="Search for an add on.."/>
             </div>
-            <table className="table table-bordered table-striped table-hover">
+            <table className="table table-bordered table-striped">
               <thead>
                 <tr>
                   <th>Logo</th>
@@ -221,7 +221,7 @@ export default class ManageApps extends React.Component {
                   handleDelete={this.handleDelete}
                 />}
             </table>
-           </div>
+          </div>
         </div>
       </div>
     );

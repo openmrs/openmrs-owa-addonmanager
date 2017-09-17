@@ -24,15 +24,15 @@ describe('<BreadCrumbComponent />', () => {
     });
 
     it('Should render a `Add-On Manager` in a span', () => {
-        expect(breadCrumb.find("span").getNodes()[2].props.children.props.children).equals("Add-On Manager");
+        expect(breadCrumb.find("span").getNodes()[2].props.children).equals("Add-On Manager");
     });
 
     it('Should render a `Manage app` in a span', () => {
-        expect(breadCrumb.find("span").getNodes()[4].props.children.props.children).equals("Manage addon");
+        expect(breadCrumb.find("span").getNodes()[4].props.children).equals("Manage addon");
     });
 
     it('Should render a `Settings` in a span', () => {
-        expect(breadCrumb.find("span").getNodes()[6].props.children.props.children).equals("Settings");
+        expect(breadCrumb.find("span").getNodes()[6].props.children).equals("Settings");
     });
 
     it('Should have a 3 Links', () => {
