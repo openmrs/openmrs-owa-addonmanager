@@ -8,7 +8,6 @@
  */
 import React, { Component } from 'react';
 import HomePage from '../components/homePage/homePage';
-import BreadCrumbComponent from '../components/breadCrumb/breadCrumbComponent';
 import Header from '../components/common/header';
 
 export default class App extends React.Component {
@@ -20,7 +19,6 @@ export default class App extends React.Component {
     return (
       <div>
         <Header/>
-        <BreadCrumbComponent />
         <div id="body-wrapper"> 
           {this.props.children} 
         </div>

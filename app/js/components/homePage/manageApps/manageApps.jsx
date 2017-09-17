@@ -10,6 +10,7 @@ import React from 'react';
 import axios from 'axios';
 import AddAddon from '../manageApps/AddAddon.jsx';
 import DeleteAddonModal from '../manageApps/deleteAddonModal.jsx';
+import BreadCrumbComponent from '../../breadCrumb/breadCrumbComponent';
 import { ApiHelper } from '../../../helpers/apiHelper';
 import { AddonList } from './addonList';
 
@@ -182,38 +183,41 @@ export default class ManageApps extends React.Component {
     );
 
     return (
-      <div className="container-fluid">
-        {this.state.showMsg ? alert : null}
-        {showProgress === true ? progressBar : null}
+      <div>
+        <BreadCrumbComponent />
+        <div className="container-fluid">
+          {this.state.showMsg ? alert : null}
+          {showProgress === true ? progressBar : null}
 
-        <h3 id="manageApps">Addon Manager</h3>
+          <h3 id="manageApps">Addon Manager</h3>
 
-        <AddAddon 
-          handleClear={this.handleClear}
-          handleUpload={this.handleUpload}
-        />
-        <div className="manage-app-table col-sm-12">
-          <div className="search-add-on">
-            <i className="glyphicon glyphicon-search" />
-            <input type="text" id="search-input" onKeyUp={this.searchAddOn} placeholder="Search for an add on.."/>
+          <AddAddon 
+            handleClear={this.handleClear}
+            handleUpload={this.handleUpload}
+          />
+          <div className="manage-app-table col-sm-12">
+            <div className="search-add-on">
+              <i className="glyphicon glyphicon-search" />
+              <input type="text" id="search-input" onKeyUp={this.searchAddOn} placeholder="Search for an add on.."/>
+            </div>
+            <table className="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>Logo</th>
+                  <th>Name</th>
+                  <th>Developer</th>
+                  <th>Version</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              {this.state.appList.length < 1 ? <tr><th colSpan="5"><h4>No apps found</h4></th></tr>: 
+                <AddonList
+                  appList={this.state.appList}
+                  openPage={this.openPage}
+                  handleDelete={this.handleDelete}
+                />}
+            </table>
           </div>
-          <table className="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>Logo</th>
-                <th>Name</th>
-                <th>Developer</th>
-                <th>Version</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            {this.state.appList.length < 1 ? <tr><th colSpan="5"><h4>No apps found</h4></th></tr>: 
-              <AddonList
-                appList={this.state.appList}
-                openPage={this.openPage}
-                handleDelete={this.handleDelete}
-              />}
-          </table>
         </div>
       </div>
     );
