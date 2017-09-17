@@ -50,7 +50,7 @@ export default class ManageApps extends React.Component {
   }
   
   componentDidMount() {
-    $(":file").filestyle({btnClass: "btn-primary"});
+    jQuery("#fileInput").filestyle({btnClass: "btn-primary"});
   }
 
   handleUpload() {
@@ -194,7 +194,7 @@ export default class ManageApps extends React.Component {
         />
         <div className="manage-app-table col-sm-12">
           <div className="search-add-on">
-            <i className="glyphicon glyphicon-search"></i>
+            <i className="glyphicon glyphicon-search" />
             <input type="text" id="search-input" onKeyUp={this.searchAddOn} placeholder="Search for an add on.."/>
           </div>
           <table className="table table-bordered table-striped">

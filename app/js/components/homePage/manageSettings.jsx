@@ -132,7 +132,7 @@ export default class ManageSettings extends React.Component {
               <div className="col-sm-offset-3 col-sm-9">
                 <div className="btn-toolbar">
                   <button 
-                    className="btn btn-success"
+                    className="btn btn-success save-button"
                     onClick={this.setDefault}
                   >Save</button>
                   <Link to="/">
