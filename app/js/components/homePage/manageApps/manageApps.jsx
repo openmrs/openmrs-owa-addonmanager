@@ -159,8 +159,12 @@ export default class ManageApps extends React.Component {
 
   searchAddOn(event){
     event.preventDefault();
-    if(event.target.value.length >= 1){
-      let addOnFound = this.state.appList.filter((app) => app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1);
+    if(event.target.value.length >= 1){     
+      let addOnFound = this.state.staticAppList.filter((app) => 
+      app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
+      || app.description.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1 
+      || app.developer["name"].toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1 
+      || app.version.indexOf(event.target.value) !== -1);
       this.setState({appList: addOnFound});
     }else{
       this.setState({appList: this.state.staticAppList});
@@ -218,6 +222,23 @@ export default class ManageApps extends React.Component {
                 />}
             </table>
           </div>
+          <table className="table table-bordered table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Logo</th>
+                <th>Name</th>
+                <th>Developer</th>
+                <th>Version</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            {this.state.appList.length < 1 ? <tr><th colSpan="5"><h4>No apps found</h4></th></tr>: 
+              <AddonList
+                appList={this.state.appList}
+                openPage={this.openPage}
+                handleDelete={this.handleDelete}
+              />}
+          </table>
         </div>
       </div>
     );
