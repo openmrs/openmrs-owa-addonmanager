@@ -161,7 +161,7 @@ export default class ManageApps extends React.Component {
     event.preventDefault();
     if(event.target.value.length >= 1){     
       let addOnFound = this.state.staticAppList.filter((app) => 
-      app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
+        app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
       || app.description.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1 
       || app.developer["name"].toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1 
       || app.version.indexOf(event.target.value) !== -1);
