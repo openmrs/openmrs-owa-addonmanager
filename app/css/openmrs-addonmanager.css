@@ -315,3 +315,7 @@ table h4{
 .save-button {
     margin-right: 10px;
 }
+
+span.title.breadcrumb-item {
+    margin-left: 5px;
+}

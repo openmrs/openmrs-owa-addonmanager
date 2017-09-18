@@ -19,11 +19,6 @@ import HomePage from '../../app/js/components/homePage/homePage';
 
 describe('<App />', () => {
 
-    it('should mount the BreadCrumbComponent in itself', () => {
-        const wrapper = shallow( <App/> )
-        expect(wrapper.contains( <BreadCrumbComponent/> )).to.equal(true);
-    });
-
     it('should mount the Header in itself', () => {
         const wrapper = shallow( <App/> )
         expect(wrapper.contains( <Header/> )).to.equal(true);
