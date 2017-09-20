@@ -17,7 +17,7 @@ import  Header  from '../../app/js/components/common/header';
 describe('<Header />', () => {
     const renderedComponent = shallow( < Header / > );
     it('Should render its children', () => {
-        expect(renderedComponent.find("Link")).to.have.length(3);
+        expect(renderedComponent.find("div")).to.have.length(1);
     });
 
     it('Ensures the dropDownMenu populates the fetch locations', () => {

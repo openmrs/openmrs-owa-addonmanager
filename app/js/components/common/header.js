@@ -104,41 +104,33 @@ export default class Header extends Component {
         </div>
 
         <ul className="navbar-right nav-header">
-          <Link to="" activeClassName="active">
-            <li className="dropdown">
-              <a className="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                <span className="glyphicon glyphicon-user"/> {' ' + this.state.currentUser}
-                <span className="caret"/>
-              </a>
-              <ul className="dropdown-menu user">
-                <li>
-                  <a href="#">My Account</a>
-                </li>
-              </ul>
-            </li>
-          </Link>
-
-          <Link to="" activeClassName="active">
-            <li className="dropdown dropdown-large">
-              <a className="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                <span className="glyphicon glyphicon glyphicon-map-marker"/> {(this.state.currentLocationTag != "")
-                  ? this.state.currentLocationTag
-                  : this.state.defaultLocation}
-                <span className="caret"/>
-              </a>
-              <ul className="dropdown-menu dropdown-menu-large row">
-                {/*Execute the function*/}
-                {this.dropDownMenu(this.getLocations())}
-              </ul>
-            </li>
-          </Link>
-
-          <Link to="" activeClassName="active">
-            <li>
-              <a href={this.state.currentLogOutUrl}>Logout {' '}
-                <span className="glyphicon glyphicon-log-out"/></a>
-            </li>
-          </Link>
+          <li className="dropdown">
+            <a className="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              <span className="glyphicon glyphicon-user"/> {' ' + this.state.currentUser}
+              <span className="caret"/>
+            </a>
+            <ul className="dropdown-menu user">
+              <li>
+                <a href="#">My Account</a>
+              </li>
+            </ul>
+          </li>
+          <li className="dropdown dropdown-large">
+            <a className="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              <span className="glyphicon glyphicon glyphicon-map-marker"/> {(this.state.currentLocationTag != "")
+                ? this.state.currentLocationTag
+                : this.state.defaultLocation}
+              <span className="caret"/>
+            </a>
+            <ul className="dropdown-menu dropdown-menu-large row">
+              {/*Execute the function*/}
+              {this.dropDownMenu(this.getLocations())}
+            </ul>
+          </li>
+          <li>
+            <a href={this.state.currentLogOutUrl}>Logout {' '}
+              <span className="glyphicon glyphicon-log-out"/></a>
+          </li>
         </ul>
       </header>
     );
