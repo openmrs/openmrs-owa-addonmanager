@@ -126,10 +126,10 @@ a:hover {
 }
 
 .dropdown-menu-large>li>a:hover {
-    background-color: transparent;
-    margin-right: 0px;
-    border-bottom: 0px;
-    color: purple;
+    /* background-color: transparent;
+    margin-right: 0px; */
+    /* border-bottom: 0px; */
+    background-color: yellow;
 }
 
 .main-home-page h2{
@@ -308,6 +308,7 @@ td {
     border-radius: 10px;
     margin-left: -20px ;
 }
+
 table h4{
     text-align: center;
 }
@@ -318,4 +319,25 @@ table h4{
 
 span.title.breadcrumb-item {
     margin-left: 5px;
+}
+
+.navbar-font {
+    font-size: 18px;
+}
+
+.navbar-glyphicon-font {
+    font-size: 17px;
+}
+
+.current-location {
+    background-color: yellow;
+}
+
+.location {
+    border-style: solid;
+    border-width: 1px;
+}
+
+.my-account {
+    font-size: 20px;
 }
