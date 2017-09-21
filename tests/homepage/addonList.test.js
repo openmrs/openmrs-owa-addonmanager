@@ -35,7 +35,8 @@ describe('<AddonList />', () => {
     },];
 
     const openPage = () => {};
-    const addonList = mount( < AddonList appList={appList} openPage={openPage} / > );
+    const openModal = () => {};
+    const addonList = mount( < AddonList appList={appList} openPage={openPage}  openModal={openModal}/ > );
     
     it('should render a tbody', () => {
         expect(addonList.find("tbody")).to.have.length(1);
@@ -50,7 +51,7 @@ describe('<AddonList />', () => {
     });
     
     it('should render div tags', () => {
-        expect(addonList.find("div")).to.have.length(8);
+        expect(addonList.find("div")).to.have.length(2);
     });
 
     it('should render a h2 tag', () => {

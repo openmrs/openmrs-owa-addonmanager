@@ -9,10 +9,10 @@
 import React from 'react';
 import axios from 'axios';
 import AddAddon from '../manageApps/AddAddon.jsx';
-import DeleteAddonModal from '../manageApps/deleteAddonModal.jsx';
 import BreadCrumbComponent from '../../breadCrumb/breadCrumbComponent';
 import { ApiHelper } from '../../../helpers/apiHelper';
 import { AddonList } from './addonList';
+import DeleteAddonModal from './deleteAddonModal.jsx';
 
 export default class ManageApps extends React.Component {
   constructor(props) {
@@ -24,19 +24,22 @@ export default class ManageApps extends React.Component {
       staticAppList: [],
       msgBody: '',
       uploadStatus: 0,
-      showProgress: false
+      showProgress: false,
+      isOpen: false,
+      selectedApp: null,
     };
 
     this.apiHelper = new ApiHelper(null);
     this.alertMessage = '';
-
     this.openPage = this.openPage.bind(this);
     this.handleClear = this.handleClear.bind(this);
-    this.handleUpload = this.handleUpload.bind(this);  
+    this.handleUpload = this.handleUpload.bind(this); 
     this.handleDelete = this.handleDelete.bind(this);  
     this.searchAddOn = this.searchAddOn.bind(this);  
     this.handleProgress = this.handleProgress.bind(this);
     this.handleAlertBehaviour = this.handleAlertBehaviour.bind(this);
+    this.openModal = this.openModal.bind(this);
+    this.hideModal = this.hideModal.bind(this);
   }
 
   componentWillMount() {
@@ -151,7 +154,23 @@ export default class ManageApps extends React.Component {
     }).catch(error => {
       toastr.error(error);
     });
+    this.hideModal()
   }
+
+  openModal(app){
+    return (e) => {
+      this.setState({
+      isOpen: true,
+      selectedApp: app
+    });
+    }
+  };
+ 
+  hideModal(){
+    this.setState({
+      isOpen: false
+    });
+  };
 
   openPage(app) {
     return location.href = `/${location.href.split('/')[3]}/owa/${app.folderName}/${app.launch_path}`;
@@ -214,13 +233,20 @@ export default class ManageApps extends React.Component {
                   <th>Delete</th>
                 </tr>
               </thead>
-              {this.state.appList.length < 1 ? <tr><th colSpan="5"><h4>No apps found</h4></th></tr>: 
-                <AddonList
-                  appList={this.state.appList}
-                  openPage={this.openPage}
-                  handleDelete={this.handleDelete}
+                {this.state.appList.length < 1 ? <tbody><tr><th colSpan="5"><h4>No apps found</h4></th></tr></tbody>: 
+                  <AddonList
+                    appList={this.state.appList}
+                    openPage={this.openPage}
+                    openModal={this.openModal}
                 />}
             </table>
+            {this.state.isOpen ? (
+              <DeleteAddonModal
+                app={this.state.selectedApp}
+                handleDelete={this.handleDelete}
+                isOpen={this.state.isOpen}
+                hideModal={this.hideModal}/>
+            ) : null}
           </div>
         </div>
       </div>

@@ -319,3 +319,7 @@ table h4{
 span.title.breadcrumb-item {
     margin-left: 5px;
 }
+
+.modal-open {
+    overflow: initial;
+}

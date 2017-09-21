@@ -8,9 +8,8 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 import React from 'react';
-import DeleteAddonModal from '../manageApps/deleteAddonModal.jsx';
 
-export const AddonList = ({appList, openPage, handleDelete}) => {
+export const AddonList = ({appList, openPage, openModal}) => {
   return (
     <tbody>
       {
@@ -36,15 +35,10 @@ export const AddonList = ({appList, openPage, handleDelete}) => {
               <td
                 className="text-center"
                 id="delete-icon-wrapper"
-                data-toggle="modal"
-                data-target={`#formModal${app.folderName}`}
               >
-                <i className="glyphicon glyphicon-trash text-danger delete-icon"/>
-              </td>
-              
-              <DeleteAddonModal app={app} handleDelete={handleDelete} />
+                <i className="glyphicon glyphicon-trash text-danger delete-icon" onClick={openModal(app)}/>
+              </td>           
             </tr>
-
           );
         })
       }
@@ -55,6 +49,6 @@ export const AddonList = ({appList, openPage, handleDelete}) => {
 
 AddonList.propTypes = {
   appList: React.PropTypes.array.isRequired,
-  openPage: React.PropTypes.func.isRequired,
-  handleDelete: React.PropTypes.func.isRequired,
+  openPage: React.PropTypes.func.isRequired, 
+  openModal: React.PropTypes.func.isRequired
 };
