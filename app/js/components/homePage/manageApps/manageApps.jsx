@@ -13,6 +13,7 @@ import BreadCrumbComponent from '../../breadCrumb/breadCrumbComponent';
 import { ApiHelper } from '../../../helpers/apiHelper';
 import { AddonList } from './addonList';
 import DeleteAddonModal from './deleteAddonModal.jsx';
+import Utility from './../../../utility';
 
 export default class ManageApps extends React.Component {
   constructor(props) {
@@ -151,6 +152,7 @@ export default class ManageApps extends React.Component {
           msgType: 'success' 
         };
       });
+      Utility.notifications('error', name + ' deleted successfully');
     }).catch(error => {
       toastr.error(error);
     });
