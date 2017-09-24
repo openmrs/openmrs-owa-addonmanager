@@ -1,7 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
-import BreadCrumbComponent from '../../app/js/components/breadCrumb/breadCrumbComponent';
+import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent';
 
 describe('<BreadCrumbComponent />', () => {
     const breadCrumb = shallow( < BreadCrumbComponent />);

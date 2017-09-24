@@ -1,9 +1,9 @@
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
-import ManageApps from '../../app/js/components/homePage/manageApps/manageApps';
-import BreadCrumbComponent from '../../app/js/components/breadCrumb/breadCrumbComponent';
-import AddonList from '../../app/js/components/homePage/manageApps/addonList';
+import ManageApps from '../../app/js/components/homePage/manageApps/ManageApps';
+import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent';
+import AddonList from '../../app/js/components/homePage/manageApps/AddonList';
 
 describe('<ManageApps />', () => {
     const renderedComponent = shallow(< ManageApps />);

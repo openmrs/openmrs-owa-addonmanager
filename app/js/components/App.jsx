@@ -7,8 +7,8 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 import React, { Component } from 'react';
-import HomePage from '../components/homePage/homePage';
-import Header from '../components/common/header';
+import HomePage from '../components/homePage/HomePage';
+import Header from '../components/common/Header';
 
 export default class App extends React.Component {
   constructor(props){

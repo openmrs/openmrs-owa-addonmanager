@@ -8,7 +8,7 @@
  */
 import React from 'react';
 import { Link } from 'react-router';
-import BreadCrumbComponent from '../breadCrumb/breadCrumbComponent';
+import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent';
 
 export default class ManageSettings extends React.Component {
   constructor(props) {

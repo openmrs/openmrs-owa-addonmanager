@@ -10,7 +10,7 @@ import React from 'react';
 import {render} from 'react-dom';
 import {Router, Route, hashHistory} from 'react-router';
 
-import routes from './routes';
+import routes from './Routes';
 
 render((
   <Router history={hashHistory}>

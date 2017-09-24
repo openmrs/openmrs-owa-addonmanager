@@ -9,10 +9,10 @@
 import React from 'react';
 import axios from 'axios';
 import AddAddon from '../manageApps/AddAddon.jsx';
-import BreadCrumbComponent from '../../breadCrumb/breadCrumbComponent';
+import BreadCrumbComponent from '../../breadCrumb/BreadCrumbComponent';
 import { ApiHelper } from '../../../helpers/apiHelper';
-import { AddonList } from './addonList';
-import DeleteAddonModal from './deleteAddonModal.jsx';
+import { AddonList } from './AddonList';
+import DeleteAddonModal from './DeleteAddonModal.jsx';
 import Utility from './../../../utility';
 
 export default class ManageApps extends React.Component {
