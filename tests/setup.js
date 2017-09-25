@@ -1,6 +1,6 @@
 //Jsdom configuration
 
-require('babel-register')();
+require('../server.babel');
 
 const jsdom = require('jsdom').jsdom;
 
@@ -18,6 +18,8 @@ Object.keys(document.defaultView).forEach((property) => {
 global.navigator = {
     userAgent: 'node.js'
 };
+
+process.env.NODE_ENV = 'test';
 
 function noop() {
     return null;

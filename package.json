@@ -21,6 +21,7 @@
     "archiver": "^1.0.0",
     "babel-core": "^6.2.1",
     "babel-loader": "^6.2.0",
+    "babel-preset-env": "^1.6.0",
     "babel-preset-es2015": "^6.1.18",
     "babel-preset-react": "^6.16.0",
     "babel-register": "^6.26.0",
@@ -75,7 +76,7 @@
     "lint": "node_modules/.bin/esw webpack.config.* app",
     "lint:watch": "npm run lint -- --watch",
     "test": "node_modules/.bin/mocha tests/**/*.test.* --require tests/setup.js",
-    "coverage": "rimraf coverage && istanbul cover _mocha tests/*.test.* tests/**/*.test.* -- --require tests/setUp.js -R spec",
+    "coverage": "rimraf coverage && istanbul cover _mocha tests/**/*.test.* -- --require tests/setUp.js -R spec",
     "coveralls": "npm run coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "keywords": [

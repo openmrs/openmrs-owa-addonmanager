@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/openmrs/openmrs-owa-addonmanager.svg?branch=master)](https://travis-ci.org/openmrs/openmrs-owa-addonmanager)
+[![Coverage Status](https://coveralls.io/repos/github/openmrs/openmrs-owa-addonmanager/badge.svg?branch=master)](https://coveralls.io/github/openmrs/openmrs-owa-addonmanager?branch=master)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/9177ef6ba94a4c6ea6887968bd298dc3)](https://www.codacy.com/app/openmrs/openmrs-owa-addonmanager?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=openmrs/openmrs-owa-addonmanager&amp;utm_campaign=Badge_Grade)
 
 <img src="https://cloud.githubusercontent.com/assets/668093/12567089/0ac42774-c372-11e5-97eb-00baf0fccc37.jpg" alt="OpenMRS"/>
