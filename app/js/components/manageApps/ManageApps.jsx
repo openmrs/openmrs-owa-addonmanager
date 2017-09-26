@@ -32,7 +32,7 @@ export default class ManageApps extends React.Component {
       displayManageOwaButtons: false,
       searchResults: [],
       install: false,
-      downloadUri: null, 
+      downloadUri: null,
     };
 
     this.apiHelper = new ApiHelper(null);
@@ -101,7 +101,7 @@ export default class ManageApps extends React.Component {
           msgType: "success",
           showMsg: true,
           appList: result,
-          staticAppList: result
+          staticAppList: result,
         });
 
         if(that.state.showMsg === true) {
@@ -132,7 +132,6 @@ export default class ManageApps extends React.Component {
   }
 
   handleProgress(e){
-    
     if(e.lengthComputable){
       let max = e.total;
       let current = e.loaded;
@@ -289,12 +288,8 @@ export default class ManageApps extends React.Component {
       </div>
     );
     const { showProgress, uploadStatus} = this.state;
-    const progressBar = (
-      <div className="progress">
-        <div className="progress-bar progress-bar-striped" style={{width: uploadStatus + "%"}} />
-        <span>{uploadStatus + "%"} Complete</span>
-      </div>
-    );
+    const disableUploadElements = (this.state.uploadStatus > 0) ? true : false;
+    disableUploadElements ? document.body.className = 'loading' : document.body.className = '';
 
     return (
       <div>
@@ -316,10 +311,11 @@ export default class ManageApps extends React.Component {
             <div className="container-fluid">
               <div id="notification-wrapper">
                 {this.state.showMsg && alert}
-                {showProgress === true ? progressBar : null}
               </div>
 
-              <AddAddon 
+              <AddAddon
+                disableUploadElements={disableUploadElements}
+                showProgress={this.state.showProgress}
                 handleClear={this.handleClear}
                 handleUpload={this.handleUpload}
                 displayManageOwaButtons={this.displayManageOwaButtons}
@@ -372,6 +368,7 @@ export default class ManageApps extends React.Component {
             </div>
           </div>
         </div>
+        <div className="waiting-modal"><p className="upload-text">Uploading {uploadStatus}%</p></div>
       </div>
     );
   }
