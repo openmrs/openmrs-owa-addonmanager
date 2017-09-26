@@ -19,13 +19,13 @@ export default class HomePage extends React.Component {
           <h2>Add On Manager</h2>
           <div className="home-page-body">
             <Link to="/manageApps" className="manage-app-button">
-              <button type="button" className="button">
-                <span className="glyphicon glyphicon-th-large button-icon" /><h5> Manage Addons </h5>
+              <button type="button" className="buttons">
+                <span className="glyphicon glyphicon-th-large button-icon" /><p>Manage Addons</p>
               </button> 
             </Link>
             <Link to="/manageSettings" className="manage-settings-button">
-              <button  type="button" className="button">
-                <span className="glyphicon glyphicon-cog button-icon" /><h5> Manage Settings</h5>
+              <button  type="button" className="buttons">
+                <span className="glyphicon glyphicon-cog button-icon" /><p>Manage Settings</p>
               </button>
             </Link>
           </div>

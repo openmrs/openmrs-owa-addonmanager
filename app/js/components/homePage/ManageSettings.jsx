@@ -135,12 +135,14 @@ export default class ManageSettings extends React.Component {
               <div className="form-group"> 
                 <div className="col-sm-offset-3 col-sm-9">
                   <div className="btn-toolbar">
-                    <button 
+                    <button
+                      id="success-btn"
                       className="btn btn-success save-button"
                       onClick={this.setDefault}
                     >Save</button>
                     <Link to="/">
-                      <button 
+                      <button
+                        id="cancel-btn"
                         className="btn btn-default"
                       >Cancel</button>
                     </Link>

@@ -238,7 +238,7 @@ export default class ManageApps extends React.Component {
           {this.state.showMsg ? alert : null}
           {showProgress === true ? progressBar : null}
 
-          <h3 id="manageApps">Addon Manager</h3>
+          <h4 id="manageApps">Addon Manager</h4>
 
           <AddAddon 
             handleClear={this.handleClear}
