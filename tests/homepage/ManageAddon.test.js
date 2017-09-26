@@ -3,7 +3,6 @@ import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import ManageApps from '../../app/js/components/homePage/manageApps/manageApps';
 import BreadCrumbComponent from '../../app/js/components/breadCrumb/breadCrumbComponent';
-import AddAddon from '../../app/js/components/homePage/manageApps/AddAddon';
 import AddonList from '../../app/js/components/homePage/manageApps/addonList';
 
 describe('<ManageApps />', () => {

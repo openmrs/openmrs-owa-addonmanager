@@ -30,7 +30,10 @@ export default class Header extends Component {
   componentWillMount() {
     this.fetchLocation('/location').then((response) => {
       this.setState({locationTags: response.results});
-      this.setState({defaultLocation: response.results[0].display});
+      this.setState({
+        defaultLocation: response.results[0].display,
+        currentLocationTag: response.results[0].display,
+      });
       this.getUri();
     });
 
@@ -75,25 +78,46 @@ export default class Header extends Component {
   dropDownMenu(locationTags) {
     const menuDisplay = [];
     const numPerColumn = Math.ceil(locationTags.length / NUMBER_OF_COLUMNS);
+    const styles = {
+      marginTop: '5px'
+    };
+
     for (let cols = 0; cols < NUMBER_OF_COLUMNS; cols++) {
       const menuInColumns = [];
       let colStart = cols * numPerColumn;
       let colEnd = (cols + 1) * numPerColumn;
       for (let menuIndex = colStart; menuIndex < colEnd; menuIndex++) {
-        menuInColumns.push(
-          <a href="#" key={menuIndex} id={locationTags[menuIndex]} onClick={(e) => {
-            e.preventDefault();
-            this.handleClick(e);
-          }}>{locationTags[menuIndex]}</a>
-        );
+        if (locationTags[menuIndex] == this.state.currentLocationTag) {
+          menuInColumns.push(
+            <a href="#" key={menuIndex} id={locationTags[menuIndex]}
+              style={styles}
+              className="current-location text-center location"
+              onClick={(e) => {
+                e.preventDefault();
+                this.handleClick(e);
+              }}><span id="current-location">{locationTags[menuIndex]}</span></a>
+          );
+        } else {
+          menuInColumns.push(
+            <a href="#" key={menuIndex} id={locationTags[menuIndex]}
+              style={styles}
+              className="text-center location"
+              onClick={(e) => {
+                e.preventDefault();
+                this.handleClick(e);
+              }}>{locationTags[menuIndex]}</a>
+          );
+        }
       }
+      let filteredMenuInColumns = menuInColumns.filter((item) => item.props.id != undefined);
       menuDisplay.push(
-        <li className="col-sm-4" key={cols}>{menuInColumns}</li>
+        <li id="location-dropdown" className="col-sm-4" key={cols}>{filteredMenuInColumns}</li>
       );
     }
 
     return menuDisplay;
   }
+
   render() {
     return (
       <header>
@@ -105,34 +129,55 @@ export default class Header extends Component {
 
         <ul className="navbar-right nav-header">
           <li className="dropdown">
-            <a className="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-              <span className="glyphicon glyphicon-user"/> {' ' + this.state.currentUser}
-              <span className="caret"/>
+            <a 
+              className="dropdown-toggle" 
+              data-toggle="dropdown" 
+              href="#" role="button" 
+              aria-haspopup="true" 
+              aria-expanded="false">
+              <span className="glyphicon glyphicon-user navbar-glyphicon-font"/> {' ' + this.state.currentUser}
+              <span className="caret navbar-glyphicon-font"/>
             </a>
-            <ul className="dropdown-menu user">
+            <ul className="dropdown-menu profile-dropdown">
               <li>
-                <a href="#">My Account</a>
+                <a 
+                  className="my-account text-center"
+                  id="my-account"
+                  href="#">My Account</a>
               </li>
             </ul>
           </li>
+
           <li className="dropdown dropdown-large">
-            <a className="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-              <span className="glyphicon glyphicon glyphicon-map-marker"/> {(this.state.currentLocationTag != "")
+            <a 
+              className="dropdown-toggle header-location" 
+              data-toggle="dropdown" 
+              href="#" 
+              role="button" 
+              aria-haspopup="true" 
+              aria-expanded="false">
+              <span className="glyphicon glyphicon glyphicon-map-marker navbar-glyphicon-font"/> {(this.state.currentLocationTag != "")
                 ? this.state.currentLocationTag
                 : this.state.defaultLocation}
-              <span className="caret"/>
+              <span className="caret navbar-glyphicon-font"/>
             </a>
-            <ul className="dropdown-menu dropdown-menu-large row">
-              {/*Execute the function*/}
+            <ul 
+              id="location-ul"
+              className="dropdown-menu dropdown-menu-large row">
               {this.dropDownMenu(this.getLocations())}
             </ul>
           </li>
+
           <li>
-            <a href={this.state.currentLogOutUrl}>Logout {' '}
-              <span className="glyphicon glyphicon-log-out"/></a>
+            <a 
+              className="navbar-font"
+              href={this.state.currentLogOutUrl}>Logout {' '}
+              <span className="glyphicon glyphicon-log-out navbar-glyphicon-font"/>
+            </a>
           </li>
         </ul>
       </header>
     );
   }
 }
+

@@ -79,8 +79,7 @@ header .logo img {
     list-style: none;
 }
 
-header>ul,
-a {
+header>ul, a {
     color: #eeeeee;
     padding-right: 2px;
     margin-top: 15px;
@@ -95,7 +94,6 @@ li>a:hover {
     color: #eeeeee;
     cursor: pointer;
     text-decoration: none;
-    border-bottom: 1px solid gold;
 }
 
 li>a:focus {
@@ -116,20 +114,26 @@ a:hover {
 }
 
 .dropdown-large {
-    position: static !important;
+    position: static;
+}
+
+.dropdown-large:hover {
+    background-color: #00463f; 
 }
 
 .dropdown-menu-large {
     margin-left: 16px;
     margin-right: 16px;
     padding: 20px 0px;
+    z-index: 900;
 }
 
 .dropdown-menu-large>li>a:hover {
-    background-color: transparent;
-    margin-right: 0px;
-    border-bottom: 0px;
-    color: purple;
+    background-color: #007fff;
+}
+.dropdown-menu > li > a {
+    color: #007fff;
+    padding: 0;
 }
 
 .main-home-page h2{
@@ -142,7 +146,7 @@ a:hover {
     display: flex;
     flex-direction: row;
     position: relative;
-    height: 150px !important;
+    height: 150px;
     padding: 0px;
     margin-left: 25px;
     text-align: center;
@@ -308,6 +312,7 @@ td {
     border-radius: 10px;
     margin-left: -20px ;
 }
+
 table h4{
     text-align: center;
 }
@@ -323,3 +328,82 @@ span.title.breadcrumb-item {
 .modal-open {
     overflow: initial;
 }
+.navbar-font {
+    font-size: 1em;
+}
+
+.navbar-font:hover {
+    border-bottom: 1px solid white;
+}
+
+.navbar-glyphicon-font {
+    font-size: 17px;
+}
+
+.current-location {
+    background-color: #007fff;
+}
+
+#current-location{
+    color: #fff;
+}
+
+.location {
+    border-width: 1px;
+    border-bottom-width:1px;
+    border-bottom-color:rgba(148, 147, 147, 0.41);
+    border-bottom-style: solid;
+}
+
+.header-location {
+    border: 0.5px solid #1D7568;
+    padding: 7px;
+    border-radius: 5px;
+}
+
+.header-location:hover {
+    background-color: #0D685D;
+}
+
+#my-account {
+    font-size: 18px;
+    color: white;
+}
+
+.my-account:hover {
+    border-bottom: 1px solid white;
+}
+
+#location-dropdown {
+    padding: 0 1px;
+}
+#location-dropdown a {
+    margin: 0;
+}
+#location-dropdown a:hover {
+    color: #fff;
+}
+
+.dropdown:hover .profile-dropdown {
+    display: block;
+    margin-top: 0;
+ }
+
+.profile-dropdown {
+    background-color:#5B57A6;
+    z-index: 1000; 
+ }
+
+.dropdown-menu {
+     padding: 0;
+ }
+
+ #my-account:hover {
+     background-color: #5B57A6;
+ }
+
+ #location-ul {
+     left: 400px;
+     border-style: black solid;
+     border-width: 1px;
+ }
