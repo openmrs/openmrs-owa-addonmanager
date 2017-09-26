@@ -11,7 +11,6 @@ import axios from 'axios';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
 import AddAddon from '../manageApps/AddAddon.jsx';
 import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent.jsx';
-import Header from '../common/Header';
 import { ApiHelper } from '../../helpers/apiHelper';
 import { AddonList } from './AddonList.jsx';
 import DeleteAddonModal from './DeleteAddonModal.jsx';
