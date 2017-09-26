@@ -76,7 +76,7 @@ export default class ManageSettings extends React.Component {
   }
   
   render() {
-    let { 
+    let {
       AppBaseURLValue,
       AppFolderPathValue,
       AppStoreURLValue
@@ -84,7 +84,12 @@ export default class ManageSettings extends React.Component {
     return (
       <div>
         <br />
-        <div className="container-fluid">
+        <div className="row">
+          <div className="col-sm-6">
+            <h2 id="title-heading">Add On Manager</h2>
+          </div>
+        </div>
+        <div className="container-fluid" id="manage-settings">
           <form className="form-horizontal">
             <fieldset className="scheduler-border">
               <legend className="scheduler-border">Manage OWA Settings</legend>

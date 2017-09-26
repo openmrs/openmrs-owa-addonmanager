@@ -11,7 +11,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
-import  AddAddon  from '../../app/js/components/homePage/manageApps/AddAddon.jsx';
+import  AddAddon  from '../../app/js/components/manageApps/AddAddon.jsx';
 
 
 describe('<AddAddon />', () => {
@@ -38,7 +38,7 @@ describe('<AddAddon />', () => {
         expect(renderedComponent.find("button")
           .getNodes()[1]
           .props.children[1])
-          .equals(' Clear Addon');
+          .equals(' Clear');
     });
 
     it('Should render 2 buttons with upload and delete glyphicons', () => {

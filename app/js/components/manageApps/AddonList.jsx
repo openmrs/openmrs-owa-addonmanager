@@ -18,7 +18,7 @@ export const AddonList = ({handleDownload, install, appList, openPage, openModal
             <tr key={key}>
               <td onClick={() => openPage(app)}>
                 <img
-                  src={app.icons!= null ? 
+                  src={app.icons !== null ? 
                     `/${location.href.split('/')[3]}/owa/openmrs-addonmanager/${app.icons[48]}` : 
                     `./img/omrs-button.png`}
                   alt="addon logo"
@@ -38,16 +38,23 @@ export const AddonList = ({handleDownload, install, appList, openPage, openModal
                 className="text-center"
                 id="delete-icon-wrapper"
               >
-                {install == false ? 
-                  <i className="glyphicon glyphicon-trash text-danger delete-icon"  onClick={openModal(app)}/> :
-                  <i className="glyphicon glyphicon-download-alt text-primary install-icon"  onClick={(e) => handleDownload(e)}/> 
+                {
+                  install === false ? 
+                    <i
+                      className="glyphicon glyphicon-trash text-danger delete-icon"
+                      id="icon-btn" onClick={openModal(app)}
+                    /> :
+                    <i
+                      className="glyphicon glyphicon-download-alt text-primary install-icon"
+                      id="icon-btn"
+                      onClick={(e) => handleDownload(e)}
+                    />
                 }
               </td>           
             </tr>
           );
         })
       }
-      
     </tbody>
   );
 };

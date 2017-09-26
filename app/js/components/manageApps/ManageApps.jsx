@@ -8,11 +8,14 @@
  */
 import React from 'react';
 import axios from 'axios';
+import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
 import AddAddon from '../manageApps/AddAddon.jsx';
-import { ApiHelper } from '../../../helpers/apiHelper';
-import { AddonList } from './AddonList';
+import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent.jsx';
+import Header from '../common/Header';
+import { ApiHelper } from '../../helpers/apiHelper';
+import { AddonList } from './AddonList.jsx';
 import DeleteAddonModal from './DeleteAddonModal.jsx';
-import Utility from './../../../utility';
+import Utility from './../../utility';
 
 export default class ManageApps extends React.Component {
   constructor(props) {
@@ -289,67 +292,85 @@ export default class ManageApps extends React.Component {
     const { showProgress, uploadStatus} = this.state;
     const progressBar = (
       <div className="progress">
-        <div className="progress-bar" style={{width: uploadStatus + "%"}} />
+        <div className="progress-bar progress-bar-striped" style={{width: uploadStatus + "%"}} />
         <span>{uploadStatus + "%"} Complete</span>
       </div>
     );
 
     return (
       <div>
-        <div className="container-fluid">
-          {this.state.showMsg ? alert : null}
-          {showProgress === true ? progressBar : null}
-
-          <h4 id="manageApps">Addon Manager</h4>
-
-          <AddAddon 
-            handleClear={this.handleClear}
-            handleUpload={this.handleUpload}
-            displayManageOwaButtons={this.displayManageOwaButtons}
-            displayManageOwaButtonsState={this.state.displayManageOwaButtons}
-          />
-          <div className="manage-app-table col-sm-12">
-            <div className="search-add-on">
-              <i className="glyphicon glyphicon-search" />
-              <input 
-                type="text" 
-                id="search-input" 
-                onKeyUp={this.searchAddOn} 
-                placeholder="Search for an add on.."/>
+        <div className="main-home-page" id="body-wrapper">
+          <div className="row">
+            <div className="col-sm-6">
+              <h2>Add-on Manager</h2>
             </div>
-            <table className="table table-bordered table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>Logo</th>
-                  <th>Name</th>
-                  <th>Developer</th>
-                  <th>Version</th>
-                  {this.state.install == false ? 
-                    <th>Delete</th> : 
-                    <th>Install</th>}
-                </tr>
-              </thead>
-              {this.state.appList.length < 1 ? 
-                <tbody>
-                  <tr>
-                    <th colSpan="5"><h4>No apps found</h4></th>
-                  </tr>
-                </tbody> : 
-                <AddonList
-                  handleDownload = {this.handleDownload}
-                  install = {this.state.install}
-                  appList={this.state.appList}
-                  openPage={this.openPage}
-                  openModal={this.openModal}
-                />}
-            </table>
-            {this.state.isOpen ? (
-              <DeleteAddonModal
-                app={this.state.selectedApp}
-                handleDelete={this.handleDelete}
-                isOpen={this.state.isOpen}
-                hideModal={this.hideModal}/>
-            ) : null}
+            <div className="col-sm-6 manage-settings">
+              <div className="pull-right">
+                <Link to="/manageSettings" className="manage-settings-button">
+                  <i className="glyphicon glyphicon-cog settings-icon" id="icon-btn" />
+                </Link>
+              </div>
+            </div>
+          </div>
+          
+          <div className="home-page-body">
+            <div className="container-fluid">
+              <div id="notification-wrapper">
+                {this.state.showMsg && alert}
+                {showProgress === true ? progressBar : null}
+              </div>
+
+              <AddAddon 
+                handleClear={this.handleClear}
+                handleUpload={this.handleUpload}
+                displayManageOwaButtons={this.displayManageOwaButtons}
+                displayManageOwaButtonsState={this.state.displayManageOwaButtons}
+              />
+
+              <div className="manage-app-table col-sm-12">
+                <div className="search-add-on">
+                  <i className="glyphicon glyphicon-search" />
+                  <input 
+                    type="text" 
+                    id="search-input" 
+                    onKeyUp={this.searchAddOn} 
+                    placeholder="Search for an add on.."/>
+                </div>
+                <table className="table table-bordered table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th>Logo</th>
+                      <th>Name</th>
+                      <th>Developer</th>
+                      <th>Version</th>
+                      {this.state.install === false ? 
+                        <th>Delete</th> : 
+                        <th>Install</th>}
+                    </tr>
+                  </thead>
+                  {this.state.appList.length < 1 ? 
+                    <tbody>
+                      <tr>
+                        <th colSpan="5"><h4>No apps found</h4></th>
+                      </tr>
+                    </tbody> : 
+                    <AddonList
+                      handleDownload = {this.handleDownload}
+                      install = {this.state.install}
+                      appList={this.state.appList}
+                      openPage={this.openPage}
+                      openModal={this.openModal}
+                    />}
+                </table>
+                {this.state.isOpen ? (
+                  <DeleteAddonModal
+                    app={this.state.selectedApp}
+                    handleDelete={this.handleDelete}
+                    isOpen={this.state.isOpen}
+                    hideModal={this.hideModal}/>
+                ) : null}
+              </div>
+            </div>
           </div>
         </div>
       </div>

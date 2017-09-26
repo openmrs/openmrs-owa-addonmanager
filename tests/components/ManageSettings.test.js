@@ -11,8 +11,8 @@
 import React from 'react';
 import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
-import  ManageSettings  from '../../app/js/components/homePage/ManageSettings.jsx';
-
+import  ManageSettings  from '../../app/js/components/manageApps/ManageSettings.jsx';
+import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent.jsx';
 
 describe('<ManageSettings />', () => {
     const renderedComponent = shallow( < ManageSettings / > );

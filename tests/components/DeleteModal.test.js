@@ -1,7 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
-import DeleteModal from '../../app/js/components/homePage/manageApps/DeleteAddonModal';
+import DeleteModal from '../../app/js/components/manageApps/DeleteAddonModal.jsx';
 
 describe('<DeleteModal />', () => {
     const selectedApp = {
