@@ -28,6 +28,7 @@ export default class ManageApps extends React.Component {
       showProgress: false,
       isOpen: false,
       selectedApp: null,
+      displayManageOwaButtons: false,
     };
 
     this.apiHelper = new ApiHelper(null);
@@ -41,6 +42,7 @@ export default class ManageApps extends React.Component {
     this.handleAlertBehaviour = this.handleAlertBehaviour.bind(this);
     this.openModal = this.openModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
+    this.displayManageOwaButtons = this.displayManageOwaButtons.bind(this);
   }
 
   componentWillMount() {
@@ -95,7 +97,7 @@ export default class ManageApps extends React.Component {
         if(that.state.showMsg === true) {
           setTimeout(that.handleAlertBehaviour, 2000);
         }
-        
+
       }.bind(this),
       error: function(xhr, status, error) {
         this.setState({
@@ -114,6 +116,7 @@ export default class ManageApps extends React.Component {
           uploadStatus: 0,
           showProgress: false,
         });
+        this.displayManageOwaButtons();
       }.bind(this)
     });
   }
@@ -132,6 +135,19 @@ export default class ManageApps extends React.Component {
     }
   }
 
+  displayManageOwaButtons() {
+    const addonFile = document.getElementById('fileInput').files[0];
+    if (typeof(addonFile) !== 'undefined') {
+      this.setState({
+        displayManageOwaButtons: true
+      });
+    } else {
+      this.setState({
+        displayManageOwaButtons: false
+      });
+    }
+  }
+
   handleAlertBehaviour() {
     this.setState({
       showMsg: false,
@@ -139,7 +155,15 @@ export default class ManageApps extends React.Component {
   }
 
   handleClear() {
-    $(":file").filestyle('clear');
+    let handleClearPromise = new Promise((resolve, reject) => {
+      $(":file").filestyle('clear');
+      resolve('Success');
+    });
+    handleClearPromise.then((response) => {
+      if (response === 'Success') {
+        this.displayManageOwaButtons();
+      }
+    });
   }
 
   handleDelete(name) {
@@ -156,23 +180,23 @@ export default class ManageApps extends React.Component {
     }).catch(error => {
       toastr.error(error);
     });
-    this.hideModal()
+    this.hideModal();
   }
 
   openModal(app){
     return (e) => {
       this.setState({
-      isOpen: true,
-      selectedApp: app
-    });
-    }
-  };
+        isOpen: true,
+        selectedApp: app
+      });
+    };
+  }
  
   hideModal(){
     this.setState({
       isOpen: false
     });
-  };
+  }
 
   openPage(app) {
     return location.href = `/${location.href.split('/')[3]}/owa/${app.folderName}/${app.launch_path}`;
@@ -219,11 +243,17 @@ export default class ManageApps extends React.Component {
           <AddAddon 
             handleClear={this.handleClear}
             handleUpload={this.handleUpload}
+            displayManageOwaButtons={this.displayManageOwaButtons}
+            displayManageOwaButtonsState={this.state.displayManageOwaButtons}
           />
           <div className="manage-app-table col-sm-12">
             <div className="search-add-on">
               <i className="glyphicon glyphicon-search" />
-              <input type="text" id="search-input" onKeyUp={this.searchAddOn} placeholder="Search for an add on.."/>
+              <input 
+                type="text" 
+                id="search-input" 
+                onKeyUp={this.searchAddOn} 
+                placeholder="Search for an add on.."/>
             </div>
             <table className="table table-bordered table-striped table-hover">
               <thead>
@@ -235,12 +265,21 @@ export default class ManageApps extends React.Component {
                   <th>Delete</th>
                 </tr>
               </thead>
-                {this.state.appList.length < 1 ? <tbody><tr><th colSpan="5"><h4>No apps found</h4></th></tr></tbody>: 
+              {
+                this.state.appList.length < 1 ? 
+                  <tbody>
+                    <tr>
+                      <th colSpan="5">
+                        <h4>No apps found</h4>
+                      </th>
+                    </tr>
+                  </tbody> : 
                   <AddonList
                     appList={this.state.appList}
                     openPage={this.openPage}
                     openModal={this.openModal}
-                />}
+                  />
+              }
             </table>
             {this.state.isOpen ? (
               <DeleteAddonModal

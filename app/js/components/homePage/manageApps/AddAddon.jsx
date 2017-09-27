@@ -9,18 +9,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function AddAddon({ handleClear, handleUpload }) {
+export default function AddAddon({ 
+  handleClear, 
+  handleUpload, 
+  displayManageOwaButtons, 
+  displayManageOwaButtonsState }) {
+  const classesToUse = displayManageOwaButtonsState ?
+    'col-xs-6 col-sm-8' : 'col-xs-6 col-sm-12';
   return (
     <div className="container-fluid">
       <fieldset className="scheduler-border">
         <legend className="scheduler-border">Upload Addon Package:</legend>
         <div className="row">
           <div className="col-xs-12">
-            <div className="col-xs-6 col-sm-8 col-md-8 col-lg-8">
+            <div className={classesToUse}>
               <input 
                 name="file"
                 type="file" 
                 id="fileInput"
+                onChange={displayManageOwaButtons}
                 accept=".zip"
                 data-text="Browse Addon"
                 data-buttonName="btn-primary"
@@ -28,22 +35,25 @@ export default function AddAddon({ handleClear, handleUpload }) {
                 data-btnClass="btn-primary"
                 className="filestyle" />
             </div>
-            <div className="col-xs-6 col-sm-4 col-md-4 col-lg-4">
-              <div className="row">
-                <div className="btn-toolbar">
-                  <button
-                    className="btn btn-primary"
-                    onClick={handleUpload}>
-                    <span 
-                      className="glyphicon glyphicon-upload" /> Upload</button>
-                  <button
-                    className="btn btn-danger"
-                    onClick={handleClear}>
-                    <span 
-                      className="glyphicon glyphicon-remove" /> Clear Addon</button>
+            {
+              displayManageOwaButtonsState && 
+                <div className="col-xs-6 col-sm-4">
+                  <div className="row">
+                    <div className="btn-toolbar">
+                      <button
+                        className="btn btn-primary"
+                        onClick={handleUpload}>
+                        <span 
+                          className="glyphicon glyphicon-upload" /> Upload</button>
+                      <button
+                        className="btn btn-danger"
+                        onClick={handleClear}>
+                        <span 
+                          className="glyphicon glyphicon-remove" /> Clear Addon</button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+            }
           </div>
         </div>
       </fieldset>
@@ -54,4 +64,6 @@ export default function AddAddon({ handleClear, handleUpload }) {
 AddAddon.propTypes = {
   handleClear: PropTypes.func.isRequired,
   handleUpload: PropTypes.func.isRequired,
+  displayManageOwaButtons: PropTypes.func.isRequired,
+  displayManageOwaButtonsState: PropTypes.bool.isRequired,
 };

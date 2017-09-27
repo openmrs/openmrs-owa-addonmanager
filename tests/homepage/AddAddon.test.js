@@ -18,7 +18,8 @@ describe('<AddAddon />', () => {
     const renderedComponent = 
     shallow( < AddAddon 
         handleClear={() => {}} 
-        handleUpload={() => {}} / > );
+        handleUpload={() => {}} 
+        displayManageOwaButtonsState={true} / > );
     
     it('Should render a file input', () => {
         expect(renderedComponent.find("input")).to.have.length(1);
