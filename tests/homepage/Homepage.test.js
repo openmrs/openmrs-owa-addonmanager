@@ -1,8 +1,8 @@
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
-import HomePage from '../../app/js/components/homePage/homePage';
-import BreadCrumbComponent from '../../app/js/components/breadCrumb/breadCrumbComponent';
+import HomePage from '../../app/js/components/homePage/HomePage';
+import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent';
 
 describe('<Homepage />', () => {
     const homePage = shallow(< HomePage />);

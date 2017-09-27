@@ -13,9 +13,9 @@ import { mount, shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
 import App from '../../app/js/components/App';
-import Header from '../../app/js/components/common/header';
-import BreadCrumbComponent from '../../app/js/components/breadCrumb/breadCrumbComponent';
-import HomePage from '../../app/js/components/homePage/homePage';
+import Header from '../../app/js/components/common/Header';
+import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent';
+import HomePage from '../../app/js/components/homePage/HomePage';
 
 describe('<App />', () => {
 

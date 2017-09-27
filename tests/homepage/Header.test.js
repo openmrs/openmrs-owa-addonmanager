@@ -11,7 +11,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
-import  Header  from '../../app/js/components/common/header';
+import  Header  from '../../app/js/components/common/Header';
 
 
 describe('<Header />', () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
-import  { AddonList }  from '../../app/js/components/homePage/manageApps/addonList';
+import  { AddonList }  from '../../app/js/components/homePage/manageApps/AddonList';
 
 
 describe('<AddonList />', () => {
