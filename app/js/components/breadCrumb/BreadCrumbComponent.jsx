@@ -9,7 +9,7 @@
  */
 
 import React, {Component} from 'react';
-import { Link } from 'react-router';
+import { Link, browserHistory } from 'react-router';
 import './breadCrumb.css';
 
 class BreadCrumbComponent extends Component{
@@ -23,26 +23,28 @@ class BreadCrumbComponent extends Component{
     };
   }
   componentWillMount(){
-    const currentTab = window.location.href.split('/').pop();
-    if (currentTab === '/') {
-      this.setState({
-        homePage: true,
-        manageSettingsPage: false,
-        manageAddonPage: false,
-      });
-    } else if(currentTab === 'manageSettings') {
-      this.setState({
-        manageSettingsPage: true,
-        manageAddonPage: false,
-        homePage: false
-      });
-    }else if (currentTab === 'manageApps') {
-      this.setState({
-        manageAddonPage: true,
-        manageSettingsPage: false,
-        homePage: false,
-      });
-    }
+    browserHistory.listen( location => {
+      const currentTab = location.hash.split('/').pop();
+      if (!currentTab) {
+        this.setState({
+          homePage: true,
+          manageSettingsPage: false,
+          manageAddonPage: false,
+        });
+      } else if(currentTab === 'manageSettings') {
+        this.setState({
+          manageSettingsPage: true,
+          manageAddonPage: false,
+          homePage: false
+        });
+      }else if (currentTab === 'manageApps') {
+        this.setState({
+          manageAddonPage: true,
+          manageSettingsPage: false,
+          homePage: false,
+        });
+      }
+    });
   }
 
   render(){

@@ -2,7 +2,6 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import ManageApps from '../../app/js/components/homePage/manageApps/ManageApps';
-import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent';
 import AddonList from '../../app/js/components/homePage/manageApps/AddonList';
 
 describe('<ManageApps />', () => {
@@ -41,10 +40,6 @@ describe('<ManageApps />', () => {
             .props.children).to.equal('Version');
         expect(renderedComponent.find("th").getNodes()[4]
             .props.children).to.equal('Delete');
-    });
-
-    it('should mount the BreadCrumbComponent in itself', () => {
-        expect(renderedComponent.contains( <BreadCrumbComponent /> )).to.equal(true);
     });
 
     it('should mount the AddonList component in itself', () => {

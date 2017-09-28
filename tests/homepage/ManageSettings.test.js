@@ -12,7 +12,6 @@ import React from 'react';
 import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
 import  ManageSettings  from '../../app/js/components/homePage/ManageSettings.jsx';
-import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent';
 
 
 describe('<ManageSettings />', () => {
@@ -47,9 +46,4 @@ describe('<ManageSettings />', () => {
         expect(renderedComponent.find("legend")).to.have.length(1);
         expect(renderedComponent.find("legend").props().children).equals('Manage OWA Settings');
     });
-
-    it('should mount the BreadCrumbComponent in itself', () => {
-        expect(renderedComponent.contains( <BreadCrumbComponent/> )).to.equal(true);
-    });
-
 });

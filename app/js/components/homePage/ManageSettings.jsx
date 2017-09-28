@@ -8,7 +8,6 @@
  */
 import React from 'react';
 import { Link } from 'react-router';
-import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent';
 
 export default class ManageSettings extends React.Component {
   constructor(props) {
@@ -84,7 +83,6 @@ export default class ManageSettings extends React.Component {
     } = this.state;
     return (
       <div>
-        <BreadCrumbComponent />
         <br />
         <div className="container-fluid">
           <form className="form-horizontal">

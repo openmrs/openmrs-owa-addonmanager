@@ -11,6 +11,7 @@
 import React, {Component} from 'react';
 import {Link, IndexLink} from 'react-router';
 import {ApiHelper} from '../../helpers/apiHelper';
+import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent';
 
 const NUMBER_OF_COLUMNS = 3;
 
@@ -120,63 +121,46 @@ export default class Header extends Component {
 
   render() {
     return (
-      <header>
-        <div className="logo">
-          <a href="../../">
-            <img src="img/openmrs-with-title-small.png"/>
-          </a>
-        </div>
-
-        <ul className="navbar-right nav-header">
-          <li className="dropdown">
-            <a 
-              className="dropdown-toggle" 
-              data-toggle="dropdown" 
-              href="#" role="button" 
-              aria-haspopup="true" 
-              aria-expanded="false">
-              <span className="glyphicon glyphicon-user navbar-glyphicon-font"/> {' ' + this.state.currentUser}
-              <span className="caret navbar-glyphicon-font"/>
+      <div>
+        <header>
+          <div className="logo">
+            <a href="../../">
+              <img src="img/openmrs-with-title-small.png"/>
             </a>
-            <ul className="dropdown-menu profile-dropdown">
-              <li>
-                <a 
-                  className="my-account text-center"
-                  id="my-account"
-                  href="#">My Account</a>
-              </li>
-            </ul>
-          </li>
+          </div>
 
-          <li className="dropdown dropdown-large">
-            <a 
-              className="dropdown-toggle header-location" 
-              data-toggle="dropdown" 
-              href="#" 
-              role="button" 
-              aria-haspopup="true" 
-              aria-expanded="false">
-              <span className="glyphicon glyphicon glyphicon-map-marker navbar-glyphicon-font"/> {(this.state.currentLocationTag != "")
-                ? this.state.currentLocationTag
-                : this.state.defaultLocation}
-              <span className="caret navbar-glyphicon-font"/>
-            </a>
-            <ul 
-              id="location-ul"
-              className="dropdown-menu dropdown-menu-large row">
-              {this.dropDownMenu(this.getLocations())}
-            </ul>
-          </li>
-
-          <li>
-            <a 
-              className="navbar-font"
-              href={this.state.currentLogOutUrl}>Logout {' '}
-              <span className="glyphicon glyphicon-log-out navbar-glyphicon-font"/>
-            </a>
-          </li>
-        </ul>
-      </header>
+          <ul className="navbar-right nav-header">
+            <li className="dropdown">
+              <a className="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <span className="glyphicon glyphicon-user"/> {' ' + this.state.currentUser}
+                <span className="caret"/>
+              </a>
+              <ul className="dropdown-menu user">
+                <li>
+                  <a href="#">My Account</a>
+                </li>
+              </ul>
+            </li>
+            <li className="dropdown dropdown-large">
+              <a className="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <span className="glyphicon glyphicon glyphicon-map-marker"/> {(this.state.currentLocationTag != "")
+                  ? this.state.currentLocationTag
+                  : this.state.defaultLocation}
+                <span className="caret"/>
+              </a>
+              <ul className="dropdown-menu dropdown-menu-large row">
+                {/*Execute the function*/}
+                {this.dropDownMenu(this.getLocations())}
+              </ul>
+            </li>
+            <li>
+              <a href={this.state.currentLogOutUrl}>Logout {' '}
+                <span className="glyphicon glyphicon-log-out"/></a>
+            </li>
+          </ul>
+        </header>
+        <BreadCrumbComponent />
+      </div>
     );
   }
 }

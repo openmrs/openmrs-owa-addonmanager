@@ -12,12 +12,17 @@ import React from 'react';
 import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
 import  Header  from '../../app/js/components/common/Header';
+import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent';
 
 
 describe('<Header />', () => {
     const renderedComponent = shallow( < Header / > );
     it('Should render its children', () => {
-        expect(renderedComponent.find("div")).to.have.length(1);
+        expect(renderedComponent.find("div")).to.have.length(2);
+    });
+
+    it('should mount the BreadCrumbComponent in itself', () => {
+        expect(renderedComponent.contains( <BreadCrumbComponent/> )).to.equal(true);
     });
 
     it('Ensures the dropDownMenu populates the fetch locations', () => {
