@@ -8,13 +8,11 @@
  */
 import React, { Component } from 'react';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
-import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent';
 
 export default class HomePage extends React.Component {
   render() {
     return (
       <div>
-        <BreadCrumbComponent />
         <div className="main-home-page">
           <h2>Add On Manager</h2>
           <div className="home-page-body">

@@ -2,7 +2,6 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import HomePage from '../../app/js/components/homePage/HomePage';
-import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent';
 
 describe('<Homepage />', () => {
     const homePage = shallow(< HomePage />);
@@ -30,7 +29,4 @@ describe('<Homepage />', () => {
         expect(homePage.find("Link").getNodes()).to.have.length(2);
     });
 
-    it('should mount the BreadCrumbComponent in itself', () => {
-        expect(homePage.contains( <BreadCrumbComponent/> )).to.equal(true);
-    });
 });

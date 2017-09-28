@@ -9,7 +9,6 @@
 import React from 'react';
 import axios from 'axios';
 import AddAddon from '../manageApps/AddAddon.jsx';
-import BreadCrumbComponent from '../../breadCrumb/BreadCrumbComponent';
 import { ApiHelper } from '../../../helpers/apiHelper';
 import { AddonList } from './AddonList';
 import DeleteAddonModal from './DeleteAddonModal.jsx';
@@ -233,7 +232,6 @@ export default class ManageApps extends React.Component {
 
     return (
       <div>
-        <BreadCrumbComponent />
         <div className="container-fluid">
           {this.state.showMsg ? alert : null}
           {showProgress === true ? progressBar : null}
