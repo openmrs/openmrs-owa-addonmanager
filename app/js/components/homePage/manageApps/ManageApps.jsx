@@ -28,6 +28,9 @@ export default class ManageApps extends React.Component {
       isOpen: false,
       selectedApp: null,
       displayManageOwaButtons: false,
+      searchResults: [],
+      install: false,
+      downloadUri: null, 
     };
 
     this.apiHelper = new ApiHelper(null);
@@ -42,9 +45,19 @@ export default class ManageApps extends React.Component {
     this.openModal = this.openModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.displayManageOwaButtons = this.displayManageOwaButtons.bind(this);
+    this.handleDownload = this.handleDownload.bind(this);
+    this.onlineSearchHandler = this.onlineSearchHandler.bind(this);
   }
 
   componentWillMount() {
+    this.handleApplist();
+  }
+  
+  componentDidMount() {
+    jQuery("#fileInput").filestyle({btnClass: "btn-primary"});
+  }
+
+  handleApplist() {
     this.apiHelper.get('/owa/applist').then(response => {
       this.setState((prevState, props) => {
         return {
@@ -53,10 +66,6 @@ export default class ManageApps extends React.Component {
         };
       });
     });
-  }
-  
-  componentDidMount() {
-    jQuery("#fileInput").filestyle({btnClass: "btn-primary"});
   }
 
   handleUpload() {
@@ -176,6 +185,7 @@ export default class ManageApps extends React.Component {
         };
       });
       Utility.notifications('error', name + ' deleted successfully');
+      this.handleApplist();
     }).catch(error => {
       toastr.error(error);
     });
@@ -201,18 +211,72 @@ export default class ManageApps extends React.Component {
     return location.href = `/${location.href.split('/')[3]}/owa/${app.folderName}/${app.launch_path}`;
   }
 
+  handleDownload(e) {
+    e.preventDefault();
+    location.href=this.state.downloadUri;
+  }
+
+  onlineSearchHandler(addOnFound, searchValue, searchResults, staticAppList) {
+    if(addOnFound.length > 0) {
+      this.setState((prevState, props) => {
+        return {
+          appList: addOnFound,
+          install: false,
+          downloadUri: null,
+          searchResults: [],        };
+      });
+    } else if(searchValue.length >1 && addOnFound.length == 0) {
+      axios.get(`https://addons.openmrs.org/api/v1//addon?&q=${searchValue}`)
+        .then(response => {
+          this.setState((prevState, props) => {
+            return {
+              searchResults: response.data
+            };
+          });
+        })
+        .catch(error => {
+          error;
+        });
+      if(searchResults.length < 1) {
+        this.setState((prevState, props) => {
+          return {
+            appList: []
+          };
+        });
+      } else {
+        searchResults.forEach(result => {
+          if(result.type == "OWA") {
+            axios.get(`https://addons.openmrs.org/api/v1//addon/${result.uid}`)
+              .then(res => {
+                this.setState({
+                  appList: [res.data],
+                  downloadUri: res.data['versions'][0].downloadUri,
+                  install: true
+                });
+              });
+          }
+        });
+      }
+    } else {
+      this.setState({ 
+        appList: staticAppList,
+        searchResults: []});
+    }
+  }
+
   searchAddOn(event){
     event.preventDefault();
-    if(event.target.value.length >= 1){     
-      let addOnFound = this.state.staticAppList.filter((app) => 
-        app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
+    const searchValue = event.target.value;
+    const { searchResults, staticAppList, appList} = this.state;
+    
+    let addOnFound = this.state.staticAppList.filter((app) => 
+      app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
       || app.description.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1 
       || app.developer["name"].toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1 
       || app.version.indexOf(event.target.value) !== -1);
-      this.setState({appList: addOnFound});
-    }else{
-      this.setState({appList: this.state.staticAppList});
-    }
+
+    this.onlineSearchHandler(addOnFound, searchValue, searchResults, staticAppList);
+
   }
 
   render() {
@@ -260,24 +324,24 @@ export default class ManageApps extends React.Component {
                   <th>Name</th>
                   <th>Developer</th>
                   <th>Version</th>
-                  <th>Delete</th>
+                  {this.state.install == false ? 
+                    <th>Delete</th> : 
+                    <th>Install</th>}
                 </tr>
               </thead>
-              {
-                this.state.appList.length < 1 ? 
-                  <tbody>
-                    <tr>
-                      <th colSpan="5">
-                        <h4>No apps found</h4>
-                      </th>
-                    </tr>
-                  </tbody> : 
-                  <AddonList
-                    appList={this.state.appList}
-                    openPage={this.openPage}
-                    openModal={this.openModal}
-                  />
-              }
+              {this.state.appList.length < 1 ? 
+                <tbody>
+                  <tr>
+                    <th colSpan="5"><h4>No apps found</h4></th>
+                  </tr>
+                </tbody> : 
+                <AddonList
+                  handleDownload = {this.handleDownload}
+                  install = {this.state.install}
+                  appList={this.state.appList}
+                  openPage={this.openPage}
+                  openModal={this.openModal}
+                />}
             </table>
             {this.state.isOpen ? (
               <DeleteAddonModal
