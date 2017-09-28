@@ -36,7 +36,7 @@ export const AddonList = ({appList, openPage, openModal}) => {
                 className="text-center"
                 id="delete-icon-wrapper"
               >
-                <i className="glyphicon glyphicon-trash text-danger delete-icon" onClick={openModal(app)}/>
+                <i className="glyphicon glyphicon-trash text-danger delete-icon" id="delete-btn" onClick={openModal(app)}/>
               </td>           
             </tr>
           );

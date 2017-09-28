@@ -20,10 +20,10 @@ describe('<Homepage />', () => {
         expect(homePage.find("h2").props().children).equals("Add On Manager");
     });
 
-    it('Should render 2 h5 tags with titles', () => {
-        expect(homePage.find("h5")).to.have.length(2);
-        expect(homePage.find("h5").getNodes()[0].props.children).equals(" Manage Addons ");
-        expect(homePage.find("h5").getNodes()[1].props.children).equals(" Manage Settings");
+    it('Should render 2 p tags with titles', () => {
+        expect(homePage.find("p")).to.have.length(2);
+        expect(homePage.find("p").getNodes()[0].props.children).equals("Manage Addons");
+        expect(homePage.find("p").getNodes()[1].props.children).equals("Manage Settings");
     });
 
     it('Should render 2 Link tags', () => {

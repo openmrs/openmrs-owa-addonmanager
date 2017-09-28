@@ -25,8 +25,8 @@ describe('<ManageApps />', () => {
     });
 
     it('Should render a heading', () => {
-        expect(renderedComponent.find("h3")).to.have.length(1);
-        expect(renderedComponent.find("h3").getNode()
+        expect(renderedComponent.find("h4")).to.have.length(1);
+        expect(renderedComponent.find("h4").getNode()
           .props.children).to.equal('Addon Manager');
     });
 

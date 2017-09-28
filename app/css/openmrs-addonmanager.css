@@ -136,13 +136,13 @@ a:hover {
     padding: 0;
 }
 
-.main-home-page h2{
+.main-home-page h2 {
     font-size: 1.3em;
     color: #009384;
     margin-left: 5px;
 }
 
-.home-page-body{
+.home-page-body {
     display: flex;
     flex-direction: row;
     position: relative;
@@ -152,7 +152,7 @@ a:hover {
     text-align: center;
 }
 
-.manage-app-button{
+.manage-app-button {
     position: relative;
     left: 5px;
     bottom: 5px;
@@ -161,7 +161,7 @@ a:hover {
     width: 16%;
 }
 
-.manage-settings-button{
+.manage-settings-button {
     position: relative;
     left: 15px;
     bottom: 5px;
@@ -170,42 +170,49 @@ a:hover {
     width: 16%;
 }
 
-.button{
-    width:100%;
-    height:100%;
-}
-
-.button-icon{
+.button-icon {
     color:#363463;
     font-size: 40px;
     text-decoration: inherit;
     display: inline-block; 
     margin-bottom: 10px;
-    margin-top: -5px;
 }
 
-button h5{
+button p {
    color: #363463;
-   font-size: 20px;
-   width: 5em;
+   font-size: 16px;
    word-wrap: break-word;
    text-align: center;
    margin: 0 auto;
 }
 
-.button:hover {
-    background-color:#dddddd;
-    border: 0px;
-}
-
-#manageApps{
+#manageApps {
     font-size: 1.3em;
     color: #009384;
     padding-left: 15px;
-
 }
 
-.manage-app-buttons{
+.buttons:hover {
+    background: -webkit-linear-gradient(top, #dddddd, #dddddd);
+}
+
+.buttons {
+    padding: 25px 10px;
+    width: 150px;
+    min-height: 90px;
+    max-width: 300px;
+    vertical-align: top;
+    line-height: 1.3em;
+    margin: 10px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #dddddd;
+    border-radius: 3px;
+    border: #dddddd 1px solid;
+    background: -webkit-linear-gradient(top, #ffffff, #dddddd);
+}
+
+.manage-app-buttons {
     display: flex;
     height: 45px;
     margin-top: 18px; 
@@ -214,19 +221,19 @@ button h5{
     text-align: center;
 }
 
-.span-icon{
+.span-icon {
     display: relative;
     color: black;
     font-size: 17px !important;
 }
 
-.button-add-module{
+.button-add-module {
     position: relative;
     margin-left: 12px;
     text-align: center;
 }
 
-.button-add-module:hover{
+.button-add-module:hover {
     background-color:#dddddd;
     border: 0px;
 }
@@ -237,7 +244,7 @@ button h5{
     text-align: center;
 }
  
-.button-search-module:hover{
+.button-search-module:hover {
     background-color:#dddddd;
     border: 0px;
 }
@@ -261,8 +268,8 @@ legend.scheduler-border {
     font-size: 1.2em;
     font-weight: bold;
     text-align: left;
-    width:inherit; /* Or auto */
-    padding:0 10px; /* To give a bit of padding on the left and right */
+    width:inherit;
+    padding:0 10px;
     border-bottom:none;
 }
 
@@ -296,7 +303,7 @@ td {
     width: 100%;
 }
 
-.search-add-on .glyphicon{
+.search-add-on .glyphicon {
      position: relative;
      text-align: center;
      font-size: 20px;
@@ -304,13 +311,13 @@ td {
      color: #363463;
 }
 
-#search-input{
+#search-input {
     font-size: 16px; 
     padding: 12px 20px 12px 40px; 
     border: 1px solid #ddd; 
     margin-bottom: 12px; 
-    border-radius: 10px;
     margin-left: -20px ;
+    width: 100%;
 }
 
 table h4{
@@ -328,6 +335,7 @@ span.title.breadcrumb-item {
 .modal-open {
     overflow: initial;
 }
+
 .navbar-font {
     font-size: 1em;
 }
@@ -407,3 +415,52 @@ span.title.breadcrumb-item {
      border-style: black solid;
      border-width: 1px;
  }
+
+#cancel-btn {
+    background: -webkit-linear-gradient(top, #ff6666, #ff3d3d);
+    background-color: #ff3d3d;
+    border: #ff3d3d 1px solid;
+}
+
+#success-btn {
+    background: -webkit-linear-gradient(top, #a1d030, #88af28);
+    background-color: #88af28;
+    border: #88af28 1px solid;
+}
+
+#success-btn, #cancel-btn, #delete-btn {
+    padding: 8px 20px;
+    line-height: 1.2em;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+    max-width: 250px;
+    min-width: 0;
+    margin-right: 10px;
+    border-radius: 3px;
+}
+
+#delete-btn {
+    background-color: #dddddd;
+    border: #dddddd 1px solid;
+    display: inline-block;
+    color: #363463;
+    min-width: 0;
+    max-width: 300px;
+    border-radius: 3px;
+    background: -webkit-linear-gradient(top, #ffffff, #dddddd);
+}
+
+input[type=text]:focus {
+    border: #007fff 1px solid;
+}
+
+input[type=text] {
+    border-radius: 0;
+    color: #363463;
+    padding: 5px 10px;
+    margin: 0;
+    margin-top: 5px;
+    background-color: #FFF;
+    border: 1px solid #dddddd;
+}
