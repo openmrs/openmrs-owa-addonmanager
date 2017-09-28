@@ -290,6 +290,11 @@ legend.scheduler-border {
     color: #a94442;
 }
 
+.install-icon {
+    font-size: 20px;
+    color: #1F78D5;
+}
+
 td {
     cursor: pointer;
 }

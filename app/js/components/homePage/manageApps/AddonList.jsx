@@ -9,7 +9,7 @@
  */
 import React from 'react';
 
-export const AddonList = ({appList, openPage, openModal}) => {
+export const AddonList = ({handleDownload, install, appList, openPage, openModal}) => {
   return (
     <tbody>
       {
@@ -18,7 +18,9 @@ export const AddonList = ({appList, openPage, openModal}) => {
             <tr key={key}>
               <td onClick={() => openPage(app)}>
                 <img
-                  src={`/${location.href.split('/')[3]}/owa/openmrs-addonmanager/${app.icons[48]}`}
+                  src={app.icons!= null ? 
+                    `/${location.href.split('/')[3]}/owa/openmrs-addonmanager/${app.icons[48]}` : 
+                    `./img/omrs-button.png`}
                   alt="addon logo"
                 />
               </td>
@@ -27,16 +29,19 @@ export const AddonList = ({appList, openPage, openModal}) => {
                 <div><h5  className="addon-description">{app.description}</h5></div>
               </td>
               <td onClick={() => openPage(app)}>
-                {app.developer.name}
+                {app.developer ? app.developer.name : app.maintainers[0].name}
               </td>
               <td onClick={() => openPage(app)}>
-                {app.version}
+                {app.version ? app.version : app.latestVersion}
               </td>
               <td
                 className="text-center"
                 id="delete-icon-wrapper"
               >
-                <i className="glyphicon glyphicon-trash text-danger delete-icon" id="delete-btn" onClick={openModal(app)}/>
+                {install == false ? 
+                  <i className="glyphicon glyphicon-trash text-danger delete-icon"  onClick={openModal(app)}/> :
+                  <i className="glyphicon glyphicon-download-alt text-primary install-icon"  onClick={(e) => handleDownload(e)}/> 
+                }
               </td>           
             </tr>
           );
@@ -48,6 +53,8 @@ export const AddonList = ({appList, openPage, openModal}) => {
 };
 
 AddonList.propTypes = {
+  handleDownload: React.PropTypes.func.isRequired,
+  install: React.PropTypes.bool.isRequired,
   appList: React.PropTypes.array.isRequired,
   openPage: React.PropTypes.func.isRequired, 
   openModal: React.PropTypes.func.isRequired
