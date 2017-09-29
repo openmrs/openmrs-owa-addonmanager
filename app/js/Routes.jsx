@@ -8,18 +8,17 @@
  */
 import React, { Component } from 'react';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
-import App from './components/App';
-import HomePage from './components/homePage/HomePage';
-import ManageApps from './components/homePage/manageApps/ManageApps';
-import ManageSettings from './components/homePage/ManageSettings';
+import App from './components/App.jsx';
+import ManageApps from './components/manageApps/ManageApps.jsx';
+import ManageSettings from './components/manageApps/ManageSettings.jsx';
 
 export default () => {
   return (
     <Router history={hashHistory}>
       <Route path="/" component={App} >
-        <IndexRoute component={HomePage}/>
+        <IndexRoute component={ManageApps}/>
         <Route path="manageSettings" component={ManageSettings} />
-        <Route path="manageApps" component={ManageApps} />
+        <Route path="*" component ={ManageApps}/>
       </Route>
     </Router>
   );

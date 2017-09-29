@@ -1,14 +1,15 @@
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
-import ManageApps from '../../app/js/components/homePage/manageApps/ManageApps';
-import AddonList from '../../app/js/components/homePage/manageApps/AddonList';
+import ManageApps from '../../app/js/components/manageApps/ManageApps.jsx';
+import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent.jsx';
+import AddonList from '../../app/js/components/manageApps/AddonList.jsx';
 
 describe('<ManageApps />', () => {
     const renderedComponent = shallow(< ManageApps />);
 
-    it('Should render 4 div', () => {
-        expect(renderedComponent.find("div")).to.have.length(4);
+    it('Should render 11 div', () => {
+        expect(renderedComponent.find("div")).to.have.length(11);
     });
 
     it('Should render a table', () => {
@@ -24,9 +25,9 @@ describe('<ManageApps />', () => {
     });
 
     it('Should render a heading', () => {
-        expect(renderedComponent.find("h4")).to.have.length(1);
-        expect(renderedComponent.find("h4").getNode()
-          .props.children).to.equal('Addon Manager');
+        expect(renderedComponent.find("h2")).to.have.length(1);
+        expect(renderedComponent.find("h2").getNode()
+          .props.children).to.equal('Add-on Manager');
     });
 
     it('Should render 5 table head titles', () => {

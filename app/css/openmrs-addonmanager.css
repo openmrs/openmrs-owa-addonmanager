@@ -51,7 +51,7 @@ header .logo img {
     -ms-border-radius: 5px;
     -khtml-border-radius: 5px;
     border-radius: 5px;
-    min-height: 500px;
+    min-height: 580px;
     justify-content: center;
     overflow: auto;
 }
@@ -137,19 +137,26 @@ a:hover {
 }
 
 .main-home-page h2 {
+    margin-left: 30px;
+}
+
+.main-home-page h2, #title-heading {
     font-size: 1.3em;
     color: #009384;
-    margin-left: 5px;
+}
+#title-heading {
+    margin-left: 45px;
+}
+
+#manage-settings {
+    margin: 0 30px;
 }
 
 .home-page-body {
     display: flex;
     flex-direction: row;
     position: relative;
-    height: 150px;
     padding: 0px;
-    margin-left: 25px;
-    text-align: center;
 }
 
 .manage-app-button {
@@ -273,6 +280,10 @@ legend.scheduler-border {
     border-bottom:none;
 }
 
+.manage-settings {
+    padding-right: 50px;
+}
+
 .addon-name {
     font-weight: bold;
 }
@@ -285,9 +296,8 @@ legend.scheduler-border {
     padding: 25px;
 }
 
-.delete-icon {
+.delete-icon, .settings-icon {
     font-size: 20px;
-    color: #a94442;
 }
 
 .install-icon {
@@ -422,9 +432,15 @@ span.title.breadcrumb-item {
  }
 
 #cancel-btn {
-    background: -webkit-linear-gradient(top, #ff6666, #ff3d3d);
+    background: -webkit-linear-gradient(top, #F56A6A, #ff3d3d);
     background-color: #ff3d3d;
     border: #ff3d3d 1px solid;
+}
+
+#upload-btn {
+    background: -webkit-linear-gradient(top, #6964FF, #514E9D);
+    background-color: #363463;
+    border: #363463 1px solid;
 }
 
 #success-btn {
@@ -433,7 +449,7 @@ span.title.breadcrumb-item {
     border: #88af28 1px solid;
 }
 
-#success-btn, #cancel-btn, #delete-btn {
+#success-btn, #cancel-btn, #icon-btn {
     padding: 8px 20px;
     line-height: 1.2em;
     color: white;
@@ -445,7 +461,7 @@ span.title.breadcrumb-item {
     border-radius: 3px;
 }
 
-#delete-btn {
+#icon-btn {
     background-color: #dddddd;
     border: #dddddd 1px solid;
     display: inline-block;
@@ -454,6 +470,10 @@ span.title.breadcrumb-item {
     max-width: 300px;
     border-radius: 3px;
     background: -webkit-linear-gradient(top, #ffffff, #dddddd);
+}
+
+#notification-wrapper {
+    margin: 0 10px;
 }
 
 input[type=text]:focus {
@@ -465,7 +485,6 @@ input[type=text] {
     color: #363463;
     padding: 5px 10px;
     margin: 0;
-    margin-top: 5px;
     background-color: #FFF;
     border: 1px solid #dddddd;
 }

@@ -23,7 +23,7 @@ export default function AddAddon({
         <div className="row">
           <div className="col-xs-12">
             <div className={classesToUse}>
-              <input 
+              <input
                 name="file"
                 type="file" 
                 id="fileInput"
@@ -46,10 +46,10 @@ export default function AddAddon({
                         <span 
                           className="glyphicon glyphicon-upload" /> Upload</button>
                       <button
+                        id="cancel-btn"
                         className="btn btn-danger"
                         onClick={handleClear}>
-                        <span 
-                          className="glyphicon glyphicon-remove" /> Clear Addon</button>
+                        <span className="glyphicon glyphicon-remove" /> Clear</button>
                     </div>
                   </div>
                 </div>

@@ -12,7 +12,7 @@ import React from 'react';
 import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
 import  Header  from '../../app/js/components/common/Header';
-import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent';
+import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent.jsx';
 
 
 describe('<Header />', () => {

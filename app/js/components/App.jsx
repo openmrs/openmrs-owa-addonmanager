@@ -7,7 +7,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 import React, { Component } from 'react';
-import HomePage from '../components/homePage/HomePage';
+import ManageApps from '../components/manageApps/ManageApps.jsx';
 import Header from '../components/common/Header';
 
 export default class App extends React.Component {
