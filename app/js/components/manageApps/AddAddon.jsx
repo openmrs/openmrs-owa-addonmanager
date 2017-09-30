@@ -9,7 +9,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function AddAddon({ 
+export default function AddAddon({
   handleClear, 
   handleUpload, 
   displayManageOwaButtons, 
@@ -43,7 +43,7 @@ export default function AddAddon({
                       <button
                         className="btn btn-primary"
                         onClick={handleUpload}>
-                        <span 
+                        <span
                           className="glyphicon glyphicon-upload" /> Upload</button>
                       <button
                         id="cancel-btn"

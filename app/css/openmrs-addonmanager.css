@@ -123,7 +123,6 @@ a:hover {
 
 .dropdown-menu-large {
     margin-left: 16px;
-    margin-right: 16px;
     padding: 20px 0px;
     z-index: 900;
 }
@@ -131,6 +130,11 @@ a:hover {
 .dropdown-menu-large>li>a:hover {
     background-color: #007fff;
 }
+
+.dropdown-menu {
+    width: 50%;
+}
+
 .dropdown-menu > li > a {
     color: #007fff;
     padding: 0;
@@ -487,4 +491,35 @@ input[type=text] {
     margin: 0;
     background-color: #FFF;
     border: 1px solid #dddddd;
+}
+
+.waiting-modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('../img/uploading.gif')
+                50% 50% 
+                no-repeat;
+}
+
+.upload-text {
+    position:   relative;
+    z-index:    1000;
+    top:        60%;
+    height:     100%;
+    width:      100%;
+    text-align: center;
+}
+
+body.loading {
+    overflow: hidden;   
+}
+
+body.loading .waiting-modal {
+    display: block;
 }

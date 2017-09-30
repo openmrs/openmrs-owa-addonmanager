@@ -149,7 +149,6 @@ export default class Header extends Component {
                 <span className="caret"/>
               </a>
               <ul className="dropdown-menu dropdown-menu-large row">
-                {/*Execute the function*/}
                 {this.dropDownMenu(this.getLocations())}
               </ul>
             </li>
