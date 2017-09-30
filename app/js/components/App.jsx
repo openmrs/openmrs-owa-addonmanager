@@ -8,7 +8,7 @@
  */
 import React, { Component } from 'react';
 import ManageApps from '../components/manageApps/ManageApps.jsx';
-import Header from '../components/common/Header';
+import Header from '../components/common/Header.jsx';
 
 export default class App extends React.Component {
   constructor(props){
