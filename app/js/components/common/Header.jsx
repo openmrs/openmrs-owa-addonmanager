@@ -30,16 +30,26 @@ export default class Header extends Component {
 
   componentWillMount() {
     this.fetchLocation('/location').then((response) => {
-      this.setState({locationTags: response.results});
-      this.setState({
-        defaultLocation: response.results[0].display,
-        currentLocationTag: response.results[0].display,
+      this.setState((prevState, props) => {
+        return {
+          locationTags: response.results
+        };
+      });
+      this.setState((prevState, props) => {
+        return {
+          defaultLocation: response.results[0].display,
+          currentLocationTag: response.results[0].display,
+        };
       });
       this.getUri();
     });
 
     this.fetchLocation('/session').then((response) => {
-      this.setState({currentUser: response.user.display});
+      this.setState((prevState, props) => {
+        return {
+          currentUser: response.user.display
+        };
+      });
     });
   }
 
@@ -55,7 +65,11 @@ export default class Header extends Component {
       let arrUrl = url.split("/");
       let applicationInUse = arrUrl[3].search('http:') == -1 ? arrUrl[3]: arrUrl[3].replace('http:', '');
       let customUrl = `/${applicationInUse}/appui/header/logout.action?successUrl=${applicationInUse}`;
-      this.setState({currentLogOutUrl: customUrl});
+      this.setState((prevState, props) => {
+        return {
+          currentLogOutUrl: customUrl
+        };
+      });
       return customUrl;
         
     });
@@ -73,7 +87,11 @@ export default class Header extends Component {
 
   handleClick(e) {
     e.preventDefault();
-    this.setState({currentLocationTag: e.target.id});
+    this.setState((prevState, props) => {
+      return {
+        currentLocationTag: e.target.id
+      };
+    });
   }
 
   dropDownMenu(locationTags) {

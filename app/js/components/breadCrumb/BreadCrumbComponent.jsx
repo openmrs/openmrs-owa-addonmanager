@@ -26,22 +26,28 @@ class BreadCrumbComponent extends Component{
     browserHistory.listen( location => {
       const currentTab = location.hash.split('/').pop();
       if (!currentTab) {
-        this.setState({
-          homePage: true,
-          manageSettingsPage: false,
-          manageAddonPage: false,
+        this.setState((prevState, props) => {
+          return {
+            homePage: true,
+            manageSettingsPage: false,
+            manageAddonPage: false,
+          };
         });
       } else if(currentTab === 'manageSettings') {
-        this.setState({
-          manageSettingsPage: true,
-          manageAddonPage: false,
-          homePage: false
+        this.setState((prevState, props) => {
+          return {
+            manageSettingsPage: true,
+            manageAddonPage: false,
+            homePage: false
+          };
         });
       }else if (currentTab === 'manageApps') {
-        this.setState({
-          manageAddonPage: true,
-          manageSettingsPage: false,
-          homePage: false,
+        this.setState((prevState, props) => {
+          return {
+            manageAddonPage: true,
+            manageSettingsPage: false,
+            homePage: false,
+          };
         });
       }
     });
