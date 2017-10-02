@@ -58,10 +58,12 @@ export default class ManageSettings extends React.Component {
   getDefaultSettings () {
     const settingsPaths = this.settingsData();
     const appFolderPath = String.raw`appdata\owa`;
-    this.setState({ 
-      AppFolderPathValue: settingsPaths != undefined ? settingsPaths[0].propertyValue : appFolderPath,
-      AppBaseURLValue: settingsPaths != undefined ? settingsPaths[1].propertyValue : '/owa',
-      AppStoreURLValue: settingsPaths != undefined ? settingsPaths[2].propertyValue : 'http://modules.openmrs.org'
+    this.setState((prevState, props) => {
+      return { 
+        AppFolderPathValue: settingsPaths != undefined ? settingsPaths[0].propertyValue : appFolderPath,
+        AppBaseURLValue: settingsPaths != undefined ? settingsPaths[1].propertyValue : '/owa',
+        AppStoreURLValue: settingsPaths != undefined ? settingsPaths[2].propertyValue : 'http://modules.openmrs.org'
+      };
     });
   }
 
@@ -72,7 +74,11 @@ export default class ManageSettings extends React.Component {
 
   onChange(event) {
     event.preventDefault();
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState((prevState, props) => {
+      return {
+        [event.target.name]: event.target.value 
+      };
+    });
   }
   
   render() {

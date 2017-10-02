@@ -96,12 +96,14 @@ export default class ManageApps extends React.Component {
       processData: false,
       cache: false,
       success: function (result) {
-        this.setState({
-          msgBody: "App has been successfully installed",
-          msgType: "success",
-          showMsg: true,
-          appList: result,
-          staticAppList: result,
+        this.setState((prevState, props) => {
+          return {
+            msgBody: "App has been successfully installed",
+            msgType: "success",
+            showMsg: true,
+            appList: result,
+            staticAppList: result,
+          };
         });
 
         if(that.state.showMsg === true) {
@@ -110,10 +112,12 @@ export default class ManageApps extends React.Component {
 
       }.bind(this),
       error: function(xhr, status, error) {
-        this.setState({
-          msgBody: "App has not been installed",
-          msgType: "warning",
-          showMsg: true
+        this.setState((prevState, props) => {
+          return {
+            msgBody: "App has not been installed",
+            msgType: "warning",
+            showMsg: true
+          };
         });
 
         if(that.state.showMsg === true) {
@@ -122,9 +126,11 @@ export default class ManageApps extends React.Component {
       }.bind(this),
       complete: function(result){
         $(":file").filestyle('clear');
-        this.setState({
-          uploadStatus: 0,
-          showProgress: false,
+        this.setState((prevState, props) => {
+          return {
+            uploadStatus: 0,
+            showProgress: false,
+          };
         });
         this.displayManageOwaButtons();
       }.bind(this)
@@ -137,9 +143,11 @@ export default class ManageApps extends React.Component {
       let current = e.loaded;
       
       let Percentage = Math.round((current * 100)/max);   
-      this.setState({
-        showProgress: true,
-        uploadStatus: Percentage
+      this.setState((prevState, props) => {
+        return {
+          showProgress: true,
+          uploadStatus: Percentage
+        };
       });
     }
   }
@@ -147,19 +155,25 @@ export default class ManageApps extends React.Component {
   displayManageOwaButtons() {
     const addonFile = document.getElementById('fileInput').files[0];
     if (typeof(addonFile) !== 'undefined') {
-      this.setState({
-        displayManageOwaButtons: true
+      this.setState((prevState, props) => {
+        return {
+          displayManageOwaButtons: true
+        };
       });
     } else {
-      this.setState({
-        displayManageOwaButtons: false
+      this.setState((prevState, props) => {
+        return {
+          displayManageOwaButtons: false
+        };
       });
     }
   }
 
   handleAlertBehaviour() {
-    this.setState({
-      showMsg: false,
+    this.setState((prevState, props) => {
+      return {
+        showMsg: false,
+      };
     });
   }
 
@@ -195,16 +209,20 @@ export default class ManageApps extends React.Component {
 
   openModal(app){
     return (e) => {
-      this.setState({
-        isOpen: true,
-        selectedApp: app
+      this.setState((prevState, props) => {
+        return {
+          isOpen: true,
+          selectedApp: app
+        };
       });
     };
   }
  
   hideModal(){
-    this.setState({
-      isOpen: false
+    this.setState((prevState, props) => {
+      return {
+        isOpen: false
+      };
     });
   }
 
@@ -249,19 +267,24 @@ export default class ManageApps extends React.Component {
           if(result.type == "OWA") {
             axios.get(`https://addons.openmrs.org/api/v1//addon/${result.uid}`)
               .then(res => {
-                this.setState({
-                  appList: [res.data],
-                  downloadUri: res.data['versions'][0].downloadUri,
-                  install: true
+                this.setState((prevState, props) => {
+                  return {
+                    appList: [res.data],
+                    downloadUri: res.data['versions'][0].downloadUri,
+                    install: true
+                  };
                 });
               });
           }
         });
       }
     } else {
-      this.setState({ 
-        appList: staticAppList,
-        searchResults: []});
+      this.setState((prevState, props) => {
+        return { 
+          appList: staticAppList,
+          searchResults: []
+        };
+      });
     }
   }
 
