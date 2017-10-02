@@ -33,6 +33,7 @@ export default class ManageApps extends React.Component {
       searchResults: [],
       install: false,
       downloadUri: null,
+      deleteStatus: false,
     };
 
     this.apiHelper = new ApiHelper(null);
@@ -190,13 +191,18 @@ export default class ManageApps extends React.Component {
   }
 
   handleDelete(name) {
+    this.setState((prevState, props) => {
+      return {
+        deleteStatus: true,
+      };
+    });
     const applicationDistribution = location.href.split('/')[3];
-
     axios.get(`/${applicationDistribution}/module/owa/deleteApp.form?appName=${name}`).then(response => {
       this.setState((prevState, props) => {
         return {
           appList: response.data.appList,
-          msgType: 'success' 
+          msgType: 'success',
+          deleteStatus: false, 
         };
       });
       Utility.notifications('error', name + ' deleted successfully');
@@ -310,8 +316,12 @@ export default class ManageApps extends React.Component {
         {this.state.msgBody}
       </div>
     );
-    const { showProgress, uploadStatus} = this.state;
+    const {
+      showProgress,
+      uploadStatus,
+      deleteStatus } = this.state;
     const disableUploadElements = (this.state.uploadStatus > 0) ? true : false;
+    deleteStatus ? document.body.className = 'loading' : document.body.className = '';
     disableUploadElements ? document.body.className = 'loading' : document.body.className = '';
 
     return (
@@ -337,8 +347,6 @@ export default class ManageApps extends React.Component {
               </div>
 
               <AddAddon
-                disableUploadElements={disableUploadElements}
-                showProgress={this.state.showProgress}
                 handleClear={this.handleClear}
                 handleUpload={this.handleUpload}
                 displayManageOwaButtons={this.displayManageOwaButtons}
@@ -391,7 +399,9 @@ export default class ManageApps extends React.Component {
             </div>
           </div>
         </div>
-        <div className="waiting-modal"><p className="upload-text">Uploading {uploadStatus}%</p></div>
+        {deleteStatus ? 
+          <div className="deleting-modal"><p className="upload-text">Deleting Addon</p></div>
+          : <div className="waiting-modal"><p className="upload-text">Uploading {uploadStatus}%</p></div>}
       </div>
     );
   }

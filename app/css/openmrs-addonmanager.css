@@ -493,8 +493,15 @@ input[type=text] {
     border: 1px solid #dddddd;
 }
 
+.deleting-modal {
+    display:    block;
+}
+
 .waiting-modal {
     display:    none;
+}
+
+.waiting-modal, .deleting-modal {
     position:   fixed;
     z-index:    1000;
     top:        0;
