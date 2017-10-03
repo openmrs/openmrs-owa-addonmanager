@@ -18,7 +18,7 @@ export const AddonList = ({handleDownload, install, appList, openPage, openModal
             <tr key={key}>
               <td onClick={() => openPage(app)}>
                 <img
-                  src={app.icons !== null ? 
+                  src={app.icons !== null && app.icons !== undefined ? 
                     `/${location.href.split('/')[3]}/owa/openmrs-addonmanager/${app.icons[48]}` : 
                     `./img/omrs-button.png`}
                   alt="addon logo"
