@@ -40,7 +40,7 @@ describe('<ManageApps />', () => {
         expect(renderedComponent.find("th").getNodes()[3]
             .props.children).to.equal('Version');
         expect(renderedComponent.find("th").getNodes()[4]
-            .props.children).to.equal('Delete');
+            .props.children).to.equal('Action');
     });
 
     it('should mount the AddonList component in itself', () => {
