@@ -12,6 +12,7 @@ import React, {Component} from 'react';
 import {Link, IndexLink} from 'react-router';
 import {ApiHelper} from '../../helpers/apiHelper';
 import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent';
+import axios from 'axios';
 
 const NUMBER_OF_COLUMNS = 3;
 
@@ -26,6 +27,13 @@ export default class Header extends Component {
       currentLogOutUrl: "",
     };
     this.getUri = this.getUri.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.dropDownMenu = this.dropDownMenu.bind(this);
+    this.getLocations = this.getLocations.bind(this);
+    this.fetchLocation = this.fetchLocation.bind(this);
+    this.getOpenmrsUrl = this.getOpenmrsUrl.bind(this);
+    this.setOpenMRSLocation = this.setOpenMRSLocation.bind(this);
+    this.fetchCurrentUserLocation = this.fetchCurrentUserLocation.bind(this);
   }
 
   componentWillMount() {
@@ -51,6 +59,14 @@ export default class Header extends Component {
         };
       });
     });
+
+    this.fetchCurrentUserLocation('/appui/session').then((response) => {
+      this.setState((prevState, props) => {
+        return {
+          currentLocationTag: response.sessionLocation.display,
+        };
+      });
+    });
   }
 
   getLocations() {
@@ -59,10 +75,25 @@ export default class Header extends Component {
     });
   }
 
+  getOpenmrsUrl() {
+    let location = window.location.toString();
+    let serverLocation = location.substring(0, location.indexOf('/owa/'));
+    let last_string = serverLocation
+      .substring(serverLocation.lastIndexOf('/') + 1, serverLocation.length)
+      .toLowerCase();
+    let finallocation = serverLocation;
+    let isOpenMRS = last_string.indexOf('openmrs');
+
+    if (isOpenMRS < 0) {
+      finallocation = serverLocation.substring(0, serverLocation.lastIndexOf('/'));
+    }
+    return finallocation;
+  }
+
   getUri() {
     this.state.locationTags.map((location) => {
       let url = location.links[0].uri;
-      let arrUrl = url.split("/");
+      let arrUrl = url.split("/"); 
       let applicationInUse = arrUrl[3].search('http:') == -1 ? arrUrl[3]: arrUrl[3].replace('http:', '');
       let customUrl = `/${applicationInUse}/appui/header/logout.action?successUrl=${applicationInUse}`;
       this.setState((prevState, props) => {
@@ -87,11 +118,32 @@ export default class Header extends Component {
 
   handleClick(e) {
     e.preventDefault();
-    this.setState((prevState, props) => {
-      return {
-        currentLocationTag: e.target.id
-      };
+    this.setState({
+      currentLocationTag: e.target.id
     });
+    let locationUuid;
+    let locationDisplay = e.target.id;
+    this.state.locationTags.map((locationArray) => {
+      if (locationArray.display === e.target.id) {
+        locationUuid = locationArray.uuid;
+      }
+    });
+    this.setOpenMRSLocation(locationUuid, locationDisplay);
+  }
+
+  setOpenMRSLocation(locationUuid,locationDisplay) {
+    let uploadUrl=this.getOpenmrsUrl()+"/ws/rest/v1/appui/session";
+    axios.post(`${uploadUrl}`, {"location" : locationUuid});
+  }
+
+  fetchCurrentUserLocation(url) {
+    const apiHelper = new ApiHelper(null);
+    const getData = new Promise(function(resolve, reject) {
+      apiHelper.get(url).then(response => {
+        resolve(response);
+      });
+    });
+    return getData;
   }
 
   dropDownMenu(locationTags) {
@@ -108,7 +160,9 @@ export default class Header extends Component {
       for (let menuIndex = colStart; menuIndex < colEnd; menuIndex++) {
         if (locationTags[menuIndex] == this.state.currentLocationTag) {
           menuInColumns.push(
-            <a href="#" key={menuIndex} id={locationTags[menuIndex]}
+            <a href="#"
+              key={menuIndex}
+              id={locationTags[menuIndex]}
               style={styles}
               className="current-location text-center location"
               onClick={(e) => {
@@ -118,7 +172,9 @@ export default class Header extends Component {
           );
         } else {
           menuInColumns.push(
-            <a href="#" key={menuIndex} id={locationTags[menuIndex]}
+            <a href="#"
+              key={menuIndex}
+              id={locationTags[menuIndex]}
               style={styles}
               className="text-center location"
               onClick={(e) => {
