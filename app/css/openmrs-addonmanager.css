@@ -28,7 +28,7 @@ header {
     -khtml-border-radius: 5px;
     border-radius: 5px;
     display: block;
-    min-height: 48px;
+    min-height: 50px;
 }
 
 header .logo {
@@ -43,7 +43,7 @@ header .logo img {
 
 #body-wrapper {
     margin-top: 10px;
-    padding: 10px;
+    padding: 0 10px 10px 10px;
     background-color: white;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
@@ -83,6 +83,21 @@ header>ul, a {
     color: #eeeeee;
     padding-right: 2px;
     margin-top: 15px;
+    font-size: 16px;
+}
+
+#current-user {
+    margin-top: 0;
+    padding-left: 20px;
+}
+
+#current-user:hover {
+    background-color: #007fff;
+    color: #ffffff;
+}
+
+a > span.glyphicon {
+    font-size: 16px;
 }
 
 .glyphicon {
@@ -97,8 +112,9 @@ li>a:hover {
 }
 
 li>a:focus {
-    color: gold;
+    color: #ffffff;
 }
+
 .table thead {
     position: -webkit-sticky;
     position: -moz-sticky;
@@ -163,22 +179,10 @@ a:hover {
     padding: 0px;
 }
 
-.manage-app-button {
-    position: relative;
-    left: 5px;
-    bottom: 5px;
-    right: 70%;
-    height: 90%;
-    width: 16%;
-}
-
 .manage-settings-button {
     position: relative;
     left: 15px;
-    bottom: 5px;
-    right: 70%;
-    height: 90%;
-    width: 16%;
+    bottom: 0;
 }
 
 .button-icon {
@@ -270,9 +274,8 @@ button p {
 fieldset.scheduler-border {
     border: 1px groove #ddd;
     padding: 0 1.4em 1.4em 1.4em;
-    margin: 0 0 1.5em 0;
     -webkit-box-shadow:  0px 0px 0px 0px #000;
-            box-shadow:  0px 0px 0px 0px #000;
+    box-shadow:  0px 0px 0px 0px #000;
 }
 
 legend.scheduler-border {
@@ -284,8 +287,13 @@ legend.scheduler-border {
     border-bottom:none;
 }
 
-.manage-settings {
-    padding-right: 50px;
+.manage-settings-wrapper {
+    margin-top: 20px;    
+    padding-right: 35px;
+}
+
+.manage-addon-title {
+    display: inline-block;
 }
 
 .addon-name {
@@ -425,6 +433,10 @@ span.title.breadcrumb-item {
      padding: 0;
  }
 
+.dropdown-toggle {
+     padding: 10px;
+ }
+
  #my-account:hover {
      background-color: #5B57A6;
  }
@@ -455,6 +467,13 @@ span.title.breadcrumb-item {
 
 #success-btn, #cancel-btn, #icon-btn {
     padding: 8px 20px;
+}
+
+#setting-icon-btn {
+    padding: 2px 5px;
+}
+
+#success-btn, #cancel-btn, #icon-btn, #setting-icon-btn {
     line-height: 1.2em;
     color: white;
     cursor: pointer;
@@ -465,7 +484,7 @@ span.title.breadcrumb-item {
     border-radius: 3px;
 }
 
-#icon-btn {
+#icon-btn, #setting-icon-btn {
     background-color: #dddddd;
     border: #dddddd 1px solid;
     display: inline-block;
@@ -477,7 +496,7 @@ span.title.breadcrumb-item {
 }
 
 #notification-wrapper {
-    margin: 0 10px;
+    margin: 10px 10px 0 10px;
 }
 
 input[type=text]:focus {
@@ -495,6 +514,15 @@ input[type=text] {
 
 .deleting-modal {
     display:    block;
+}
+
+div.modal-dialog.modal-dialog-open {
+    top: 25% !important;
+    /* I used !important to postion the modal vertically
+    in the center of the screen.
+    Due to the usage of react-modal-bootstrap,
+    there's no way I oculd target the elements via a class
+    or ID cos the elements are generated on the fly*/
 }
 
 .waiting-modal {

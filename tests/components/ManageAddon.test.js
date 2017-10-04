@@ -8,8 +8,8 @@ import AddonList from '../../app/js/components/manageApps/AddonList.jsx';
 describe('<ManageApps />', () => {
     const renderedComponent = shallow(< ManageApps />);
 
-    it('Should render 12 div', () => {
-        expect(renderedComponent.find("div")).to.have.length(12);
+    it('Should render 10 divs on initial render', () => {
+        expect(renderedComponent.find("div")).to.have.length(10);
     });
 
     it('Should render a table', () => {
