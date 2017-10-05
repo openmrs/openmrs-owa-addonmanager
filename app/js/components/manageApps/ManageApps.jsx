@@ -369,9 +369,7 @@ export default class ManageApps extends React.Component {
                       <th>Name</th>
                       <th>Developer</th>
                       <th>Version</th>
-                      {this.state.install === false ? 
-                        <th>Delete</th> : 
-                        <th>Install</th>}
+                      <th>Action</th>
                     </tr>
                   </thead>
                   {this.state.appList.length < 1 ? 
