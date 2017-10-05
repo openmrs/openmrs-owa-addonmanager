@@ -58,6 +58,11 @@ export default class ManageApps extends React.Component {
   
   componentDidMount() {
     jQuery("#fileInput").filestyle({btnClass: "btn-primary"});
+    $(document).keydown(e => { 
+      if (e.keyCode == 27) {
+        this.hideModal();
+      } 
+    });
   }
 
   handleApplist() {
