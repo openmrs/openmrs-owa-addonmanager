@@ -42,7 +42,7 @@ export default function AddAddon({
                     <div className="btn-toolbar">
                       <button
                         className="btn btn-primary"
-                        onClick={handleUpload}>
+                        onClick={handleUpload(null)}>
                         <span
                           className="glyphicon glyphicon-upload" /> Upload</button>
                       <button

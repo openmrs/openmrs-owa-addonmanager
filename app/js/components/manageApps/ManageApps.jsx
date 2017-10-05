@@ -76,15 +76,21 @@ export default class ManageApps extends React.Component {
     });
   }
 
-  handleUpload() {
+  handleUpload(file = null) {
     const applicationDistribution = location.href.split('/')[2];
     const url = location.href.split('/')[3];
     let apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
     this.requestUrl ='/owa/addapp';
     let that = this;
 
+    
     const addonFile = new FormData();
-    addonFile.append('file', document.getElementById('fileInput').files[0]);
+
+    if(file !== null) {
+      addonFile.append('file', file);
+    } else {
+      addonFile.append('file', document.getElementById('fileInput').files[0]);
+    }
   
     const response = $.ajax({
       xhr: function(){
@@ -93,8 +99,8 @@ export default class ManageApps extends React.Component {
           xhrRequest.upload.addEventListener('progress',that.handleProgress, false);
         }
         return xhrRequest;
-       
       },
+
       type: "POST",
       url: `https:/${apiBaseUrl}${this.requestUrl}`,
       data: addonFile,
@@ -243,7 +249,26 @@ export default class ManageApps extends React.Component {
 
   handleDownload(e) {
     e.preventDefault();
-    location.href=this.state.downloadUri;
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', this.state.downloadUri, true);
+    xhr.responseType = 'blob';
+    let filename = this.state.downloadUri.split('=').slice(-1)[0];
+    let that = this;
+    
+    xhr.onload = function(e) {
+      if (this.status == 200) {
+        let data = this.response;
+        const blob = new Blob([data], {type: 'application/octet-stream'});
+        const file = new File([blob], filename, {type: 'application/zip'});
+        that.handleUpload(file);
+        that.setState((prevState, props) => {
+          return {
+            install : false
+          };
+        });
+      }
+    };
+    xhr.send();
   }
 
   onlineSearchHandler(addOnFound, searchValue, searchResults, staticAppList) {
@@ -253,7 +278,8 @@ export default class ManageApps extends React.Component {
           appList: addOnFound,
           install: false,
           downloadUri: null,
-          searchResults: [],        };
+          searchResults: []
+        };
       });
     } else if(searchValue.length >1 && addOnFound.length == 0) {
       axios.get(`https://addons.openmrs.org/api/v1//addon?&q=${searchValue}`)
