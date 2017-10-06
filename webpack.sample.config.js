@@ -142,9 +142,10 @@ plugins.push( new webpack.DefinePlugin({
 }));
 
 plugins.push(new CopyWebpackPlugin([{
-  from: './app/img/omrs-button.png',
-  to: 'img/omrs-button.png'},
-{ 
+  from: './app/img/',
+  to: 'img'
+},
+{
   from: 'libs',
   to: 'libs'
 }]));
