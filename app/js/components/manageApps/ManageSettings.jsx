@@ -89,7 +89,6 @@ export default class ManageSettings extends React.Component {
     } = this.state;
     return (
       <div>
-        <br />
         <div className="row">
           <div className="col-sm-6">
             <h2 id="title-heading">Add On Manager</h2>

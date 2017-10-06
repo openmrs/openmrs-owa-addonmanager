@@ -24,7 +24,13 @@ export default class DeleteModal extends Component {
         </ModalBody>
         <ModalFooter>
           <button className="btn btn-default" onClick={hideModal}>Cancel</button>
-          <button type="button" className="btn btn-danger" data-dismiss="modal" id="cancel-btn" onClick={() => handleDelete(app.name)}>Delete</button>
+          <button
+            type="button"
+            className="btn btn-danger"
+            data-dismiss="modal"
+            id="cancel-btn"
+            onClick={() => handleDelete(app.name)}
+          >Delete</button>
         </ModalFooter>
       </Modal> 
     );

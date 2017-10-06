@@ -44,12 +44,16 @@ export default function AddAddon({
                         className="btn btn-primary"
                         onClick={handleUpload(null)}>
                         <span
-                          className="glyphicon glyphicon-upload" /> Upload</button>
+                          className="glyphicon glyphicon-upload"
+                        /> Upload
+                      </button>
                       <button
                         id="cancel-btn"
                         className="btn btn-danger"
-                        onClick={handleClear}>
-                        <span className="glyphicon glyphicon-remove" /> Clear</button>
+                        onClick={handleClear}
+                      >
+                        <span className="glyphicon glyphicon-remove" /> Clear
+                      </button>
                     </div>
                   </div>
                 </div>

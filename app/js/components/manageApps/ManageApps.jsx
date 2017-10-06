@@ -83,7 +83,6 @@ export default class ManageApps extends React.Component {
     this.requestUrl ='/owa/addapp';
     let that = this;
 
-    
     const addonFile = new FormData();
 
     if(file !== null) {
@@ -91,6 +90,9 @@ export default class ManageApps extends React.Component {
     } else {
       addonFile.append('file', document.getElementById('fileInput').files[0]);
     }
+
+    let fileName = document.getElementById('fileInput').files[0].name;
+    fileName = fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
   
     const response = $.ajax({
       xhr: function(){
@@ -110,16 +112,19 @@ export default class ManageApps extends React.Component {
       success: function (result) {
         this.setState((prevState, props) => {
           return {
-            msgBody: "App has been successfully installed",
-            msgType: "success",
             showMsg: true,
+            msgBody: `${fileName} has been successfully installed`,
+            msgType: "success",
             appList: result,
             staticAppList: result,
           };
         });
 
+        /**
+        * handle delay for alert boxes
+        */
         if(that.state.showMsg === true) {
-          setTimeout(that.handleAlertBehaviour, 2000);
+          setTimeout(that.handleAlertBehaviour, 10000);
         }
 
       }.bind(this),
@@ -132,8 +137,11 @@ export default class ManageApps extends React.Component {
           };
         });
 
+        /**
+        * handle delay for alert boxes
+        */
         if(that.state.showMsg === true) {
-          setTimeout(that.handleAlertBehaviour, 2000);
+          setTimeout(that.handleAlertBehaviour, 10000);
         }
       }.bind(this),
       complete: function(result){
@@ -181,6 +189,9 @@ export default class ManageApps extends React.Component {
     }
   }
 
+  /**
+   * handle delay for alert boxes
+   */
   handleAlertBehaviour() {
     this.setState((prevState, props) => {
       return {
@@ -212,11 +223,12 @@ export default class ManageApps extends React.Component {
       this.setState((prevState, props) => {
         return {
           appList: response.data.appList,
-          msgType: 'success',
-          deleteStatus: false, 
+          msgType: 'warning',
+          deleteStatus: false,
+          msgBody: `${name} has been successfully deleted.`,
+          showMsg: true,
         };
       });
-      Utility.notifications('error', name + ' deleted successfully');
       this.handleApplist();
     }).catch(error => {
       toastr.error(error);
@@ -359,15 +371,13 @@ export default class ManageApps extends React.Component {
       <div>
         <div className="main-home-page" id="body-wrapper">
           <div className="row">
-            <div className="col-sm-6">
-              <h2>Add-on Manager</h2>
-            </div>
-            <div className="col-sm-6 manage-settings">
-              <div className="pull-right">
+            <div className="col-sm-12">
+              <h2 className="manage-addon-title">Add-on Manager</h2>
+              <span className="pull-right manage-settings-wrapper">
                 <Link to="/manageSettings" className="manage-settings-button">
-                  <i className="glyphicon glyphicon-cog settings-icon" id="icon-btn" />
+                  <i className="glyphicon glyphicon-cog settings-icon" id="setting-icon-btn" />
                 </Link>
-              </div>
+              </span>
             </div>
           </div>
           
@@ -391,7 +401,7 @@ export default class ManageApps extends React.Component {
                     type="text" 
                     id="search-input" 
                     onKeyUp={this.searchAddOn} 
-                    placeholder="Search for an add on.."/>
+                    placeholder="Search for add-ons to install or clear field to display installed add-ons"/>
                 </div>
                 <table className="table table-bordered table-striped table-hover">
                   <thead>

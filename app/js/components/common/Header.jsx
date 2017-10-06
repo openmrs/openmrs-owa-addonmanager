@@ -150,7 +150,8 @@ export default class Header extends Component {
     const menuDisplay = [];
     const numPerColumn = Math.ceil(locationTags.length / NUMBER_OF_COLUMNS);
     const styles = {
-      marginTop: '5px'
+      marginTop: '5px',
+      fontSize: '14px'
     };
 
     for (let cols = 0; cols < NUMBER_OF_COLUMNS; cols++) {
@@ -206,20 +207,20 @@ export default class Header extends Component {
           <ul className="navbar-right nav-header">
             <li className="dropdown">
               <a className="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                <span className="glyphicon glyphicon-user"/> {' ' + this.state.currentUser}
+                <span className="glyphicon glyphicon-user"/> {' ' + this.state.currentUser + ' '}
                 <span className="caret"/>
               </a>
               <ul className="dropdown-menu user">
                 <li>
-                  <a href="#">My Account</a>
+                  <a href="#" id="current-user">My Account</a>
                 </li>
               </ul>
             </li>
             <li className="dropdown dropdown-large">
               <a className="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 <span className="glyphicon glyphicon glyphicon-map-marker"/> {(this.state.currentLocationTag != "")
-                  ? this.state.currentLocationTag
-                  : this.state.defaultLocation}
+                  ? this.state.currentLocationTag + ' '
+                  : this.state.defaultLocation + ' '}
                 <span className="caret"/>
               </a>
               <ul className="dropdown-menu dropdown-menu-large row">
