@@ -76,7 +76,7 @@ export default class ManageApps extends React.Component {
     });
   }
 
-  handleUpload(file = null) {
+  handleUpload() {
     const applicationDistribution = location.href.split('/')[2];
     const url = location.href.split('/')[3];
     let apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
@@ -84,12 +84,7 @@ export default class ManageApps extends React.Component {
     let that = this;
 
     const addonFile = new FormData();
-
-    if(file !== null) {
-      addonFile.append('file', file);
-    } else {
-      addonFile.append('file', document.getElementById('fileInput').files[0]);
-    }
+    addonFile.append('file', document.getElementById('fileInput').files[0]);
 
     let fileName = document.getElementById('fileInput').files[0].name;
     fileName = fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
@@ -261,26 +256,7 @@ export default class ManageApps extends React.Component {
 
   handleDownload(e) {
     e.preventDefault();
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', this.state.downloadUri, true);
-    xhr.responseType = 'blob';
-    let filename = this.state.downloadUri.split('=').slice(-1)[0];
-    let that = this;
-    
-    xhr.onload = function(e) {
-      if (this.status == 200) {
-        let data = this.response;
-        const blob = new Blob([data], {type: 'application/octet-stream'});
-        const file = new File([blob], filename, {type: 'application/zip'});
-        that.handleUpload(file);
-        that.setState((prevState, props) => {
-          return {
-            install : false
-          };
-        });
-      }
-    };
-    xhr.send();
+    location.href=this.state.downloadUri;
   }
 
   onlineSearchHandler(addOnFound, searchValue, searchResults, staticAppList) {
