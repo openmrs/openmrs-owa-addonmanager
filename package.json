@@ -11,6 +11,7 @@
     "bower": "^1.8.0",
     "eslint-plugin-import": "^2.7.0",
     "extract-loader": "^1.0.1",
+    "jszip": "^3.1.4",
     "react": "^15.4.1",
     "react-bootstrap": "^0.31.2",
     "react-modal-bootstrap": "^1.1.1",
