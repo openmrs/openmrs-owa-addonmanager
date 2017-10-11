@@ -8,6 +8,7 @@
  */
 import React from 'react';
 import axios from 'axios';
+import JSZip from 'jszip';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
 import AddAddon from '../manageApps/AddAddon.jsx';
 import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent.jsx';
@@ -34,22 +35,25 @@ export default class ManageApps extends React.Component {
       install: false,
       downloadUri: null,
       deleteStatus: false,
+      addonAlreadyInstalled: null,
     };
 
     this.apiHelper = new ApiHelper(null);
     this.alertMessage = '';
     this.openPage = this.openPage.bind(this);
-    this.handleClear = this.handleClear.bind(this);
-    this.handleUpload = this.handleUpload.bind(this); 
-    this.handleDelete = this.handleDelete.bind(this);  
-    this.searchAddOn = this.searchAddOn.bind(this);  
-    this.handleProgress = this.handleProgress.bind(this);
-    this.handleAlertBehaviour = this.handleAlertBehaviour.bind(this);
     this.openModal = this.openModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
-    this.displayManageOwaButtons = this.displayManageOwaButtons.bind(this);
+    this.handleClear = this.handleClear.bind(this);
+    this.searchAddOn = this.searchAddOn.bind(this);  
+    this.handleUpload = this.handleUpload.bind(this); 
+    this.handleDelete = this.handleDelete.bind(this);  
     this.handleDownload = this.handleDownload.bind(this);
+    this.handleProgress = this.handleProgress.bind(this);
     this.onlineSearchHandler = this.onlineSearchHandler.bind(this);
+    this.handleUploadRequest = this.handleUploadRequest.bind(this);
+    this.handleAlertBehaviour = this.handleAlertBehaviour.bind(this);
+    this.handleAddonUploadModal = this.handleAddonUploadModal.bind(this);
+    this.displayManageOwaButtons = this.displayManageOwaButtons.bind(this);
   }
 
   componentWillMount() {
@@ -76,19 +80,92 @@ export default class ManageApps extends React.Component {
     });
   }
 
+  handleAddonUploadModal(addonName, action, response) {
+    swal({
+      title: `Are you sure you want to ${action} ${addonName}`,
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+      .then((performAction) => {
+        if (performAction) {
+          swal(`${addonName} addon is ${response}`, {
+            icon: 'success', 
+          });
+          this.handleUploadRequest();
+        } else {
+          this.handleClear();
+        }
+      });
+  }
+
   handleUpload() {
+    const zipedAddon = document.getElementById('fileInput').files[0];
+
+    const readZippedAddon = new Promise((resolve, reject) => {
+      let new_zip = new JSZip();
+      new_zip.loadAsync(zipedAddon)
+        .then((zip) => {
+          return zip.files['manifest.webapp'];
+        })
+        .then((file) => {
+          return new_zip.file(file.name).async("string");
+        })
+        .then(result => {
+          resolve (JSON.parse(result));
+        });
+    });
+
+    readZippedAddon.then((result) => {
+      this.setState({
+        addonAlreadyInstalled: false,
+      });
+
+      this.state.appList.map((addon) => {
+        if(addon.name === result.name) {
+          this.setState({
+            addonAlreadyInstalled: true,
+          });
+          const toBeInstalledAddonName = result.name;
+          const installedAddonVersion = parseInt(addon.version);
+          const toBeInstalledAddonVersion = parseInt(result.version);
+          if (installedAddonVersion === toBeInstalledAddonVersion) {
+            this.handleAddonUploadModal(
+              toBeInstalledAddonName,
+              'overwrite',
+              'overwriting');
+          } else if(installedAddonVersion < toBeInstalledAddonVersion) {
+            this.handleAddonUploadModal(
+              toBeInstalledAddonName,
+              'upgrade',
+              'upgrading');
+          } else {
+            this.handleAddonUploadModal(
+              toBeInstalledAddonName,
+              'downgrade',
+              'downgrading');
+          }
+        }
+      });
+      this.state.addonAlreadyInstalled === false && this.handleUploadRequest();
+    });
+  }
+
+  handleUploadRequest() {
     const applicationDistribution = location.href.split('/')[2];
     const url = location.href.split('/')[3];
-    let apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
+    const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
     this.requestUrl ='/owa/addapp';
+
     let that = this;
+    const zipedAddon = document.getElementById('fileInput').files[0];
 
     const addonFile = new FormData();
-    addonFile.append('file', document.getElementById('fileInput').files[0]);
+    addonFile.append('file', zipedAddon);
 
     let fileName = document.getElementById('fileInput').files[0].name;
     fileName = fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
-  
+
     const response = $.ajax({
       xhr: function(){
         let xhrRequest = $.ajaxSetup().xhr();
