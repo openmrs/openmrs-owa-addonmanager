@@ -15,6 +15,7 @@ import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent.jsx';
 import { ApiHelper } from '../../helpers/apiHelper';
 import { AddonList } from './AddonList.jsx';
 import DeleteAddonModal from './DeleteAddonModal.jsx';
+import InvalidZipUploadModal from './InvalidZipUploadModal.jsx';
 import Utility from './../../utility';
 
 export default class ManageApps extends React.Component {
@@ -36,6 +37,7 @@ export default class ManageApps extends React.Component {
       deleteStatus: false,
       addonAlreadyInstalled: null,
       files: null,
+      displayInvalidZip: false
     };
 
     this.apiHelper = new ApiHelper(null);
@@ -118,48 +120,59 @@ export default class ManageApps extends React.Component {
       let new_zip = new JSZip();
       new_zip.loadAsync(zipedAddon)
         .then((zip) => {
-          return zip.files['manifest.webapp'];
+          return zip.files['manifest.webapp'] ? zip.files['manifest.webapp'] : false;
         })
         .then((file) => {
-          return new_zip.file(file.name).async("string");
+          return file ? new_zip.file(file.name).async("string") : false;
         })
         .then(result => {
           resolve(JSON.parse(result));
+        })
+        .catch(e => {
+          resolve(false);
         });
     });
 
     readZippedAddon.then((result) => {
-      this.setState({
-        addonAlreadyInstalled: false,
-      });
-
-      this.state.appList.map((addon) => {
-        if (addon.name === result.name) {
-          this.setState({
-            addonAlreadyInstalled: true,
-          });
-          const toBeInstalledAddonName = result.name;
-          const installedAddonVersion = parseInt(addon.version);
-          const toBeInstalledAddonVersion = parseInt(result.version);
-          if (installedAddonVersion === toBeInstalledAddonVersion) {
-            this.handleAddonUploadModal(
-              toBeInstalledAddonName,
-              'overwrite',
-              'overwriting');
-          } else if (installedAddonVersion < toBeInstalledAddonVersion) {
-            this.handleAddonUploadModal(
-              toBeInstalledAddonName,
-              'upgrade',
-              'upgrading');
-          } else {
-            this.handleAddonUploadModal(
-              toBeInstalledAddonName,
-              'downgrade',
-              'downgrading');
+      if(!result) {
+        this.setState((prevState, props) => {
+          return {
+            displayInvalidZip: true
+          };
+        });
+      } else {
+        this.setState({
+          addonAlreadyInstalled: false,
+        });
+  
+        this.state.appList.map((addon) => {
+          if(addon.name === result.name) {
+            this.setState({
+              addonAlreadyInstalled: true,
+            });
+            const toBeInstalledAddonName = result.name;
+            const installedAddonVersion = parseInt(addon.version);
+            const toBeInstalledAddonVersion = parseInt(result.version);
+            if (installedAddonVersion === toBeInstalledAddonVersion) {
+              this.handleAddonUploadModal(
+                toBeInstalledAddonName,
+                'overwrite',
+                'overwriting');
+            } else if(installedAddonVersion < toBeInstalledAddonVersion) {
+              this.handleAddonUploadModal(
+                toBeInstalledAddonName,
+                'upgrade',
+                'upgrading');
+            } else {
+              this.handleAddonUploadModal(
+                toBeInstalledAddonName,
+                'downgrade',
+                'downgrading');
+            }
           }
-        }
-      });
-      this.state.addonAlreadyInstalled === false && this.handleUploadRequest();
+        });
+        this.state.addonAlreadyInstalled === false && this.handleUploadRequest();
+      }
     });
   }
 
@@ -332,7 +345,8 @@ export default class ManageApps extends React.Component {
   hideModal() {
     this.setState((prevState, props) => {
       return {
-        isOpen: false
+        isOpen: false,
+        displayInvalidZip: false
       };
     });
   }
@@ -426,10 +440,13 @@ export default class ManageApps extends React.Component {
         {this.state.msgBody}
       </div>
     );
+
     const {
       showProgress,
       uploadStatus,
-      deleteStatus } = this.state;
+      deleteStatus,
+      displayInvalidZip } = this.state;
+
     const disableUploadElements = (this.state.uploadStatus > 0) ? true : false;
     deleteStatus ? document.body.className = 'loading' : document.body.className = '';
     disableUploadElements ? document.body.className = 'loading' : document.body.className = '';
@@ -502,6 +519,13 @@ export default class ManageApps extends React.Component {
                     isOpen={this.state.isOpen}
                     hideModal={this.hideModal} />
                 ) : null}
+                {
+                  displayInvalidZip && (
+                    <InvalidZipUploadModal
+                      isOpen={displayInvalidZip}
+                      hideModal={this.hideModal}
+                    />
+                  )}
               </div>
             </div>
           </div>
