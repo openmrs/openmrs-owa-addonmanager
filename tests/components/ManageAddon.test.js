@@ -4,9 +4,18 @@ import { shallow } from 'enzyme';
 import ManageApps from '../../app/js/components/manageApps/ManageApps.jsx';
 import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent.jsx';
 import AddonList from '../../app/js/components/manageApps/AddonList.jsx';
+import AddAddon from '../../app/js/components/manageApps/AddAddon.jsx';
 
 describe('<ManageApps />', () => {
     const renderedComponent = shallow(< ManageApps />);
+
+    // simulate a selected file in order to render upload and clear buttons
+    renderedComponent.setState({
+        files: [{
+            name: "test.zip",
+            type: "application/zip"
+        }]
+    });
 
     it('Should render 10 divs on initial render', () => {
         expect(renderedComponent.find("div")).to.have.length(10);
@@ -45,5 +54,20 @@ describe('<ManageApps />', () => {
 
     it('should mount the AddonList component in itself', () => {
         expect(renderedComponent.contains( <AddonList /> )).to.equal(true);
+    });
+
+    it('should mount the AddAddon component in itself', () => {
+        expect(renderedComponent.find("AddAddon")).to.have.length(1);
+    });
+    
+    it('Should render clear and upload buttons when file is selected', () => {
+        const AddAddon = renderedComponent.find("AddAddon").first();
+        expect(AddAddon.find("#upload-btn").first().length).to.equal(1);
+        expect(AddAddon.find("#clear-btn").first().length).to.equal(1);
+    });
+
+    it('Should add selected file name when file is selected', () => {
+        const AddAddon = renderedComponent.find("AddAddon").first();
+        expect(AddAddon.html()).to.contain('test.zip');
     });
 });

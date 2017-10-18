@@ -30,12 +30,12 @@ export default class ManageApps extends React.Component {
       showProgress: false,
       isOpen: false,
       selectedApp: null,
-      displayManageOwaButtons: false,
       searchResults: [],
       install: false,
       downloadUri: null,
       deleteStatus: false,
       addonAlreadyInstalled: null,
+      files: null,
     };
 
     this.apiHelper = new ApiHelper(null);
@@ -43,10 +43,11 @@ export default class ManageApps extends React.Component {
     this.openPage = this.openPage.bind(this);
     this.openModal = this.openModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
+    this.handleDrop = this.handleDrop.bind(this);
     this.handleClear = this.handleClear.bind(this);
-    this.searchAddOn = this.searchAddOn.bind(this);  
-    this.handleUpload = this.handleUpload.bind(this); 
-    this.handleDelete = this.handleDelete.bind(this);  
+    this.searchAddOn = this.searchAddOn.bind(this);
+    this.handleUpload = this.handleUpload.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.handleDownload = this.handleDownload.bind(this);
     this.handleProgress = this.handleProgress.bind(this);
     this.onlineSearchHandler = this.onlineSearchHandler.bind(this);
@@ -59,14 +60,26 @@ export default class ManageApps extends React.Component {
   componentWillMount() {
     this.handleApplist();
   }
-  
+
   componentDidMount() {
-    jQuery("#fileInput").filestyle({btnClass: "btn-primary"});
-    $(document).keydown(e => { 
+    jQuery("#fileInput").filestyle({ btnClass: "btn-primary" });
+    $(document).keydown(e => {
       if (e.keyCode == 27) {
         this.hideModal();
-      } 
+      }
     });
+  }
+
+  handleDrop(files) {
+    if(files.length > 0){
+      this.setState({ files: files });
+    }else{
+      this.setState({
+        msgBody: "File has not been added, please select a valid zip file",
+        msgType: "warning",
+        showMsg: true,
+      });
+    }    
   }
 
   handleApplist() {
@@ -90,7 +103,7 @@ export default class ManageApps extends React.Component {
       .then((performAction) => {
         if (performAction) {
           swal(`${addonName} addon is ${response}`, {
-            icon: 'success', 
+            icon: 'success',
           });
           this.handleUploadRequest();
         } else {
@@ -100,8 +113,7 @@ export default class ManageApps extends React.Component {
   }
 
   handleUpload() {
-    const zipedAddon = document.getElementById('fileInput').files[0];
-
+    const zipedAddon = this.state.files[0];
     const readZippedAddon = new Promise((resolve, reject) => {
       let new_zip = new JSZip();
       new_zip.loadAsync(zipedAddon)
@@ -112,7 +124,7 @@ export default class ManageApps extends React.Component {
           return new_zip.file(file.name).async("string");
         })
         .then(result => {
-          resolve (JSON.parse(result));
+          resolve(JSON.parse(result));
         });
     });
 
@@ -122,7 +134,7 @@ export default class ManageApps extends React.Component {
       });
 
       this.state.appList.map((addon) => {
-        if(addon.name === result.name) {
+        if (addon.name === result.name) {
           this.setState({
             addonAlreadyInstalled: true,
           });
@@ -134,7 +146,7 @@ export default class ManageApps extends React.Component {
               toBeInstalledAddonName,
               'overwrite',
               'overwriting');
-          } else if(installedAddonVersion < toBeInstalledAddonVersion) {
+          } else if (installedAddonVersion < toBeInstalledAddonVersion) {
             this.handleAddonUploadModal(
               toBeInstalledAddonName,
               'upgrade',
@@ -155,22 +167,22 @@ export default class ManageApps extends React.Component {
     const applicationDistribution = location.href.split('/')[2];
     const url = location.href.split('/')[3];
     const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
-    this.requestUrl ='/owa/addapp';
+    this.requestUrl = '/owa/addapp';
 
     let that = this;
-    const zipedAddon = document.getElementById('fileInput').files[0];
+    const zipedAddon = this.state.files[0];
 
     const addonFile = new FormData();
     addonFile.append('file', zipedAddon);
 
-    let fileName = document.getElementById('fileInput').files[0].name;
+    let fileName = this.state.files[0].name;
     fileName = fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
 
     const response = $.ajax({
-      xhr: function(){
+      xhr: function () {
         let xhrRequest = $.ajaxSetup().xhr();
-        if(xhrRequest.upload){
-          xhrRequest.upload.addEventListener('progress',that.handleProgress, false);
+        if (xhrRequest.upload) {
+          xhrRequest.upload.addEventListener('progress', that.handleProgress, false);
         }
         return xhrRequest;
       },
@@ -192,15 +204,8 @@ export default class ManageApps extends React.Component {
           };
         });
 
-        /**
-        * handle delay for alert boxes
-        */
-        if(that.state.showMsg === true) {
-          setTimeout(that.handleAlertBehaviour, 10000);
-        }
-
       }.bind(this),
-      error: function(xhr, status, error) {
+      error: function (xhr, status, error) {
         this.setState((prevState, props) => {
           return {
             msgBody: "App has not been installed",
@@ -208,16 +213,9 @@ export default class ManageApps extends React.Component {
             showMsg: true
           };
         });
-
-        /**
-        * handle delay for alert boxes
-        */
-        if(that.state.showMsg === true) {
-          setTimeout(that.handleAlertBehaviour, 10000);
-        }
       }.bind(this),
-      complete: function(result){
-        $(":file").filestyle('clear');
+      complete: function (result) {
+        this.setState({files: null});
         this.setState((prevState, props) => {
           return {
             uploadStatus: 0,
@@ -229,12 +227,12 @@ export default class ManageApps extends React.Component {
     });
   }
 
-  handleProgress(e){
-    if(e.lengthComputable){
+  handleProgress(e) {
+    if (e.lengthComputable) {
       let max = e.total;
       let current = e.loaded;
-      
-      let Percentage = Math.round((current * 100)/max);   
+
+      let Percentage = Math.round((current * 100) / max);
       this.setState((prevState, props) => {
         return {
           showProgress: true,
@@ -245,19 +243,28 @@ export default class ManageApps extends React.Component {
   }
 
   displayManageOwaButtons() {
-    const addonFile = document.getElementById('fileInput').files[0];
-    if (typeof(addonFile) !== 'undefined') {
-      this.setState((prevState, props) => {
-        return {
-          displayManageOwaButtons: true
-        };
-      });
-    } else {
-      this.setState((prevState, props) => {
-        return {
-          displayManageOwaButtons: false
-        };
-      });
+    if (this.state.files !== null) {
+      return (
+        <div className="manage-owa-btns">
+          <div className="btn-toolbar">
+            <button
+              id="upload-btn"
+              className="btn"
+              onClick={this.handleUpload}>
+              <span
+                className="glyphicon glyphicon-upload"
+              /> Upload
+            </button>
+            <button
+              id="clear-btn"
+              className="btn"
+              onClick={this.handleClear}
+            >
+              <span className="glyphicon glyphicon-remove" /> Clear
+            </button>
+          </div>
+        </div>
+      );
     }
   }
 
@@ -274,7 +281,10 @@ export default class ManageApps extends React.Component {
 
   handleClear() {
     let handleClearPromise = new Promise((resolve, reject) => {
-      $(":file").filestyle('clear');
+      this.setState({
+        files: null,
+        showMsg: false
+      });
       resolve('Success');
     });
     handleClearPromise.then((response) => {
@@ -308,7 +318,7 @@ export default class ManageApps extends React.Component {
     this.hideModal();
   }
 
-  openModal(app){
+  openModal(app) {
     return (e) => {
       this.setState((prevState, props) => {
         return {
@@ -318,8 +328,8 @@ export default class ManageApps extends React.Component {
       });
     };
   }
- 
-  hideModal(){
+
+  hideModal() {
     this.setState((prevState, props) => {
       return {
         isOpen: false
@@ -333,11 +343,11 @@ export default class ManageApps extends React.Component {
 
   handleDownload(e) {
     e.preventDefault();
-    location.href=this.state.downloadUri;
+    location.href = this.state.downloadUri;
   }
 
   onlineSearchHandler(addOnFound, searchValue, searchResults, staticAppList) {
-    if(addOnFound.length > 0) {
+    if (addOnFound.length > 0) {
       this.setState((prevState, props) => {
         return {
           appList: addOnFound,
@@ -346,7 +356,7 @@ export default class ManageApps extends React.Component {
           searchResults: []
         };
       });
-    } else if(searchValue.length >1 && addOnFound.length == 0) {
+    } else if (searchValue.length > 1 && addOnFound.length == 0) {
       axios.get(`https://addons.openmrs.org/api/v1//addon?&q=${searchValue}`)
         .then(response => {
           this.setState((prevState, props) => {
@@ -358,7 +368,7 @@ export default class ManageApps extends React.Component {
         .catch(error => {
           error;
         });
-      if(searchResults.length < 1) {
+      if (searchResults.length < 1) {
         this.setState((prevState, props) => {
           return {
             appList: []
@@ -366,7 +376,7 @@ export default class ManageApps extends React.Component {
         });
       } else {
         searchResults.forEach(result => {
-          if(result.type == "OWA") {
+          if (result.type == "OWA") {
             axios.get(`https://addons.openmrs.org/api/v1//addon/${result.uid}`)
               .then(res => {
                 this.setState((prevState, props) => {
@@ -382,7 +392,7 @@ export default class ManageApps extends React.Component {
       }
     } else {
       this.setState((prevState, props) => {
-        return { 
+        return {
           appList: staticAppList,
           searchResults: []
         };
@@ -390,15 +400,15 @@ export default class ManageApps extends React.Component {
     }
   }
 
-  searchAddOn(event){
+  searchAddOn(event) {
     event.preventDefault();
     const searchValue = event.target.value;
-    const { searchResults, staticAppList, appList} = this.state;
-    
-    let addOnFound = this.state.staticAppList.filter((app) => 
+    const { searchResults, staticAppList, appList } = this.state;
+
+    let addOnFound = this.state.staticAppList.filter((app) =>
       app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
-      || app.description.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1 
-      || app.developer["name"].toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1 
+      || app.description.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
+      || app.developer["name"].toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
       || app.version.indexOf(event.target.value) !== -1);
 
     this.onlineSearchHandler(addOnFound, searchValue, searchResults, staticAppList);
@@ -406,6 +416,10 @@ export default class ManageApps extends React.Component {
   }
 
   render() {
+    if (this.state.showMsg === true) {
+      setTimeout(this.handleAlertBehaviour, 6000);
+    }
+
     const alert = (
       <div className={`col-sm-12 alert alert-${this.state.msgType} alert-dismissable`}>
         <button className="close" data-dismiss="alert" aria-label="close">×</button>
@@ -433,7 +447,7 @@ export default class ManageApps extends React.Component {
               </span>
             </div>
           </div>
-          
+
           <div className="home-page-body">
             <div className="container-fluid">
               <div id="notification-wrapper">
@@ -441,20 +455,21 @@ export default class ManageApps extends React.Component {
               </div>
 
               <AddAddon
+                files={this.state.files}
+                handleDrop={this.handleDrop}
                 handleClear={this.handleClear}
                 handleUpload={this.handleUpload}
                 displayManageOwaButtons={this.displayManageOwaButtons}
-                displayManageOwaButtonsState={this.state.displayManageOwaButtons}
               />
 
               <div className="manage-app-table col-sm-12">
                 <div className="search-add-on">
                   <i className="glyphicon glyphicon-search" />
-                  <input 
-                    type="text" 
-                    id="search-input" 
-                    onKeyUp={this.searchAddOn} 
-                    placeholder="Search for add-ons to install or clear field to display installed add-ons"/>
+                  <input
+                    type="text"
+                    id="search-input"
+                    onKeyUp={this.searchAddOn}
+                    placeholder="Search for add-ons to install or clear field to display installed add-ons" />
                 </div>
                 <table className="table table-bordered table-striped table-hover">
                   <thead>
@@ -466,15 +481,15 @@ export default class ManageApps extends React.Component {
                       <th>Action</th>
                     </tr>
                   </thead>
-                  {this.state.appList.length < 1 ? 
+                  {this.state.appList.length < 1 ?
                     <tbody>
                       <tr>
                         <th colSpan="5"><h4>No apps found</h4></th>
                       </tr>
-                    </tbody> : 
+                    </tbody> :
                     <AddonList
-                      handleDownload = {this.handleDownload}
-                      install = {this.state.install}
+                      handleDownload={this.handleDownload}
+                      install={this.state.install}
                       appList={this.state.appList}
                       openPage={this.openPage}
                       openModal={this.openModal}
@@ -485,13 +500,13 @@ export default class ManageApps extends React.Component {
                     app={this.state.selectedApp}
                     handleDelete={this.handleDelete}
                     isOpen={this.state.isOpen}
-                    hideModal={this.hideModal}/>
+                    hideModal={this.hideModal} />
                 ) : null}
               </div>
             </div>
           </div>
         </div>
-        {deleteStatus ? 
+        {deleteStatus ?
           <div className="deleting-modal"><p className="upload-text">Deleting Addon</p></div>
           : <div className="waiting-modal"><p className="upload-text">Uploading {uploadStatus}%</p></div>}
       </div>

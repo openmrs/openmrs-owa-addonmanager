@@ -10,59 +10,42 @@
 
 import React from 'react';
 import { expect } from 'chai';
+import sinon from 'sinon';
 import { mount, shallow } from 'enzyme';
-import  AddAddon  from '../../app/js/components/manageApps/AddAddon.jsx';
+import AddAddon from '../../app/js/components/manageApps/AddAddon.jsx';
 
 
 describe('<AddAddon />', () => {
-    const renderedComponent = 
-    shallow( < AddAddon 
-        handleClear={() => {}} 
-        handleUpload={() => {}} 
-        displayManageOwaButtonsState={true} / > );
+    const spy = sinon.spy();
+    const renderedComponent =
+        mount(<AddAddon
+                files={null}
+                handleClear={() => { }}
+                handleUpload={() => { }}
+                handleDrop={() => { }}
+                displayManageOwaButtons={spy} />);
+
+    it('Should render', () => {
+        expect(renderedComponent.length).equal(1);
+    });
+
+    it('Should render a dropzone component', () => {
+        expect(renderedComponent.find("Dropzone")).to.have.length(1);
+    });
+
+    it('Should display select OWA message', () => {
+        expect(renderedComponent.text()).to.contain('Select an OWA');
+    });
+
+    it('Should have true disableClick initial state', function () {
+        expect(renderedComponent.state().disableClick).to.equal(true);
+    });
+
+    it('should render drag or click to select message', () => {
+        expect(renderedComponent.find('#click-to-select')).to.have.length(1);
+    });
     
-    it('Should render a file input', () => {
-        expect(renderedComponent.find("input")).to.have.length(1);
-    });
-
-    it('Should render a FieldSet', () => {
-        expect(renderedComponent.find("fieldset")).to.have.length(1);
-    });
-
-    it('Should render 2 buttons', () => {
-        expect(renderedComponent.find("button")).to.have.length(2);
-        expect(renderedComponent.find("button")
-          .getNodes()[0]
-          .props.children[1])
-          .equals(' Upload');
-        expect(renderedComponent.find("button")
-          .getNodes()[1]
-          .props.children[1])
-          .equals(' Clear');
-    });
-
-    it('Should render 2 buttons with upload and delete glyphicons', () => {
-        expect(renderedComponent.find("button")).to.have.length(2);
-        expect(renderedComponent.find("button")
-          .getNodes()[0].props
-          .children[0].props.className)
-          .equals('glyphicon glyphicon-upload');
-          
-        expect(renderedComponent.find("button")
-          .getNodes()[1].props
-          .children[0].props.className)
-          .equals('glyphicon glyphicon-remove');
-    });
-
-    it('Should render 2 span fields', () => {
-        expect(renderedComponent.find("span")).to.have.length(2);
-    });
-
-    it('Should render a Legend with text of `Upload Addon Package:`', () => {
-        expect(renderedComponent.find("legend")).to.have.length(1);
-        expect(renderedComponent.find("legend")
-          .props().children)
-          .equals('Upload Addon Package:');
-    });
-
+    it('should render manage owa buttons', () => {
+        expect(spy.calledOnce).to.equal(true);
+    })
 });

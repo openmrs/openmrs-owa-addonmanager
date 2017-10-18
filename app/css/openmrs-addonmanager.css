@@ -347,7 +347,7 @@ td {
     width: 100%;
 }
 
-table h4{
+table h4 {
     text-align: center;
 }
 
@@ -412,9 +412,11 @@ span.title.breadcrumb-item {
 #location-dropdown {
     padding: 0 1px;
 }
+
 #location-dropdown a {
     margin: 0;
 }
+
 #location-dropdown a:hover {
     color: #fff;
 }
@@ -437,15 +439,15 @@ span.title.breadcrumb-item {
      padding: 10px;
  }
 
- #my-account:hover {
+#my-account:hover {
      background-color: #5B57A6;
  }
 
- #location-ul {
+#location-ul {
      left: 400px;
      border-style: black solid;
      border-width: 1px;
- }
+}
 
 #cancel-btn {
     background: -webkit-linear-gradient(top, #F56A6A, #ff3d3d);
@@ -453,10 +455,19 @@ span.title.breadcrumb-item {
     border: #ff3d3d 1px solid;
 }
 
-#upload-btn {
-    background: -webkit-linear-gradient(top, #6964FF, #514E9D);
-    background-color: #363463;
-    border: #363463 1px solid;
+#upload-btn, #clear-btn {
+    background: -webkit-linear-gradient(top, #ffffff, #bfbfbf);
+    background-color: #dddddd;
+    font-size: 1.1em;
+    border: #dddddd 1px solid;
+}
+
+.glyphicon-upload {
+    color: #3bb300;
+}
+
+.glyphicon-remove {
+    color: #ff3d3d;
 }
 
 #success-btn {
@@ -557,4 +568,46 @@ body.loading {
 
 body.loading .waiting-modal {
     display: block;
+}
+
+.drop-zone {
+    background: #dddddd;
+    border: 2px solid #dddddd;
+    font-size: 1.2em;
+    height: 120px;
+    line-height: 120px;
+    margin-left: 15px;
+    margin-top: 10px;
+    outline: 2px dashed #BBBBBB;
+    outline-offset: -10px;
+    width: 97%;
+}
+
+.drop-zone-container {
+    text-align: center;
+}
+
+#click-to-select {
+    color: #3bb300;
+    font-size: 1em;
+    text-decoration: none;
+}
+
+.manage-owa-btns {
+    margin-left: 6.3%;
+    width: 97%;
+}
+
+.btn-toolbar {
+    width: 32%;
+    padding-top: 10px;
+    margin: auto;
+}
+
+.drop-zone-accept {
+    border: 5px solid #80ff80;
+}
+
+.drop-zone-reject {
+    border: 5px solid #ff8080;
 }
