@@ -6,68 +6,64 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Dropzone from 'react-dropzone';
 
-export default function AddAddon({
-  handleClear, 
-  handleUpload, 
-  displayManageOwaButtons, 
-  displayManageOwaButtonsState }) {
-  const classesToUse = displayManageOwaButtonsState ?
-    'col-xs-6 col-sm-8' : 'col-xs-6 col-sm-12';
-  return (
-    <div className="container-fluid">
-      <fieldset className="scheduler-border">
-        <legend className="scheduler-border">Upload Addon Package:</legend>
-        <div className="row">
-          <div className="col-xs-12">
-            <div className={classesToUse}>
-              <input
-                name="file"
-                type="file" 
-                id="fileInput"
-                onChange={displayManageOwaButtons}
-                accept=".zip"
-                data-text="Browse Addon"
-                data-buttonName="btn-primary"
-                data-placeholder="Select Addon to upload"
-                data-btnClass="btn-primary"
-                className="filestyle" />
-            </div>
-            {
-              displayManageOwaButtonsState && 
-                <div className="col-xs-6 col-sm-4">
-                  <div className="row">
-                    <div className="btn-toolbar">
-                      <button
-                        className="btn btn-primary"
-                        onClick={handleUpload}>
-                        <span
-                          className="glyphicon glyphicon-upload"
-                        /> Upload
-                      </button>
-                      <button
-                        id="cancel-btn"
-                        className="btn btn-danger"
-                        onClick={handleClear}
-                      >
-                        <span className="glyphicon glyphicon-remove" /> Clear
-                      </button>
-                    </div>
-                  </div>
-                </div>
-            }
-          </div>
+export default class AddAddon extends Component {
+  constructor() {
+    super();
+    this.state = {
+      disableClick: true,
+      dropzoneRef: {},
+    }
+    this.showMessage = this.showMessage.bind(this);
+  }
+
+  showMessage() {
+    if (this.props.files == null || this.props.files.length < 1) {
+      return (
+        <p>Drag file here to upload or
+          <a id="click-to-select" href=""
+            onClick={(e) => {
+              e.preventDefault(); this.state.dropzoneRef.open();
+            }}> Click to here select</a>
+        </p>
+      );
+    }
+    else {
+      return (
+        <p>{this.props.files[0].name}</p>
+      );
+    }
+  }
+
+  render() {
+    return (
+      <div className="container-fluid">
+        <div className="row drop-zone-container">
+          <span>Select an OWA to upload</span>
+          <Dropzone
+            className="drop-zone"
+            acceptClassName="drop-zone-accept"
+            rejectClassName="drop-zone-reject"
+            accept="application/zip"
+            disableClick={this.state.disableClick}
+            ref={(node) => { this.state.dropzoneRef = node; }}
+            onDrop={(files) => this.props.handleDrop(files)}
+          >
+            {this.showMessage}
+          </Dropzone>
+          {this.props.displayManageOwaButtons()}
         </div>
-      </fieldset>
-    </div>
-  );
+      </div>
+    );
+  }
 }
 
 AddAddon.propTypes = {
   handleClear: PropTypes.func.isRequired,
+  handleDrop: PropTypes.func.isRequired,
   handleUpload: PropTypes.func.isRequired,
   displayManageOwaButtons: PropTypes.func.isRequired,
-  displayManageOwaButtonsState: PropTypes.bool.isRequired,
 };
