@@ -25,10 +25,16 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackOnBuildPlugin = require('on-build-webpack');
 
+require.extensions['.webapp'] = function (module, filename) {
+  module.exports = fs.readFileSync(filename, 'utf8');
+};
+const manifest = require('./app/manifest.webapp');
 
 const nodeModulesDir = path.resolve(__dirname, '../node_modules');
 
+
 const THIS_APP_ID = 'openmrs-addonmanager';
+const THIS_APP_VERSION = JSON.parse(manifest).version;
 
 let plugins = [];
 const nodeModules = {};
@@ -84,7 +90,8 @@ if (env === 'production') {
   plugins.push(new WebpackOnBuildPlugin(function(stats){
     //create zip file
     let archiver = require('archiver');
-    let output = fs.createWriteStream(THIS_APP_ID+'.zip');
+    let output = THIS_APP_VERSION ? fs.createWriteStream(`${THIS_APP_ID}-${THIS_APP_VERSION}.zip`)
+      :fs.createWriteStream(`${THIS_APP_ID}.zip`) ;
     let archive = archiver('zip');
 
     output.on('close', function () {
