@@ -466,7 +466,7 @@ export default class ManageApps extends React.Component {
           </div>
 
           <div className="home-page-body">
-            <div className="container-fluid">
+            <div className="container">
               <div id="notification-wrapper">
                 {this.state.showMsg && alert}
               </div>
