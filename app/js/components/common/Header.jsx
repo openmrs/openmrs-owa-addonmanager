@@ -55,7 +55,7 @@ export default class Header extends Component {
     this.fetchLocation('/session').then((response) => {
       this.setState((prevState, props) => {
         return {
-          currentUser: response.user.display
+          currentUser: response.user ? response.user.display : ''
         };
       });
     });
@@ -63,7 +63,7 @@ export default class Header extends Component {
     this.fetchCurrentUserLocation('/appui/session').then((response) => {
       this.setState((prevState, props) => {
         return {
-          currentLocationTag: response.sessionLocation.display,
+          currentLocationTag: response.sessionLocation ? response.sessionLocation.display : ''
         };
       });
     });

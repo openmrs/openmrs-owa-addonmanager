@@ -9,45 +9,53 @@
  */
 import React from 'react';
 
-export const AddonList = ({handleDownload, install, appList, openPage, openModal}) => {
+export const AddonList = ({handleDownload, appList, openPage, openModal}) => {
   return (
     <tbody>
       {
         appList.map((app, key) => {
           return (
             <tr key={key}>
-              <td onClick={() => openPage(app)}>
+              <td onClick={() => openPage(app.appDetails)}>
                 <img
-                  src={app.icons !== null && app.icons !== undefined ? 
-                    `/${location.href.split('/')[3]}/owa/openmrs-addonmanager/${app.icons[48]}` : 
+                  src={app.appDetails &&
+                    app.appDetails.icon !== null &&
+                    app.appDetails.icons !== undefined ? 
+                    `/${location.href.split('/')[3]}/owa/openmrs-addonmanager/${app.appDetails.icons[48]}` : 
                     `./img/omrs-button.png`}
                   alt="addon logo"
                 />
               </td>
-              <td onClick={() => openPage(app)}>
-                <div className="addon-name">{app.name}</div>
-                <div><h5  className="addon-description">{app.description}</h5></div>
+              <td onClick={() => openPage(app.appDetails)}>
+                <div className="addon-name">{app.appDetails && app.appDetails.name}</div>
+                <div><h5 className="addon-description">
+                  {app.appDetails && app.appDetails.description}
+                </h5></div>
               </td>
-              <td onClick={() => openPage(app)}>
-                {app.developer ? app.developer.name : app.maintainers[0].name}
+              <td onClick={() => openPage(app.appDetails)}>
+                {app.appDetails && app.appDetails.developer ?
+                  app.appDetails.developer.name :
+                  app.appDetails.maintainers[0].name}
               </td>
-              <td onClick={() => openPage(app)}>
-                {app.version ? app.version : app.latestVersion}
+              <td onClick={() => openPage(app.appDetails)}>
+                {app.appDetails.version ?
+                  app.appDetails.version :
+                  app.appDetails.latestVersion}
               </td>
               <td
                 className="text-center"
                 id="delete-icon-wrapper"
               >
                 {
-                  install === false ? 
+                  app.install === false ? 
                     <i
                       className="glyphicon glyphicon-trash text-danger delete-icon"
-                      id="icon-btn" onClick={openModal(app)}
+                      id="icon-btn" onClick={openModal(app.appDetails)}
                     /> :
                     <i
                       className="glyphicon glyphicon-download-alt text-primary install-icon"
                       id="icon-btn"
-                      onClick={(e) => handleDownload(e)}
+                      onClick={(e) => handleDownload(app.downloadUri)(e)}
                     />
                 }
               </td>           
@@ -61,7 +69,6 @@ export const AddonList = ({handleDownload, install, appList, openPage, openModal
 
 AddonList.propTypes = {
   handleDownload: React.PropTypes.func.isRequired,
-  install: React.PropTypes.bool.isRequired,
   appList: React.PropTypes.array.isRequired,
   openPage: React.PropTypes.func.isRequired, 
   openModal: React.PropTypes.func.isRequired
