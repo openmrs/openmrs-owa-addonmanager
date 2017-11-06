@@ -25,12 +25,12 @@ describe('<ManageApps />', () => {
         expect(renderedComponent.find("table")).to.have.length(1);
     });
 
-    it('Should render a table row', () => {
-        expect(renderedComponent.find("tr")).to.have.length(1);
+    it('Should render two table rows', () => {
+        expect(renderedComponent.find("tr")).to.have.length(2);
     });
 
-    it('Should render 5 table head', () => {
-        expect(renderedComponent.find("th")).to.have.length(5);
+    it('Should render 6 table head', () => {
+        expect(renderedComponent.find("th")).to.have.length(6);
     });
 
     it('Should render a heading', () => {
