@@ -11,6 +11,7 @@ import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 're
 import App from './components/App.jsx';
 import ManageApps from './components/manageApps/ManageApps.jsx';
 import ManageSettings from './components/manageApps/ManageSettings.jsx';
+import ManageModules from './components/manageApps/ManageModules.jsx';
 
 export default () => {
   return (
@@ -18,6 +19,7 @@ export default () => {
       <Route path="/" component={App} >
         <IndexRoute component={ManageApps}/>
         <Route path="manageSettings" component={ManageSettings} />
+        <Route path="manageModules" component={ManageModules} />
         <Route path="*" component ={ManageApps}/>
       </Route>
     </Router>
