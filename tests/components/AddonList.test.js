@@ -6,37 +6,40 @@ import  { AddonList }  from '../../app/js/components/manageApps/AddonList.jsx';
 
 describe('<AddonList />', () => {
     const appList = [{
-        "version": "1.0.0",
-        "name": "CohortBuilder",
-        "description": "modern refresh of the OpenMRS Cohort Builder tool",
-        "icons": {
-            "16": null,
-            "48": "/img/omrs-button.png",
-            "128": null
+        appDetails: {
+            "version": "1.0.0",
+            "name": "CohortBuilder",
+            "description": "modern refresh of the OpenMRS Cohort Builder tool",
+            "icons": {
+                "16": null,
+                "48": "/img/omrs-button.png",
+                "128": null
+            },
+            "developer": {
+                "url": "https://github.com/openmrs/openmrs-owa-cohortbuilder",
+                "name": "andela-odaniel, wanjikum, andela-jomadoye, andela-pupendo, kingisaac95",
+                "company": null,
+                "email": null
+            },
+            "activities": {
+                "openmrs": {
+                    "href": "*"
+                }
+            },
+            "folderName": "cohortbuilder",
+            "baseUrl": null,
+            "launchUrl": null,
+            "launch_path": "index.html",
+            "installs_allowed_from": null,
+            "default_locale": "en",
+            "deployed.owa.name": null
         },
-        "developer": {
-            "url": "https://github.com/openmrs/openmrs-owa-cohortbuilder",
-            "name": "andela-odaniel, wanjikum, andela-jomadoye, andela-pupendo, kingisaac95",
-            "company": null,
-            "email": null
-        },
-        "activities": {
-            "openmrs": {
-                "href": "*"
-            }
-        },
-        "folderName": "cohortbuilder",
-        "baseUrl": null,
-        "launchUrl": null,
-        "launch_path": "index.html",
-        "installs_allowed_from": null,
-        "default_locale": "en",
-        "deployed.owa.name": null
-    },];
+        install: false
+    }];
 
     const openPage = () => {};
     const openModal = () => {};
-    const addonList = mount( < AddonList appList={appList} openPage={openPage}  openModal={openModal}/ > );
+    const addonList = mount( <AddonList appList={appList} openPage={openPage}  openModal={openModal}/ > );
     
     it('should render a tbody', () => {
         expect(addonList.find("tbody")).to.have.length(1);

@@ -31,13 +31,11 @@ export default class ManageApps extends React.Component {
       showProgress: false,
       isOpen: false,
       selectedApp: null,
-      searchResults: [],
-      install: false,
       downloadUri: null,
       deleteStatus: false,
       addonAlreadyInstalled: null,
       files: null,
-      displayInvalidZip: false
+      displayInvalidZip: false,
     };
 
     this.apiHelper = new ApiHelper(null);
@@ -47,7 +45,6 @@ export default class ManageApps extends React.Component {
     this.hideModal = this.hideModal.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
     this.handleClear = this.handleClear.bind(this);
-    this.searchAddOn = this.searchAddOn.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleDownload = this.handleDownload.bind(this);
@@ -56,6 +53,7 @@ export default class ManageApps extends React.Component {
     this.handleUploadRequest = this.handleUploadRequest.bind(this);
     this.handleAlertBehaviour = this.handleAlertBehaviour.bind(this);
     this.handleAddonUploadModal = this.handleAddonUploadModal.bind(this);
+    this.initiateSearch = this.initiateSearch.bind(this);
     this.displayManageOwaButtons = this.displayManageOwaButtons.bind(this);
   }
 
@@ -85,12 +83,21 @@ export default class ManageApps extends React.Component {
   }
 
   handleApplist() {
+    const resultData = [];
     this.apiHelper.get('/owa/applist').then(response => {
-      this.setState((prevState, props) => {
-        return {
-          appList: response,
-          staticAppList: response
-        };
+      response.forEach((data, index) => {
+        resultData.push({
+          appDetails: data,
+          install: false
+        });
+        if (index === response.length - 1) {
+          this.setState((prevState, props) => {
+            return {
+              appList: resultData,
+              staticAppList: resultData
+            };
+          });
+        }
       });
     });
   }
@@ -177,6 +184,7 @@ export default class ManageApps extends React.Component {
   }
 
   handleUploadRequest() {
+    const resultData = [];
     const applicationDistribution = location.href.split('/')[2];
     const url = location.href.split('/')[3];
     const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
@@ -207,13 +215,18 @@ export default class ManageApps extends React.Component {
       processData: false,
       cache: false,
       success: function (result) {
+        resultData.push({
+          appList: result,
+          downloadUri: null,                  
+          install: false
+        });
         this.setState((prevState, props) => {
           return {
             showMsg: true,
             msgBody: `${fileName} has been successfully installed`,
             msgType: "success",
-            appList: result,
-            staticAppList: result,
+            appList: resultData,
+            staticAppList: resultData,
           };
         });
 
@@ -355,99 +368,91 @@ export default class ManageApps extends React.Component {
     return location.href = `/${location.href.split('/')[3]}/owa/${app.folderName}/${app.launch_path}`;
   }
 
-  handleDownload(e) {
-    e.preventDefault();
-    location.href = this.state.downloadUri;
+  handleDownload(downloadUri) {
+    return (e) => {
+      e.preventDefault();
+      location.href = downloadUri;
+    };
   }
 
-  onlineSearchHandler(addOnFound, searchValue, searchResults, staticAppList) {
-    if (addOnFound.length > 0) {
-      this.setState((prevState, props) => {
-        return {
-          appList: addOnFound,
-          install: false,
-          downloadUri: null,
-          searchResults: []
-        };
-      });
-    } else if (searchValue.length > 1 && addOnFound.length == 0) {
+  onlineSearchHandler(searchValue) {
+    const resultData = [];
+    const { staticAppList } = this.state;    
+    if (searchValue) {
       axios.get(`https://addons.openmrs.org/api/v1//addon?&q=${searchValue}`)
         .then(response => {
-          this.setState((prevState, props) => {
-            return {
-              searchResults: response.data
-            };
-          });
-        })
-        .catch(error => {
-          error;
-        });
-      if (searchResults.length < 1) {
-        this.setState((prevState, props) => {
-          return {
-            appList: []
-          };
-        });
-      } else {
-        searchResults.forEach(result => {
-          if (result.type == "OWA") {
-            axios.get(`https://addons.openmrs.org/api/v1//addon/${result.uid}`)
-              .then(res => {
-                this.setState((prevState, props) => {
-                  return {
-                    appList: [res.data],
-                    downloadUri: res.data['versions'][0].downloadUri,
-                    install: true
-                  };
+          const searchResults = response.data;
+          if (searchResults.length === 0) {
+            this.setState({ appList: [] });
+          } else {
+            const searchResultsPromise = searchResults.map(result => axios.get(
+              `https://addons.openmrs.org/api/v1//addon/${result.uid}`
+            ));
+            Promise.all(searchResultsPromise)
+              .then(results => results.forEach((result, index) => {
+                resultData.push({
+                  appDetails: result.data,
+                  downloadUri: result.data['versions'][0] ? result.data['versions'][0].downloadUri: null,
+                  install: true             
                 });
+                if (index === searchResults.length - 1) {
+                  this.setState((prevState, props) => {
+                    return {             
+                      appList: resultData
+                    };
+                  });
+                }
+              }))
+              .catch(error => {
+                if(error) this.setState({ appList: [] });
               });
           }
+        })
+        .catch(error => {
+          if(error) this.setState({ appList: [] });          
         });
-      }
     } else {
       this.setState((prevState, props) => {
         return {
-          appList: staticAppList,
-          searchResults: []
+          appList: staticAppList
         };
       });
     }
   }
 
-  searchAddOn(event) {
-    event.preventDefault();
-    const searchValue = event.target.value;
-    const { searchResults, staticAppList, appList } = this.state;
-
-    let addOnFound = this.state.staticAppList.filter((app) =>
-      app.name.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
-      || app.description.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
-      || app.developer["name"].toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1
-      || app.version.indexOf(event.target.value) !== -1);
-
-    this.onlineSearchHandler(addOnFound, searchValue, searchResults, staticAppList);
-
+  initiateSearch(event) {
+    if (event.keyCode ===  13) {
+      const searchValue = event.target.value;      
+      this.onlineSearchHandler(searchValue);
+    }
   }
 
   render() {
-    if (this.state.showMsg === true) {
-      setTimeout(this.handleAlertBehaviour, 6000);
-    }
-
-    const alert = (
-      <div className={`col-sm-12 alert alert-${this.state.msgType} alert-dismissable`}>
-        <button className="close" data-dismiss="alert" aria-label="close">×</button>
-        {this.state.msgBody}
-      </div>
-    );
-
     const {
       showProgress,
       uploadStatus,
       deleteStatus,
+      showMsg,
+      msgType,
+      msgBody,
+      appList,
+      isOpen,
+      selectedApp,
       displayInvalidZip } = this.state;
 
-    const disableUploadElements = (this.state.uploadStatus > 0) ? true : false;
+    if (showMsg === true) {
+      setTimeout(this.handleAlertBehaviour, 6000);
+    }
+
+    const alert = (
+      <div className={`col-sm-12 alert alert-${msgType} alert-dismissable`}>
+        <button className="close" data-dismiss="alert" aria-label="close">×</button>
+        {msgBody}
+      </div>
+    );
+
+
+    const disableUploadElements = (uploadStatus > 0) ? true : false;
     deleteStatus ? document.body.className = 'loading' : document.body.className = '';
     disableUploadElements ? document.body.className = 'loading' : document.body.className = '';
 
@@ -457,12 +462,12 @@ export default class ManageApps extends React.Component {
           <div className="row">
             <div className="col-sm-12">
               <h2 className="manage-addon-title">Add-on Manager</h2>
-              <div className="row">
-                <Link to="/manageModules">
-                  <button className="btn btn-secondary">Manage Modules</button>
-                </Link>
-              </div>
               <span className="pull-right manage-settings-wrapper">
+                <Link to="/manageModules">
+                  <button id="manage-modules-btn" className="btn btn-secondary">
+                    <span className="glyphicon glyphicon-th-list" />
+                      Manage Modules</button>
+                </Link>
                 <Link to="/manageSettings" className="manage-settings-button">
                   <i className="glyphicon glyphicon-cog settings-icon" id="setting-icon-btn" />
                 </Link>
@@ -473,7 +478,7 @@ export default class ManageApps extends React.Component {
           <div className="home-page-body">
             <div className="container">
               <div id="notification-wrapper">
-                {this.state.showMsg && alert}
+                {showMsg && alert}
               </div>
 
               <AddAddon
@@ -490,7 +495,7 @@ export default class ManageApps extends React.Component {
                   <input
                     type="text"
                     id="search-input"
-                    onKeyUp={this.searchAddOn}
+                    onKeyDown={this.initiateSearch}
                     placeholder="Search for add-ons to install or clear field to display installed add-ons" />
                 </div>
                 <table className="table table-bordered table-striped table-hover">
@@ -503,7 +508,7 @@ export default class ManageApps extends React.Component {
                       <th>Action</th>
                     </tr>
                   </thead>
-                  {this.state.appList.length < 1 ?
+                  {appList.length < 1 ?
                     <tbody>
                       <tr>
                         <th colSpan="5"><h4>No apps found</h4></th>
@@ -511,17 +516,17 @@ export default class ManageApps extends React.Component {
                     </tbody> :
                     <AddonList
                       handleDownload={this.handleDownload}
-                      install={this.state.install}
-                      appList={this.state.appList}
+                      appList={appList}
                       openPage={this.openPage}
                       openModal={this.openModal}
-                    />}
+                    />
+                  }
                 </table>
-                {this.state.isOpen ? (
+                {isOpen ? (
                   <DeleteAddonModal
-                    app={this.state.selectedApp}
+                    app={selectedApp}
                     handleDelete={this.handleDelete}
-                    isOpen={this.state.isOpen}
+                    isOpen={isOpen}
                     hideModal={this.hideModal} />
                 ) : null}
                 {
