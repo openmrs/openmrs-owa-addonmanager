@@ -9,6 +9,7 @@
 import React from 'react';
 import axios from 'axios';
 import JSZip from 'jszip';
+import Loader from 'react-loader';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
 import AddAddon from '../manageApps/AddAddon.jsx';
 import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent.jsx';
@@ -36,6 +37,7 @@ export default class ManageApps extends React.Component {
       addonAlreadyInstalled: null,
       files: null,
       displayInvalidZip: false,
+      searchComplete: false
     };
 
     this.apiHelper = new ApiHelper(null);
@@ -94,7 +96,8 @@ export default class ManageApps extends React.Component {
           this.setState((prevState, props) => {
             return {
               appList: resultData,
-              staticAppList: resultData
+              staticAppList: resultData,
+              searchComplete: true
             };
           });
         }
@@ -376,6 +379,7 @@ export default class ManageApps extends React.Component {
   }
 
   onlineSearchHandler(searchValue) {
+    this.state.searchComplete === true ? this.setState({ searchComplete: false }) : null;
     const resultData = [];
     const { staticAppList } = this.state;    
     if (searchValue) {
@@ -383,7 +387,10 @@ export default class ManageApps extends React.Component {
         .then(response => {
           const searchResults = response.data;
           if (searchResults.length === 0) {
-            this.setState({ appList: [] });
+            this.setState({
+              appList: [],
+              searchComplete: true
+            });
           } else {
             const searchResultsPromise = searchResults.map(result => axios.get(
               `https://addons.openmrs.org/api/v1//addon/${result.uid}`
@@ -398,30 +405,41 @@ export default class ManageApps extends React.Component {
                 if (index === searchResults.length - 1) {
                   this.setState((prevState, props) => {
                     return {             
-                      appList: resultData
+                      appList: resultData,
+                      searchComplete: true
                     };
                   });
                 }
               }))
               .catch(error => {
-                if(error) this.setState({ appList: [] });
+                if(error) this.setState({ appList: [], searchComplete: true });
               });
           }
         })
         .catch(error => {
-          if(error) this.setState({ appList: [] });          
+          if(error) this.setState({ appList: [], searchComplete: true });          
         });
     } else {
       this.setState((prevState, props) => {
         return {
-          appList: staticAppList
+          appList: staticAppList,
+          searchComplete: true
         };
       });
     }
   }
 
   initiateSearch(event) {
+    const { staticAppList } = this.state;
+    const { value } = this.input;      
+    if (value.length === 0 || value.length === 1) {
+      this.setState({
+        appList: staticAppList,
+        searchComplete: true
+      });
+    }
     if (event.keyCode ===  13) {
+      this.setState({ searchComplete: false });
       const searchValue = event.target.value;      
       this.onlineSearchHandler(searchValue);
     }
@@ -429,6 +447,7 @@ export default class ManageApps extends React.Component {
 
   render() {
     const {
+      files,
       showProgress,
       uploadStatus,
       deleteStatus,
@@ -438,6 +457,7 @@ export default class ManageApps extends React.Component {
       appList,
       isOpen,
       selectedApp,
+      searchComplete,
       displayInvalidZip } = this.state;
 
     if (showMsg === true) {
@@ -477,7 +497,7 @@ export default class ManageApps extends React.Component {
               </div>
 
               <AddAddon
-                files={this.state.files}
+                files={files}
                 handleDrop={this.handleDrop}
                 handleClear={this.handleClear}
                 handleUpload={this.handleUpload}
@@ -485,38 +505,43 @@ export default class ManageApps extends React.Component {
               />
 
               <div className="manage-app-table col-sm-12">
-                <div className="search-add-on">
-                  <i className="glyphicon glyphicon-search" />
+                <div
+                  className="search-add-on"
+                  style={!searchComplete ? {marginBottom: 200}: {marginBottom: 10}}>
+                  <i className="glyphicon glyphicon-search"/>
                   <input
                     type="text"
                     id="search-input"
+                    ref={value => this.input = value}
                     onKeyDown={this.initiateSearch}
-                    placeholder="Search for add-ons to install or clear field to display installed add-ons" />
+                    placeholder="Need new add-ons? Type & press ENTER or clear field to display installed add-ons" />
                 </div>
-                <table className="table table-bordered table-striped table-hover">
-                  <thead>
-                    <tr>
-                      <th>Logo</th>
-                      <th>Name</th>
-                      <th>Developer</th>
-                      <th>Version</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  {appList.length < 1 ?
-                    <tbody>
+                <Loader loaded={searchComplete}>
+                  <table className="table table-bordered table-striped table-hover">
+                    <thead>
                       <tr>
-                        <th colSpan="5"><h4>No apps found</h4></th>
+                        <th>Logo</th>
+                        <th>Name</th>
+                        <th>Developer</th>
+                        <th>Version</th>
+                        <th>Action</th>
                       </tr>
-                    </tbody> :
-                    <AddonList
-                      handleDownload={this.handleDownload}
-                      appList={appList}
-                      openPage={this.openPage}
-                      openModal={this.openModal}
-                    />
-                  }
-                </table>
+                    </thead>
+                    {appList.length < 1 ?
+                      <tbody>
+                        <tr>
+                          <th colSpan="5"><h4>No apps found</h4></th>
+                        </tr>
+                      </tbody> :
+                      <AddonList
+                        handleDownload={this.handleDownload}
+                        appList={appList}
+                        openPage={this.openPage}
+                        openModal={this.openModal}
+                      />
+                    }
+                  </table>
+                </Loader>
                 {isOpen ? (
                   <DeleteAddonModal
                     app={selectedApp}
