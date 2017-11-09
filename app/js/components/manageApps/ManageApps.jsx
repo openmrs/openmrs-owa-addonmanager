@@ -71,15 +71,15 @@ export default class ManageApps extends React.Component {
   }
 
   handleDrop(files) {
-    if(files.length > 0){
+    if (files.length > 0) {
       this.setState({ files: files });
-    }else{
+    } else {
       this.setState({
         msgBody: "File has not been added, please select a valid zip file",
         msgType: "warning",
         showMsg: true,
       });
-    }    
+    }
   }
 
   handleApplist() {
@@ -141,7 +141,7 @@ export default class ManageApps extends React.Component {
     });
 
     readZippedAddon.then((result) => {
-      if(!result) {
+      if (!result) {
         this.setState((prevState, props) => {
           return {
             displayInvalidZip: true
@@ -151,9 +151,9 @@ export default class ManageApps extends React.Component {
         this.setState({
           addonAlreadyInstalled: false,
         });
-  
+
         this.state.appList.map((addon) => {
-          if(addon.name === result.name) {
+          if (addon.name === result.name) {
             this.setState({
               addonAlreadyInstalled: true,
             });
@@ -165,7 +165,7 @@ export default class ManageApps extends React.Component {
                 toBeInstalledAddonName,
                 'overwrite',
                 'overwriting');
-            } else if(installedAddonVersion < toBeInstalledAddonVersion) {
+            } else if (installedAddonVersion < toBeInstalledAddonVersion) {
               this.handleAddonUploadModal(
                 toBeInstalledAddonName,
                 'upgrade',
@@ -241,7 +241,7 @@ export default class ManageApps extends React.Component {
         });
       }.bind(this),
       complete: function (result) {
-        this.setState({files: null});
+        this.setState({ files: null });
         this.setState((prevState, props) => {
           return {
             uploadStatus: 0,
@@ -463,6 +463,11 @@ export default class ManageApps extends React.Component {
             <div className="col-sm-12">
               <h2 className="manage-addon-title">Add-on Manager</h2>
               <span className="pull-right manage-settings-wrapper">
+                <Link to="/manageModules">
+                  <button id="manage-modules-btn" className="btn btn-secondary">
+                    <span className="glyphicon glyphicon-th-list" />
+                      Manage Modules</button>
+                </Link>
                 <Link to="/manageSettings" className="manage-settings-button">
                   <i className="glyphicon glyphicon-cog settings-icon" id="setting-icon-btn" />
                 </Link>
@@ -542,3 +547,4 @@ export default class ManageApps extends React.Component {
     );
   }
 }
+

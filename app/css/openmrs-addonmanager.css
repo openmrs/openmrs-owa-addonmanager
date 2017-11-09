@@ -289,7 +289,7 @@ legend.scheduler-border {
 
 .manage-settings-wrapper {
     margin-top: 20px;    
-    padding-right: 35px;
+    padding-right: 17px;
 }
 
 .manage-addon-title {
@@ -481,10 +481,11 @@ span.title.breadcrumb-item {
 }
 
 #setting-icon-btn {
-    padding: 2px 5px;
+    padding: 3px 5px;
 }
 
-#success-btn, #cancel-btn, #icon-btn, #setting-icon-btn {
+#success-btn, #cancel-btn, #icon-btn, #setting-icon-btn, #manage-modules-btn,
+#startall-modules-btn{
     line-height: 1.2em;
     color: white;
     cursor: pointer;
@@ -523,7 +524,7 @@ input[type=text] {
     border: 1px solid #dddddd;
 }
 
-.deleting-modal {
+.deleting-modal, .happening {
     display:    block;
 }
 
@@ -540,7 +541,7 @@ div.modal-dialog.modal-dialog-open {
     display:    none;
 }
 
-.waiting-modal, .deleting-modal {
+.waiting-modal, .deleting-modal, .happening {
     position:   fixed;
     z-index:    1000;
     top:        0;
@@ -610,4 +611,75 @@ body.loading .waiting-modal {
 
 .drop-zone-reject {
     border: 5px solid #ff8080;
+}
+
+#modules-table{
+    font-size: 0.95em;
+}
+
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+    background-color: #fffdf7;
+ }
+
+ .module-description {
+    font-size: 0.88em;
+ }
+
+ #table-header > th {
+     background: #f3f3f3;
+ }
+
+ #manage-modules-btn, #startall-modules-btn {
+     background: -webkit-linear-gradient(top, #ffffff, #dddddd);
+     float: right;
+     margin-left: 8px;
+     color: #363463;
+     font-size: 1em;
+ }
+
+ #startall-modules-btn {
+     margin-right: 0px;
+     margin-bottom: 8px;
+ }
+
+ .glyphicon-th-list {
+     margin-right: 4px;
+     color: #363463;
+ }
+
+ .manage-modules {
+     max-width: 920px;
+ }
+
+ #start-module {
+     color: #a1d030;
+ }
+
+ #stop-module {
+     color: #ce7777;
+ }
+
+#status-cell, .module-action-cell {
+    vertical-align: middle;
+}
+
+.glyphicon-ok {
+    font-size: 1.5em;
+    color: #a1d030;
+}
+
+#startall-modules-btn > .glyphicon-play {
+    color: #a1d030;
+    font-size: 1.05em;
+}
+
+#status-cell > .glyphicon-stop {
+    color: #ce7777;
+    font-size: 1.6em;
+}
+
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
