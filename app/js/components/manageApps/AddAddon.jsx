@@ -16,12 +16,13 @@ export default class AddAddon extends Component {
     this.state = {
       disableClick: true,
       dropzoneRef: {},
-    }
+    };
     this.showMessage = this.showMessage.bind(this);
   }
 
   showMessage() {
-    if (this.props.files == null || this.props.files.length < 1) {
+    const { files } = this.props;
+    if (files == null || files.length < 1) {
       return (
         <p>Drag file here to upload or
           <a id="click-to-select" href=""
@@ -33,7 +34,7 @@ export default class AddAddon extends Component {
     }
     else {
       return (
-        <p>{this.props.files[0].name}</p>
+        <p>{files[0].name}</p>
       );
     }
   }

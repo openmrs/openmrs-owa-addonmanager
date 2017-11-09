@@ -74,7 +74,7 @@
     "build:dev": "npm run clean && webpack --progress --colors --mode=dev --target=web",
     "build:prod": "npm run build",
     "build:deploy": "webpack --progress --colors --mode=deploy --target=web",
-    "watch": "webpack --progress --colors --watch --mode=deploy --target=web",
+    "watch": "webpack --progress --colors --watch --mode=deploy --target=web --devtool source-map",
     "lint": "node_modules/.bin/esw webpack.config.* app",
     "lint:watch": "npm run lint -- --watch",
     "test": "node_modules/.bin/mocha tests/**/*.test.* --require tests/setup.js",
