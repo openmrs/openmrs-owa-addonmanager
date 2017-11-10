@@ -304,7 +304,7 @@ legend.scheduler-border {
     margin-top: 3px;
 }
 
-#delete-icon-wrapper {
+#view-icon-wrapper {
     padding: 25px;
 }
 
@@ -312,7 +312,7 @@ legend.scheduler-border {
     font-size: 20px;
 }
 
-.install-icon {
+.install-icon, .view-icon {
     font-size: 20px;
     color: #1F78D5;
 }
@@ -484,7 +484,7 @@ span.title.breadcrumb-item {
     padding: 2px 5px;
 }
 
-#success-btn, #cancel-btn, #icon-btn, #setting-icon-btn {
+#success-btn, #cancel-btn, #icon-btn, #setting-icon-btn, #view-addon-btn {
     line-height: 1.2em;
     color: white;
     cursor: pointer;
@@ -610,4 +610,11 @@ body.loading .waiting-modal {
 
 .drop-zone-reject {
     border: 5px solid #ff8080;
+}
+
+#view-addon-btn {
+    background: -webkit-linear-gradient(top, #ffffff, #dddddd);
+    color: #363463;
+    font-size: 1.05em;
+    border: 1px solid #dddddd;
 }
