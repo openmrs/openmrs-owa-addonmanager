@@ -73,34 +73,52 @@ export default class ManageApps extends React.Component {
   }
 
   handleDrop(files) {
-    if(files.length > 0){
+    if (files.length > 0) {
       this.setState({ files: files });
-    }else{
+    } else {
       this.setState({
         msgBody: "File has not been added, please select a valid zip file",
         msgType: "warning",
         showMsg: true,
       });
-    }    
+    }
   }
 
   handleApplist() {
-    const resultData = [];
+    const installedOwas = [];
+    const installedModules = [];
+
     this.apiHelper.get('/owa/applist').then(response => {
       response.forEach((data, index) => {
-        resultData.push({
+        installedOwas.push({
           appDetails: data,
+          appType: 'owa',
           install: false
         });
-        if (index === response.length - 1) {
-          this.setState((prevState, props) => {
-            return {
-              appList: resultData,
-              staticAppList: resultData,
-              searchComplete: true
-            };
+      });
+    }).then(() => {
+      const applicationDistribution = location.href.split('/')[2];
+      const url = location.href.split('/')[3];
+      const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
+      this.requestUrl = '/v1/module/?v=full';
+      axios.get(`https:/${apiBaseUrl}${this.requestUrl}`).then(response => {
+        response.data.results.forEach((data) => {
+          installedModules.push({
+            appDetails: data,
+            appType: 'module',
+            install: false
           });
-        }
+        });
+      }).then(() => {
+        const installedAddons = installedOwas.concat(installedModules);
+        this.setState((prevState, props) => {
+          return {
+            appList: installedAddons,
+            staticAppList: installedAddons,
+            searchComplete: true
+          };
+        });
+
       });
     });
   }
@@ -144,7 +162,7 @@ export default class ManageApps extends React.Component {
     });
 
     readZippedAddon.then((result) => {
-      if(!result) {
+      if (!result) {
         this.setState((prevState, props) => {
           return {
             displayInvalidZip: true
@@ -154,9 +172,9 @@ export default class ManageApps extends React.Component {
         this.setState({
           addonAlreadyInstalled: false,
         });
-  
+
         this.state.appList.map((addon) => {
-          if(addon.name === result.name) {
+          if (addon.name === result.name) {
             this.setState({
               addonAlreadyInstalled: true,
             });
@@ -168,7 +186,7 @@ export default class ManageApps extends React.Component {
                 toBeInstalledAddonName,
                 'overwrite',
                 'overwriting');
-            } else if(installedAddonVersion < toBeInstalledAddonVersion) {
+            } else if (installedAddonVersion < toBeInstalledAddonVersion) {
               this.handleAddonUploadModal(
                 toBeInstalledAddonName,
                 'upgrade',
@@ -220,7 +238,7 @@ export default class ManageApps extends React.Component {
       success: function (result) {
         resultData.push({
           appList: result,
-          downloadUri: null,                  
+          downloadUri: null,
           install: false
         });
         this.setState((prevState, props) => {
@@ -244,7 +262,7 @@ export default class ManageApps extends React.Component {
         });
       }.bind(this),
       complete: function (result) {
-        this.setState({files: null});
+        this.setState({ files: null });
         this.setState((prevState, props) => {
           return {
             uploadStatus: 0,
@@ -381,7 +399,7 @@ export default class ManageApps extends React.Component {
   onlineSearchHandler(searchValue) {
     this.state.searchComplete === true ? this.setState({ searchComplete: false }) : null;
     const resultData = [];
-    const { staticAppList } = this.state;    
+    const { staticAppList } = this.state;
     if (searchValue) {
       axios.get(`https://addons.openmrs.org/api/v1//addon?&q=${searchValue}`)
         .then(response => {
@@ -399,12 +417,12 @@ export default class ManageApps extends React.Component {
               .then(results => results.forEach((result, index) => {
                 resultData.push({
                   appDetails: result.data,
-                  downloadUri: result.data['versions'][0] ? result.data['versions'][0].downloadUri: null,
-                  install: true             
+                  downloadUri: result.data['versions'][0] ? result.data['versions'][0].downloadUri : null,
+                  install: true
                 });
                 if (index === searchResults.length - 1) {
                   this.setState((prevState, props) => {
-                    return {             
+                    return {
                       appList: resultData,
                       searchComplete: true
                     };
@@ -412,12 +430,12 @@ export default class ManageApps extends React.Component {
                 }
               }))
               .catch(error => {
-                if(error) this.setState({ appList: [], searchComplete: true });
+                if (error) this.setState({ appList: [], searchComplete: true });
               });
           }
         })
         .catch(error => {
-          if(error) this.setState({ appList: [], searchComplete: true });          
+          if (error) this.setState({ appList: [], searchComplete: true });
         });
     } else {
       this.setState((prevState, props) => {
@@ -431,16 +449,16 @@ export default class ManageApps extends React.Component {
 
   initiateSearch(event) {
     const { staticAppList } = this.state;
-    const { value } = this.input;      
+    const { value } = this.input;
     if (value.length === 0 || value.length === 1) {
       this.setState({
         appList: staticAppList,
         searchComplete: true
       });
     }
-    if (event.keyCode ===  13) {
+    if (event.keyCode === 13) {
       this.setState({ searchComplete: false });
-      const searchValue = event.target.value;      
+      const searchValue = event.target.value;
       this.onlineSearchHandler(searchValue);
     }
   }
@@ -507,8 +525,8 @@ export default class ManageApps extends React.Component {
               <div className="manage-app-table col-sm-12">
                 <div
                   className="search-add-on"
-                  style={!searchComplete ? {marginBottom: 200}: {marginBottom: 10}}>
-                  <i className="glyphicon glyphicon-search"/>
+                  style={!searchComplete ? { marginBottom: 200 } : { marginBottom: 10 }}>
+                  <i className="glyphicon glyphicon-search" />
                   <input
                     type="text"
                     id="search-input"
