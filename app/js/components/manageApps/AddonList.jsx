@@ -8,20 +8,23 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 import React from 'react';
+import { Link } from 'react-router';
 
-export const AddonList = ({handleDownload, appList, openPage, openModal}) => {
+export const AddonList = ({ handleDownload, appList, openPage, openModal }) => {
   return (
     <tbody>
       {
         appList.map((app, key) => {
+          let addonParam = app.appDetails.uuid ?
+            'module-' + app.appDetails.uuid : 'owa-' + app.appDetails.name;
           return (
             <tr key={key}>
               <td onClick={() => openPage(app.appDetails)}>
                 <img
                   src={app.appDetails &&
                     app.appDetails.icon !== null &&
-                    app.appDetails.icons !== undefined ? 
-                    `/${location.href.split('/')[3]}/owa/openmrs-addonmanager/${app.appDetails.icons[48]}` : 
+                    app.appDetails.icons !== undefined ?
+                    `/${location.href.split('/')[3]}/owa/openmrs-addonmanager/${app.appDetails.icons[48]}` :
                     `./img/omrs-button.png`}
                   alt="addon logo"
                 />
@@ -33,9 +36,13 @@ export const AddonList = ({handleDownload, appList, openPage, openModal}) => {
                 </h5></div>
               </td>
               <td onClick={() => openPage(app.appDetails)}>
-                {app.appDetails && app.appDetails.developer ?
-                  app.appDetails.developer.name :
-                  app.appDetails.maintainers[0].name}
+                {
+                  app.appDetails && app.appDetails.uuid ?
+                    app.appDetails.author :
+                    app.appDetails && app.appDetails.developer ?
+                      app.appDetails.developer.name :
+                      app.appDetails.maintainers[0].name
+                }
               </td>
               <td onClick={() => openPage(app.appDetails)}>
                 {app.appDetails.version ?
@@ -44,21 +51,28 @@ export const AddonList = ({handleDownload, appList, openPage, openModal}) => {
               </td>
               <td
                 className="text-center"
-                id="delete-icon-wrapper"
+                id="view-icon-wrapper"
               >
                 {
-                  app.install === false ? 
-                    <i
-                      className="glyphicon glyphicon-trash text-danger delete-icon"
-                      id="icon-btn" onClick={openModal(app.appDetails)}
-                    /> :
+                  app.install === false ?
+                    <Link
+                      to={{
+                        pathname: "addon/" + addonParam,
+                      }}
+                    >
+                      <button id="view-addon-btn" className="btn btn-secondary">
+                        <i className="glyphicon glyphicon-option-vertical view-icon" />
+                        View
+                      </button>
+                    </Link>
+                    :
                     <i
                       className="glyphicon glyphicon-download-alt text-primary install-icon"
                       id="icon-btn"
                       onClick={(e) => handleDownload(app.downloadUri)(e)}
                     />
                 }
-              </td>           
+              </td>
             </tr>
           );
         })
@@ -70,6 +84,6 @@ export const AddonList = ({handleDownload, appList, openPage, openModal}) => {
 AddonList.propTypes = {
   handleDownload: React.PropTypes.func.isRequired,
   appList: React.PropTypes.array.isRequired,
-  openPage: React.PropTypes.func.isRequired, 
+  openPage: React.PropTypes.func.isRequired,
   openModal: React.PropTypes.func.isRequired
 };

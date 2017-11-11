@@ -304,7 +304,7 @@ legend.scheduler-border {
     margin-top: 3px;
 }
 
-#delete-icon-wrapper {
+#view-icon-wrapper {
     padding: 25px;
 }
 
@@ -312,7 +312,7 @@ legend.scheduler-border {
     font-size: 20px;
 }
 
-.install-icon {
+.install-icon, .view-icon {
     font-size: 20px;
     color: #1F78D5;
 }
@@ -484,7 +484,7 @@ span.title.breadcrumb-item {
     padding: 2px 5px;
 }
 
-#success-btn, #cancel-btn, #icon-btn, #setting-icon-btn {
+#success-btn, #cancel-btn, #icon-btn, #setting-icon-btn, #view-addon-btn {
     line-height: 1.2em;
     color: white;
     cursor: pointer;
@@ -523,7 +523,7 @@ input[type=text] {
     border: 1px solid #dddddd;
 }
 
-.deleting-modal {
+.deleting-modal, .happening {
     display:    block;
 }
 
@@ -540,7 +540,7 @@ div.modal-dialog.modal-dialog-open {
     display:    none;
 }
 
-.waiting-modal, .deleting-modal {
+.waiting-modal, .deleting-modal, .happening {
     position:   fixed;
     z-index:    1000;
     top:        0;
@@ -610,4 +610,71 @@ body.loading .waiting-modal {
 
 .drop-zone-reject {
     border: 5px solid #ff8080;
+}
+
+#view-addon-btn {
+    background: -webkit-linear-gradient(top, #ffffff, #dddddd);
+    color: #363463;
+    font-size: 1.05em;
+    border: 1px solid #dddddd;
+}
+
+.addon {
+    background: #f2f2f2;
+    margin-top: 1.2%;
+    border-radius: 5px;
+    max-width: 90%;
+    padding-left: 5%;
+    padding-right: 5%;
+    height: 500px;
+}
+
+.addon-table {
+    background: white;
+}
+
+.addon-table > tbody > tr > td {
+    padding-left: 5%;
+}
+
+.btn-stop {
+    margin-left: 20px;
+}
+
+#addon-name {
+    display: inline;
+}
+
+#addon-description {
+    padding-top: 1%;
+}
+
+.title-container {
+    padding-top: 4%;
+    padding-bottom: 2%;
+}
+
+.status-icon {
+    margin-right: 12px;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+}
+
+#started-status {
+    background: #a1d030;
+}
+
+#stopped-status {
+    background: #d9534f;
+}
+
+.row-title {
+    font-weight: bold;
+    width: 30%;
+}
+
+.module-control {
+    float: right;
+    margin-bottom: 2%;
 }
