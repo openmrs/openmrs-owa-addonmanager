@@ -8,12 +8,15 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 import React from 'react';
+import { Link } from 'react-router';
 
 export const AddonList = ({ handleDownload, appList, openPage, openModal }) => {
   return (
     <tbody>
       {
         appList.map((app, key) => {
+          let addonParam = app.appDetails.uuid ?
+            'module-' + app.appDetails.uuid : 'owa-' + app.appDetails.name;
           return (
             <tr key={key}>
               <td onClick={() => openPage(app.appDetails)}>
@@ -52,10 +55,16 @@ export const AddonList = ({ handleDownload, appList, openPage, openModal }) => {
               >
                 {
                   app.install === false ?
-                    <button id="view-addon-btn" className="btn btn-secondary">
-                      <i className="glyphicon glyphicon-option-vertical view-icon" />
-                      View
-                    </button>
+                    <Link
+                      to={{
+                        pathname: "addon/" + addonParam,
+                      }}
+                    >
+                      <button id="view-addon-btn" className="btn btn-secondary">
+                        <i className="glyphicon glyphicon-option-vertical view-icon" />
+                        View
+                      </button>
+                    </Link>
                     :
                     <i
                       className="glyphicon glyphicon-download-alt text-primary install-icon"

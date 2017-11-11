@@ -15,7 +15,6 @@ import AddAddon from '../manageApps/AddAddon.jsx';
 import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent.jsx';
 import { ApiHelper } from '../../helpers/apiHelper';
 import { AddonList } from './AddonList.jsx';
-import DeleteAddonModal from './DeleteAddonModal.jsx';
 import InvalidZipUploadModal from './InvalidZipUploadModal.jsx';
 import Utility from './../../utility';
 
@@ -33,7 +32,6 @@ export default class ManageApps extends React.Component {
       isOpen: false,
       selectedApp: null,
       downloadUri: null,
-      deleteStatus: false,
       addonAlreadyInstalled: null,
       files: null,
       displayInvalidZip: false,
@@ -48,7 +46,6 @@ export default class ManageApps extends React.Component {
     this.handleDrop = this.handleDrop.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
     this.handleDownload = this.handleDownload.bind(this);
     this.handleProgress = this.handleProgress.bind(this);
     this.onlineSearchHandler = this.onlineSearchHandler.bind(this);
@@ -341,30 +338,6 @@ export default class ManageApps extends React.Component {
     });
   }
 
-  handleDelete(name) {
-    this.setState((prevState, props) => {
-      return {
-        deleteStatus: true,
-      };
-    });
-    const applicationDistribution = location.href.split('/')[3];
-    axios.get(`/${applicationDistribution}/module/owa/deleteApp.form?appName=${name}`).then(response => {
-      this.setState((prevState, props) => {
-        return {
-          appList: response.data.appList,
-          msgType: 'warning',
-          deleteStatus: false,
-          msgBody: `${name} has been successfully deleted.`,
-          showMsg: true,
-        };
-      });
-      this.handleApplist();
-    }).catch(error => {
-      toastr.error(error);
-    });
-    this.hideModal();
-  }
-
   openModal(app) {
     return (e) => {
       this.setState((prevState, props) => {
@@ -468,7 +441,6 @@ export default class ManageApps extends React.Component {
       files,
       showProgress,
       uploadStatus,
-      deleteStatus,
       showMsg,
       msgType,
       msgBody,
@@ -491,7 +463,6 @@ export default class ManageApps extends React.Component {
 
 
     const disableUploadElements = (uploadStatus > 0) ? true : false;
-    deleteStatus ? document.body.className = 'loading' : document.body.className = '';
     disableUploadElements ? document.body.className = 'loading' : document.body.className = '';
 
     return (
@@ -560,13 +531,6 @@ export default class ManageApps extends React.Component {
                     }
                   </table>
                 </Loader>
-                {isOpen ? (
-                  <DeleteAddonModal
-                    app={selectedApp}
-                    handleDelete={this.handleDelete}
-                    isOpen={isOpen}
-                    hideModal={this.hideModal} />
-                ) : null}
                 {
                   displayInvalidZip && (
                     <InvalidZipUploadModal
@@ -578,9 +542,11 @@ export default class ManageApps extends React.Component {
             </div>
           </div>
         </div>
-        {deleteStatus ?
-          <div className="deleting-modal"><p className="upload-text">Deleting Addon</p></div>
-          : <div className="waiting-modal"><p className="upload-text">Uploading {uploadStatus}%</p></div>}
+        {
+          uploadStatus ?
+            <div className="waiting-modal"><p className="upload-text">Uploading {uploadStatus}%</p></div>
+            : null
+        }
       </div>
     );
   }

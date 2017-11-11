@@ -17,8 +17,8 @@ describe('<ManageApps />', () => {
         }]
     });
 
-    it('Should render 10 divs on initial render', () => {
-        expect(renderedComponent.find("div")).to.have.length(10);
+    it('Should render 9 divs on initial render', () => {
+        expect(renderedComponent.find("div")).to.have.length(9);
     });
 
     it('Should render a table', () => {
