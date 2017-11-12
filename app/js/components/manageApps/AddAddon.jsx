@@ -43,12 +43,11 @@ export default class AddAddon extends Component {
     return (
       <div className="container-fluid">
         <div className="row drop-zone-container">
-          <span>Select an OWA to upload</span>
+          <span>Select an Add-on to upload</span>
           <Dropzone
             className="drop-zone"
             acceptClassName="drop-zone-accept"
             rejectClassName="drop-zone-reject"
-            accept="application/zip"
             disableClick={this.state.disableClick}
             ref={(node) => { this.state.dropzoneRef = node; }}
             onDrop={(files) => this.props.handleDrop(files)}
