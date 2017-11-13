@@ -8,44 +8,57 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router';
 import './breadCrumb.css';
 
-class BreadCrumbComponent extends Component{
+class BreadCrumbComponent extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      addonPage: false,
       manageSettingsPage: false,
       manageAddonPage: false,
       homePage: false
     };
   }
-  componentWillMount(){
-    browserHistory.listen( location => {
+  componentWillMount() {
+    browserHistory.listen(location => {
       const currentTab = location.hash.split('/').pop();
       if (!currentTab) {
         this.setState((prevState, props) => {
           return {
             homePage: true,
+            addonPage: false,
             manageSettingsPage: false,
             manageAddonPage: false,
           };
         });
-      } else if(currentTab === 'manageSettings') {
+      } else if (currentTab === 'manageSettings') {
         this.setState((prevState, props) => {
           return {
             manageSettingsPage: true,
             manageAddonPage: false,
+            addonPage: false,
             homePage: false
           };
         });
-      }else if (currentTab === 'manageApps') {
+      } else if (currentTab === 'manageApps') {
         this.setState((prevState, props) => {
           return {
             manageAddonPage: true,
             manageSettingsPage: false,
+            addonPage: false,
+            homePage: false,
+          };
+        });
+      } else if (location.hash.split('/')[1] === 'addon') {
+        this.setState((prevState, props) => {
+          return {
+            manageAddonPage: false,
+            manageSettingsPage: false,
+            addonPage: true,
             homePage: false,
           };
         });
@@ -53,8 +66,9 @@ class BreadCrumbComponent extends Component{
     });
   }
 
-  render(){
+  render() {
     let {
+      addonPage,
       homePage,
       manageSettingsPage,
       manageAddonPage
@@ -65,7 +79,7 @@ class BreadCrumbComponent extends Component{
           <span className="glyphicon glyphicon-home breadcrumb-item" aria-hidden="true" />
         </a>
         {
-          manageAddonPage || manageSettingsPage ?
+          manageAddonPage || manageSettingsPage || addonPage ?
             <Link to="/">
               <span className="glyphicon glyphicon-chevron-right breadcrumb-item separator"
                 aria-hidden="true" />
@@ -82,7 +96,7 @@ class BreadCrumbComponent extends Component{
             </Link>
         }
         {
-          manageAddonPage && 
+          manageAddonPage &&
           <Link to="manageApps">
             <span className="glyphicon glyphicon-chevron-right breadcrumb-item separator"
               aria-hidden="true" />
@@ -91,7 +105,7 @@ class BreadCrumbComponent extends Component{
             </span>
           </Link>}
         {
-          manageSettingsPage && 
+          manageSettingsPage &&
           <Link to="manageSettings">
             <span className="glyphicon glyphicon-chevron-right breadcrumb-item separator"
               aria-hidden="true" />
@@ -99,6 +113,16 @@ class BreadCrumbComponent extends Component{
               <strong>Settings</strong>
             </span>
           </Link>
+        }
+        {
+          addonPage &&
+          <span>
+            <span className="glyphicon glyphicon-chevron-right breadcrumb-item separator"
+              aria-hidden="true" />
+            <span className="title breadcrumb-item">
+              <strong>Add-on</strong>
+            </span>
+          </span>
         }
       </div>
     );

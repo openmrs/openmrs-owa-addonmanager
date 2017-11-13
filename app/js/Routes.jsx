@@ -11,14 +11,16 @@ import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 're
 import App from './components/App.jsx';
 import ManageApps from './components/manageApps/ManageApps.jsx';
 import ManageSettings from './components/manageApps/ManageSettings.jsx';
+import Addon from './components/manageApps/Addon.jsx';
 
 export default () => {
   return (
     <Router history={hashHistory}>
       <Route path="/" component={App} >
-        <IndexRoute component={ManageApps}/>
+        <IndexRoute component={ManageApps} />
         <Route path="manageSettings" component={ManageSettings} />
-        <Route path="*" component ={ManageApps}/>
+        <Route path="addon/:addonName" component={Addon} />
+        <Route path="*" component={ManageApps} />
       </Route>
     </Router>
   );

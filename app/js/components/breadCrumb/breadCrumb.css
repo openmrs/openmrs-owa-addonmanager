@@ -18,6 +18,7 @@
 
 .breadcrumb .breadcrumb-item {
     color: #363463;
+    font-size: 16px;
 }
 
 .breadcrumb>.separator {
