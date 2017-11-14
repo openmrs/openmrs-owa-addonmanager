@@ -53,6 +53,7 @@ export default class ManageApps extends React.Component {
     this.handleAlertBehaviour = this.handleAlertBehaviour.bind(this);
     this.handleAddonUploadModal = this.handleAddonUploadModal.bind(this);
     this.initiateSearch = this.initiateSearch.bind(this);
+    this.handleOmodUploadRequest = this.handleOmodUploadRequest.bind(this);
     this.displayManageOwaButtons = this.displayManageOwaButtons.bind(this);
   }
 
@@ -70,11 +71,14 @@ export default class ManageApps extends React.Component {
   }
 
   handleDrop(files) {
-    if (files.length > 0) {
+    const fileName = files[0].name;
+    const fileExtension = fileName.substr(fileName.lastIndexOf('.') + 1, fileName.length - 1).toLowerCase();
+
+    if (fileExtension === 'zip' || fileExtension === 'omod') {
       this.setState({ files: files });
     } else {
       this.setState({
-        msgBody: "File has not been added, please select a valid zip file",
+        msgBody: "File has not been added, please select a valid .zip or .omod file",
         msgType: "warning",
         showMsg: true,
       });
@@ -140,64 +144,103 @@ export default class ManageApps extends React.Component {
   }
 
   handleUpload() {
-    const zipedAddon = this.state.files[0];
-    const readZippedAddon = new Promise((resolve, reject) => {
-      let new_zip = new JSZip();
-      new_zip.loadAsync(zipedAddon)
-        .then((zip) => {
-          return zip.files['manifest.webapp'] ? zip.files['manifest.webapp'] : false;
-        })
-        .then((file) => {
-          return file ? new_zip.file(file.name).async("string") : false;
-        })
-        .then(result => {
-          resolve(JSON.parse(result));
-        })
-        .catch(e => {
-          resolve(false);
-        });
-    });
+    const uploadFile = this.state.files[0];
+    if (uploadFile.type === 'application/zip') {
+      const readZippedAddon = new Promise((resolve, reject) => {
+        let new_zip = new JSZip();
+        new_zip.loadAsync(uploadFile)
+          .then((zip) => {
+            return zip.files['manifest.webapp'] ? zip.files['manifest.webapp'] : false;
+          })
+          .then((file) => {
+            return file ? new_zip.file(file.name).async("string") : false;
+          })
+          .then(result => {
+            resolve(JSON.parse(result));
+          })
+          .catch(e => {
+            resolve(false);
+          });
+      });
 
-    readZippedAddon.then((result) => {
-      if (!result) {
-        this.setState((prevState, props) => {
-          return {
-            displayInvalidZip: true
-          };
-        });
-      } else {
-        this.setState({
-          addonAlreadyInstalled: false,
-        });
+      readZippedAddon.then((result) => {
+        if (!result) {
+          this.setState((prevState, props) => {
+            return {
+              displayInvalidZip: true
+            };
+          });
+        } else {
+          this.setState({
+            addonAlreadyInstalled: false,
+          });
 
-        this.state.appList.map((addon) => {
-          if (addon.name === result.name) {
-            this.setState({
-              addonAlreadyInstalled: true,
-            });
-            const toBeInstalledAddonName = result.name;
-            const installedAddonVersion = parseInt(addon.version);
-            const toBeInstalledAddonVersion = parseInt(result.version);
-            if (installedAddonVersion === toBeInstalledAddonVersion) {
-              this.handleAddonUploadModal(
-                toBeInstalledAddonName,
-                'overwrite',
-                'overwriting');
-            } else if (installedAddonVersion < toBeInstalledAddonVersion) {
-              this.handleAddonUploadModal(
-                toBeInstalledAddonName,
-                'upgrade',
-                'upgrading');
-            } else {
-              this.handleAddonUploadModal(
-                toBeInstalledAddonName,
-                'downgrade',
-                'downgrading');
+          this.state.appList.map((addon) => {
+            if (addon.name === result.name) {
+              this.setState({
+                addonAlreadyInstalled: true,
+              });
+              const toBeInstalledAddonName = result.name;
+              const installedAddonVersion = parseInt(addon.version);
+              const toBeInstalledAddonVersion = parseInt(result.version);
+              if (installedAddonVersion === toBeInstalledAddonVersion) {
+                this.handleAddonUploadModal(
+                  toBeInstalledAddonName,
+                  'overwrite',
+                  'overwriting');
+              } else if (installedAddonVersion < toBeInstalledAddonVersion) {
+                this.handleAddonUploadModal(
+                  toBeInstalledAddonName,
+                  'upgrade',
+                  'upgrading');
+              } else {
+                this.handleAddonUploadModal(
+                  toBeInstalledAddonName,
+                  'downgrade',
+                  'downgrading');
+              }
             }
-          }
-        });
-        this.state.addonAlreadyInstalled === false && this.handleUploadRequest();
+          });
+          this.state.addonAlreadyInstalled === false && this.handleUploadRequest();
+        }
+      });
+    } else {
+      this.handleOmodUploadRequest();
+    }
+  }
+
+  handleOmodUploadRequest() {
+    const applicationDistribution = location.href.split('/')[2];
+    const url = location.href.split('/')[3];
+    const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
+    const requestUrl = '/v1/module';
+    const omodFile = this.state.files[0];
+    const addonFile = new FormData();
+    addonFile.append('file', omodFile);
+    let fileName = this.state.files[0].name;
+    fileName = fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
+
+    axios({
+      url: `https:/${apiBaseUrl}${requestUrl}`,
+      method: 'post',
+      headers: {
+        'Content-Type': undefined,
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+      },
+      data: addonFile,
+      onUploadProgress: (event) => {
+        this.handleProgress(event);
       }
+    }).then((response) => {
+      this.setState((prevState, props) => {
+        return {
+          showMsg: true,
+          msgBody: `${fileName} has been successfully installed`,
+          msgType: "success",
+        };
+      });
+    }).catch((error) => {
+      toastr.error(error);
     });
   }
 
@@ -271,12 +314,12 @@ export default class ManageApps extends React.Component {
     });
   }
 
-  handleProgress(e) {
-    if (e.lengthComputable) {
-      let max = e.total;
-      let current = e.loaded;
+  handleProgress(event) {
+    if (event.lengthComputable) {
+      const max = event.total;
+      const current = event.loaded;
 
-      let Percentage = Math.round((current * 100) / max);
+      const Percentage = Math.round((current * 100) / max);
       this.setState((prevState, props) => {
         return {
           showProgress: true,
