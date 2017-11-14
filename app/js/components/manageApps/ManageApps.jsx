@@ -276,21 +276,24 @@ export default class ManageApps extends React.Component {
       processData: false,
       cache: false,
       success: function (result) {
-        resultData.push({
-          appList: result,
-          downloadUri: null,
-          install: false
+        result.forEach((data, index) => {
+          resultData.push({
+            appDetails: data,
+            downloadUri: null,                  
+            install: false
+          });
+          if (index === result.length - 1) {
+            this.setState((prevState, props) => {
+              return {
+                showMsg: true,
+                msgBody: `${fileName} has been successfully installed`,
+                msgType: "success",
+                appList: resultData,
+                staticAppList: resultData,
+              };
+            });
+          }
         });
-        this.setState((prevState, props) => {
-          return {
-            showMsg: true,
-            msgBody: `${fileName} has been successfully installed`,
-            msgType: "success",
-            appList: resultData,
-            staticAppList: resultData,
-          };
-        });
-
       }.bind(this),
       error: function (xhr, status, error) {
         this.setState((prevState, props) => {
@@ -585,11 +588,10 @@ export default class ManageApps extends React.Component {
             </div>
           </div>
         </div>
-        {
-          uploadStatus ?
-            <div className="waiting-modal"><p className="upload-text">Uploading {uploadStatus}%</p></div>
-            : null
-        }
+        {disableUploadElements && 
+            <div className="waiting-modal">
+              <p className="upload-text">Uploading {uploadStatus}%</p>
+            </div>}
       </div>
     );
   }
