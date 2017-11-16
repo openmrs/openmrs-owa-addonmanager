@@ -9,6 +9,7 @@ class Addon extends Component {
     super(props);
     this.state = {
       app: {},
+      affectedModules: null,
       action: null,
       stopping: false,
       starting: false,
@@ -20,10 +21,10 @@ class Addon extends Component {
     this.fetchAddon = this.fetchAddon.bind(this);
     this.handleAction = this.handleAction.bind(this);
     this.actionRunning = this.actionRunning.bind(this);
-    this.handleOwaDelete = this.handleOwaDelete.bind(this);
-    this.handleModuleDelete = this.handleModuleDelete.bind(this);
+    this.handleAddonDelete = this.handleAddonDelete.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.getAffectedModules = this.getAffectedModules.bind(this);
   }
 
   componentDidMount() {
@@ -47,7 +48,8 @@ class Addon extends Component {
     const url = location.href.split('/')[3];
     const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
     this.requestUrl = '/v1/module/' + moduleName + '?v=full';
-    axios.get(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`).then(response => {
+    axios.get(`https:/${apiBaseUrl}${this.requestUrl}`).then(response => {
+      this.getAffectedModules(response.data.uuid);
       this.setState({
         app: response.data,
       });
@@ -82,7 +84,6 @@ class Addon extends Component {
         starting: true
       });
     }
-
     const applicationDistribution = location.href.split('/')[2];
     const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
     const url = location.href.split('/')[3];
@@ -110,35 +111,76 @@ class Addon extends Component {
     );
   }
 
-  handleOwaDelete() {
+  handleAddonDelete(event) {
     event.preventDefault();
     this.setState({
       isOpen: true,
     });
   }
 
-  handleModuleDelete() {
-    event.preventDefault();
+  getAffectedModules(appUuid){
+    const applicationDistribution = location.href.split('/')[2];
+    const url = location.href.split('/')[3];
+    const apiBaseUrl = `/${applicationDistribution}/${url}`;
+    this.requestUrl = '/admin/modules/manage/checkdependencies.form?moduleId='+appUuid;
+    axios.get(`https:/${apiBaseUrl}${this.requestUrl}`).then(response => {
+      response.data ?
+        this.setState({
+          affectedModules: response.data.join(', ')
+        })
+        :
+        null;
+    }).catch((error) => {
+      toastr.error(error);
+    });
   }
 
-  handleDelete(name) {
+  handleDelete(name, appUuid) {
     this.setState((prevState, props) => {
       return {
         deleting: true,
       };
     });
-    const applicationDistribution = location.href.split('/')[3];
-    axios.get(`/${applicationDistribution}/module/owa/deleteApp.form?appName=${name}`).then(response => {
-      this.setState((prevState, props) => {
-        return {
-          deleting: false,
-        };
+
+    if(appUuid != null){
+      const applicationDistribution = location.href.split('/')[2];
+      const url = location.href.split('/')[3];
+      const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
+      this.requestUrl = '/v1/moduleaction';
+      let postData = {};
+
+      postData = {
+        "action": "unload",
+        "modules": [appUuid],
+      };
+
+      axios.post(`https:/${apiBaseUrl}${this.requestUrl}`, postData).then(response => {
+        this.setState((prevState, props) => {
+          return {
+            deleting: false,
+          };
+        });
+        toastr.success("Delete Successful");
+        hashHistory.push('/');
+      }).catch(error => {
+        toastr.error(error);
+        hashHistory.push('/');
       });
-      hashHistory.push('/');
-    }).catch(error => {
-      toastr.error(error);
-      hashHistory.push('/');
-    });
+    }else{
+      const applicationDistribution = location.href.split('/')[3];
+      axios.get(`/${applicationDistribution}/module/owa/deleteApp.form?appName=${name}`).then(response => {
+        this.setState((prevState, props) => {
+          return {
+            deleting: false,
+          };
+        });
+        toastr.success("Delete Successful");
+        hashHistory.push('/');
+      }).catch(error => {
+        toastr.error(error);
+        hashHistory.push('/');
+      });
+    }
     this.hideModal();
   }
 
@@ -162,7 +204,7 @@ class Addon extends Component {
   }
 
   render() {
-    const { app, isOpen } = this.state;
+    const { app, isOpen, affectedModules } = this.state;
     return (
       <div className="container-fluid addon">
         <Link to="/">
@@ -224,10 +266,11 @@ class Addon extends Component {
         <button
           type="button"
           className="btn btn-danger btn-delete"
-          onClick={app.uuid ? this.handleModuleDelete : this.handleOwaDelete}
+          onClick={(event) => this.handleAddonDelete(event)}
         >
-          Delete
+        Delete
         </button>
+
         {
           app.uuid ?
             app.started ?
@@ -254,7 +297,9 @@ class Addon extends Component {
             app={app}
             handleDelete={this.handleDelete}
             isOpen={isOpen}
-            hideModal={this.hideModal} />
+            hideModal={this.hideModal}
+            appUuid={app.uuid ? app.uuid : null}
+            affectedModules = {affectedModules}/>
         ) : null}
       </div>
     );

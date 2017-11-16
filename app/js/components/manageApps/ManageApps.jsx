@@ -656,9 +656,9 @@ export default class ManageApps extends React.Component {
           </div>
         </div>
         {disableUploadElements &&
-          <div className="waiting-modal">
-            <p className="upload-text">Uploading {uploadStatus}%</p>
-          </div>}
+            <div className="waiting-modal">
+              <p className="upload-text">Uploading {uploadStatus}%</p>
+            </div>}
       </div>
     );
   }
