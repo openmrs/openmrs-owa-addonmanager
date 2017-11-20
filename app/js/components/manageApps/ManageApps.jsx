@@ -35,7 +35,8 @@ export default class ManageApps extends React.Component {
       addonAlreadyInstalled: null,
       files: null,
       displayInvalidZip: false,
-      searchComplete: false
+      searchComplete: false,
+      updatesAvailable: [],
     };
 
     this.apiHelper = new ApiHelper(null);
@@ -55,6 +56,7 @@ export default class ManageApps extends React.Component {
     this.initiateSearch = this.initiateSearch.bind(this);
     this.handleOmodUploadRequest = this.handleOmodUploadRequest.bind(this);
     this.displayManageOwaButtons = this.displayManageOwaButtons.bind(this);
+    this.checkForUpdates = this.checkForUpdates.bind(this);
   }
 
   componentWillMount() {
@@ -279,7 +281,7 @@ export default class ManageApps extends React.Component {
         result.forEach((data, index) => {
           resultData.push({
             appDetails: data,
-            downloadUri: null,                  
+            downloadUri: null,
             install: false
           });
           if (index === result.length - 1) {
@@ -415,6 +417,30 @@ export default class ManageApps extends React.Component {
     };
   }
 
+  checkForUpdates() {
+    const installedAddons = this.state.appList;
+    const updatesAvailable = {};
+    axios.get(`https://addons.openmrs.org/api/v1/addon`).then((response) => {
+      this.state.appList.forEach((addon) => {
+        response.data.forEach((result) => {
+          if (addon.appDetails.name === result.name) {
+            result.latestVersion > addon.appDetails.version ?
+              updatesAvailable[addon.appDetails.name] = result.latestVersion
+              :
+              null
+            return;
+          }
+        });
+      });
+
+      this.setState({ updatesAvailable });
+    }).catch(
+      (error) => {
+        toastr.error(error);
+      }
+      );
+  }
+
   onlineSearchHandler(searchValue) {
     this.state.searchComplete === true ? this.setState({ searchComplete: false }) : null;
     const resultData = [];
@@ -488,6 +514,7 @@ export default class ManageApps extends React.Component {
       showProgress,
       uploadStatus,
       showMsg,
+      updatesAvailable,
       msgType,
       msgBody,
       appList,
@@ -518,6 +545,7 @@ export default class ManageApps extends React.Component {
             <div className="col-sm-12">
               <h2 className="manage-addon-title">Add-on Manager</h2>
               <span className="pull-right manage-settings-wrapper">
+                <button className="button" onClick={this.checkForUpdates}>Check For Updates</button>
                 <Link to="/manageSettings" className="manage-settings-button">
                   <i className="glyphicon glyphicon-cog settings-icon" id="setting-icon-btn" />
                 </Link>
@@ -571,6 +599,7 @@ export default class ManageApps extends React.Component {
                       <AddonList
                         handleDownload={this.handleDownload}
                         appList={appList}
+                        updatesAvailable={updatesAvailable}
                         openPage={this.openPage}
                         openModal={this.openModal}
                       />
@@ -588,10 +617,10 @@ export default class ManageApps extends React.Component {
             </div>
           </div>
         </div>
-        {disableUploadElements && 
-            <div className="waiting-modal">
-              <p className="upload-text">Uploading {uploadStatus}%</p>
-            </div>}
+        {disableUploadElements &&
+          <div className="waiting-modal">
+            <p className="upload-text">Uploading {uploadStatus}%</p>
+          </div>}
       </div>
     );
   }

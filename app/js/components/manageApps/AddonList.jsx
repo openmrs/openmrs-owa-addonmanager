@@ -10,7 +10,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-export const AddonList = ({ handleDownload, appList, openPage, openModal }) => {
+export const AddonList = ({ handleDownload, appList, openPage, openModal, updatesAvailable }) => {
   return (
     <tbody>
       {
@@ -34,6 +34,9 @@ export const AddonList = ({ handleDownload, appList, openPage, openModal }) => {
                 <div><h5 className="addon-description">
                   {app.appDetails && app.appDetails.description}
                 </h5></div>
+                {updatesAvailable && updatesAvailable.hasOwnProperty(app.appDetails.name) ? <span className="update-notification">New version Available </span>: null}
+                {updatesAvailable && updatesAvailable.hasOwnProperty(app.appDetails.name) ? updatesAvailable[app.appDetails.name]: null}
+
               </td>
               <td onClick={() => openPage(app.appDetails)}>
                 {
