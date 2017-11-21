@@ -690,3 +690,9 @@ body.loading .waiting-modal {
 .back-nav :hover {
     text-decoration-color: red;
 }
+
+.update-notification {
+    color:#3bb300;
+    font-size: 0.9em;
+
+}
