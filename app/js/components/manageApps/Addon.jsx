@@ -43,10 +43,11 @@ class Addon extends Component {
   fetchModule(fileName) {
     const moduleName = fileName.substr(fileName.indexOf('-') + 1, fileName.length - 1);
     const applicationDistribution = location.href.split('/')[2];
+    const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
     const url = location.href.split('/')[3];
     const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
     this.requestUrl = '/v1/module/' + moduleName + '?v=full';
-    axios.get(`https:/${apiBaseUrl}${this.requestUrl}`).then(response => {
+    axios.get(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`).then(response => {
       this.setState({
         app: response.data,
       });
@@ -83,6 +84,7 @@ class Addon extends Component {
     }
 
     const applicationDistribution = location.href.split('/')[2];
+    const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
     const url = location.href.split('/')[3];
     const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
     this.requestUrl = '/v1/moduleaction';
@@ -95,7 +97,7 @@ class Addon extends Component {
       };
     }
 
-    axios.post(`https:/${apiBaseUrl}${this.requestUrl}`, postData).then(response => {
+    axios.post(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`, postData).then(response => {
       this.setState({
         stopping: false,
         starting: false,
