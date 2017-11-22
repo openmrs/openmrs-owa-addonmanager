@@ -57,6 +57,7 @@ export default class ManageApps extends React.Component {
     this.handleOmodUploadRequest = this.handleOmodUploadRequest.bind(this);
     this.displayManageOwaButtons = this.displayManageOwaButtons.bind(this);
     this.checkForUpdates = this.checkForUpdates.bind(this);
+    this.startAllModules = this.startAllModules.bind(this);
   }
 
   componentWillMount() {
@@ -70,6 +71,34 @@ export default class ManageApps extends React.Component {
         this.hideModal();
       }
     });
+  }
+
+  startAllModules() {
+    this.setState({
+      searchComplete: false
+    });
+    const applicationDistribution = location.href.split('/')[2];
+    const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
+    const url = location.href.split('/')[3];
+    const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
+    const requestUrl = '/v1/moduleaction';
+    const postData = {
+      "action": "start",
+      "allModules": "true"
+    };
+
+    axios.post(`${urlPrefix}/${apiBaseUrl}${requestUrl}`, postData).then(response => {
+      this.setState({
+        msgBody: "All modules started successfully",
+        msgType: "success",
+        showMsg: true,
+        searchComplete: true,
+      });
+    }).catch(
+      (error) => {
+        toastr.error(error);
+      }
+    );
   }
 
   handleDrop(files) {
@@ -101,10 +130,11 @@ export default class ManageApps extends React.Component {
       });
     }).then(() => {
       const applicationDistribution = location.href.split('/')[2];
+      const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
       const url = location.href.split('/')[3];
       const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
       this.requestUrl = '/v1/module/?v=full';
-      axios.get(`https:/${apiBaseUrl}${this.requestUrl}`).then(response => {
+      axios.get(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`).then(response => {
         response.data.results.forEach((data) => {
           installedModules.push({
             appDetails: data,
@@ -546,6 +576,14 @@ export default class ManageApps extends React.Component {
               <h2 className="manage-addon-title">Add-on Manager</h2>
               <span className="pull-right manage-settings-wrapper">
                 <button className="button" onClick={this.checkForUpdates}>Check For Updates</button>
+                <span
+                  id="startall-modules-btn"
+                  className="btn btn-secondary"
+                  onClick={this.startAllModules}
+                >
+                  <span className="glyphicon glyphicon-play" />
+                  Start All Modules
+                </span>
                 <Link to="/manageSettings" className="manage-settings-button">
                   <i className="glyphicon glyphicon-cog settings-icon" id="setting-icon-btn" />
                 </Link>

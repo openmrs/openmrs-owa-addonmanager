@@ -495,7 +495,7 @@ span.title.breadcrumb-item {
     border-radius: 3px;
 }
 
-#icon-btn, #setting-icon-btn {
+#icon-btn, #setting-icon-btn, #startall-modules-btn {
     background-color: #dddddd;
     border: #dddddd 1px solid;
     display: inline-block;
@@ -504,6 +504,21 @@ span.title.breadcrumb-item {
     max-width: 300px;
     border-radius: 3px;
     background: -webkit-linear-gradient(top, #ffffff, #dddddd);
+}
+
+#startall-modules-btn {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
+    margin-left: 12px;
+    font-weight: bold;
+}
+
+#startall-modules-btn > .glyphicon-play {
+    color: #a1d030;
+    font-size: 1.05em;
+    font-weight: bold;
+    margin-right: 3px;
 }
 
 #notification-wrapper {
