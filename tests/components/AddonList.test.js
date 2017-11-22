@@ -40,21 +40,21 @@ describe('<AddonList />', () => {
     const openPage = () => {};
     const openModal = () => {};
     const addonList = mount( <AddonList appList={appList} openPage={openPage}  openModal={openModal}/ > );
-    
+
     it('should render a tbody', () => {
         expect(addonList.find("tbody")).to.have.length(1);
     });
-    
+
     it('should render a tr tag', () => {
         expect(addonList.find("tr")).to.have.length(1);
     });
-    
+
     it('should render td tag', () => {
         expect(addonList.find("td")).to.have.length(5);
     });
-    
+
     it('should render div tags', () => {
-        expect(addonList.find("div")).to.have.length(2);
+        expect(addonList.find("div")).to.have.length(3);
     });
 
     it('should render a h2 tag', () => {

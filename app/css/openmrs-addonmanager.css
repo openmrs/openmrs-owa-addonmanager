@@ -298,6 +298,8 @@ legend.scheduler-border {
 
 .addon-name {
     font-weight: bold;
+    display: flex;
+    flex-direction: row;
 }
 
 .addon-description {
@@ -656,10 +658,6 @@ body.loading .waiting-modal {
     margin-left: 20px;
 }
 
-#addon-name {
-    display: inline;
-}
-
 #addon-description {
     padding-top: 1%;
 }
@@ -672,8 +670,8 @@ body.loading .waiting-modal {
 .status-icon {
     margin-right: 12px;
     border-radius: 50%;
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
 }
 
 #started-status {

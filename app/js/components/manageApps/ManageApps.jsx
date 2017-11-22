@@ -94,6 +94,7 @@ export default class ManageApps extends React.Component {
         showMsg: true,
         searchComplete: true,
       });
+      this.handleApplist();
     }).catch(
       (error) => {
         toastr.error(error);
