@@ -134,7 +134,7 @@ a:hover {
 }
 
 .dropdown-large:hover {
-    background-color: #00463f; 
+    background-color: #00463f;
 }
 
 .dropdown-menu-large {
@@ -189,7 +189,7 @@ a:hover {
     color:#363463;
     font-size: 40px;
     text-decoration: inherit;
-    display: inline-block; 
+    display: inline-block;
     margin-bottom: 10px;
 }
 
@@ -230,7 +230,7 @@ button p {
 .manage-app-buttons {
     display: flex;
     height: 45px;
-    margin-top: 18px; 
+    margin-top: 18px;
     height: 40px !important;
     position: relative;
     text-align: center;
@@ -258,7 +258,7 @@ button p {
     margin-left: 10px;
     text-align: center;
 }
- 
+
 .button-search-module:hover {
     background-color:#dddddd;
     border: 0px;
@@ -288,7 +288,7 @@ legend.scheduler-border {
 }
 
 .manage-settings-wrapper {
-    margin-top: 20px;    
+    margin-top: 20px;
     padding-right: 35px;
 }
 
@@ -339,8 +339,8 @@ td {
 }
 
 #search-input {
-    font-size: 16px; 
-    padding: 12px 20px 12px 40px; 
+    font-size: 16px;
+    padding: 12px 20px 12px 40px;
     border: 1px solid #ddd;
     margin-bottom: 12px;
     margin-left: -20px;
@@ -428,7 +428,7 @@ span.title.breadcrumb-item {
 
 .profile-dropdown {
     background-color:#5B57A6;
-    z-index: 1000; 
+    z-index: 1000;
  }
 
 .dropdown-menu {
@@ -562,9 +562,9 @@ div.modal-dialog.modal-dialog-open {
     left:       0;
     height:     100%;
     width:      100%;
-    background: rgba( 255, 255, 255, .8 ) 
+    background: rgba( 255, 255, 255, .8 )
                 url('../img/uploading.gif')
-                50% 50% 
+                50% 50%
                 no-repeat;
 }
 
@@ -578,7 +578,7 @@ div.modal-dialog.modal-dialog-open {
 }
 
 body.loading {
-    overflow: hidden;   
+    overflow: hidden;
 }
 
 body.loading .waiting-modal {
@@ -709,5 +709,8 @@ body.loading .waiting-modal {
 .update-notification {
     color:#3bb300;
     font-size: 0.9em;
+}
 
+.dependency-alert{
+    color: #d9534f;
 }
