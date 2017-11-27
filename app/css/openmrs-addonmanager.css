@@ -351,7 +351,7 @@ table h4 {
     text-align: center;
 }
 
-.save-button {
+.save-button, #error-title-logo {
     margin-right: 10px;
 }
 
@@ -689,7 +689,7 @@ body.loading .waiting-modal {
     width: 30%;
 }
 
-.module-control {
+.module-control, .message-container {
     float: right;
     margin-bottom: 2%;
 }
@@ -713,4 +713,54 @@ body.loading .waiting-modal {
 
 .dependency-alert{
     color: #d9534f;
+}
+
+.action-message {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-top: 18px;
+    margin-bottom: 10px;
+    background: #ff6666;
+    padding-right: 20px;
+    color: #ffffff;
+}
+
+#messageText {
+    color: #ffffff;
+    display: inline-block;
+}
+
+.error-detail {
+    background: #ff6666;
+    color: #ffffff;
+    border-color: #ffffff;
+    padding-top: 1px;
+    padding-right: 20px;
+    padding-bottom: 3px;
+    padding-left: 20px;
+    margin-top: 6px;
+    margin-right: 0px;
+    margin-bottom: 6px;
+    border-radius: 4px;
+    float: right;
+}
+
+#error-msg-logo {
+    font-size: 1.2em;
+    color: #ffffff;
+    margin-right: 8px;
+}
+
+#error-title-logo {
+    font-size: 1.2em;
+    color: #ff6666;
+}
+
+#msg-modal-title {
+    color: #ff6666;
+}
+
+.btn-mark-ok {
+    background: #5b57a6;
+    color: #ffffff;
 }

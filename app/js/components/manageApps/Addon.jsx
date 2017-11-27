@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { ApiHelper } from '../../helpers/apiHelper';
 import DeleteAddonModal from './DeleteAddonModal.jsx';
+import StartErrorModal from './StartErrorModal.jsx';
 import { Link, hashHistory } from 'react-router';
 
 class Addon extends Component {
@@ -14,6 +15,7 @@ class Addon extends Component {
       stopping: false,
       starting: false,
       isOpen: false,
+      showMessageDetail: false,
     };
     this.apiHelper = new ApiHelper(null);
     this.fetchOwa = this.fetchOwa.bind(this);
@@ -25,6 +27,8 @@ class Addon extends Component {
     this.hideModal = this.hideModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.getAffectedModules = this.getAffectedModules.bind(this);
+    this.handleMessageClick = this.handleMessageClick.bind(this);
+    this.hideMsgModal = this.hideMsgModal.bind(this);
   }
 
   componentDidMount() {
@@ -48,14 +52,15 @@ class Addon extends Component {
     const url = location.href.split('/')[3];
     const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
     this.requestUrl = '/v1/module/' + moduleName + '?v=full';
-    axios.get(`https:/${apiBaseUrl}${this.requestUrl}`).then(response => {
-      this.getAffectedModules(response.data.uuid);
-      this.setState({
-        app: response.data,
+    axios.get(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`)
+      .then(response => {
+        this.getAffectedModules(response.data.uuid);
+        this.setState({
+          app: response.data,
+        });
+      }).catch((error) => {
+        toastr.error(error);
       });
-    }).catch((error) => {
-      toastr.error(error);
-    });
 
   }
 
@@ -98,17 +103,27 @@ class Addon extends Component {
       };
     }
 
-    axios.post(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`, postData).then(response => {
-      this.setState({
-        stopping: false,
-        starting: false,
-      });
-      this.fetchAddon();
-    }).catch(
-      (error) => {
-        toastr.error(error);
+    axios.post(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`, postData)
+      .then(response => {
+        this.setState({
+          stopping: false,
+          starting: false,
+        });
+        this.fetchAddon();
+      }).catch((error) => {
+        this.setState({
+          stopping: false,
+          starting: false,
+        });
       }
-    );
+      );
+  }
+
+  handleMessageClick(event) {
+    event.preventDefault();
+    this.setState({
+      showMessageDetail: true,
+    });
   }
 
   handleAddonDelete(event) {
@@ -118,21 +133,23 @@ class Addon extends Component {
     });
   }
 
-  getAffectedModules(appUuid){
+  getAffectedModules(appUuid) {
     const applicationDistribution = location.href.split('/')[2];
+    const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
     const url = location.href.split('/')[3];
     const apiBaseUrl = `/${applicationDistribution}/${url}`;
-    this.requestUrl = '/admin/modules/manage/checkdependencies.form?moduleId='+appUuid;
-    axios.get(`https:/${apiBaseUrl}${this.requestUrl}`).then(response => {
-      response.data ?
-        this.setState({
-          affectedModules: response.data.join(', ')
-        })
-        :
-        null;
-    }).catch((error) => {
-      toastr.error(error);
-    });
+    this.requestUrl = '/admin/modules/manage/checkdependencies.form?moduleId=' + appUuid;
+    axios.get(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`)
+      .then(response => {
+        response.data ?
+          this.setState({
+            affectedModules: response.data.join(', ')
+          })
+          :
+          null;
+      }).catch((error) => {
+        toastr.error(error);
+      });
   }
 
   handleDelete(name, appUuid) {
@@ -142,8 +159,9 @@ class Addon extends Component {
       };
     });
 
-    if(appUuid != null){
+    if (appUuid != null) {
       const applicationDistribution = location.href.split('/')[2];
+      const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
       const url = location.href.split('/')[3];
       const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
       this.requestUrl = '/v1/moduleaction';
@@ -154,32 +172,34 @@ class Addon extends Component {
         "modules": [appUuid],
       };
 
-      axios.post(`https:/${apiBaseUrl}${this.requestUrl}`, postData).then(response => {
-        this.setState((prevState, props) => {
-          return {
-            deleting: false,
-          };
+      axios.post(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`, postData)
+        .then(response => {
+          this.setState((prevState, props) => {
+            return {
+              deleting: false,
+            };
+          });
+          toastr.success("Delete Successful");
+          hashHistory.push('/');
+        }).catch(error => {
+          toastr.error(error);
+          hashHistory.push('/');
         });
-        toastr.success("Delete Successful");
-        hashHistory.push('/');
-      }).catch(error => {
-        toastr.error(error);
-        hashHistory.push('/');
-      });
-    }else{
+    } else {
       const applicationDistribution = location.href.split('/')[3];
-      axios.get(`/${applicationDistribution}/module/owa/deleteApp.form?appName=${name}`).then(response => {
-        this.setState((prevState, props) => {
-          return {
-            deleting: false,
-          };
+      axios.get(`/${applicationDistribution}/module/owa/deleteApp.form?appName=${name}`)
+        .then(response => {
+          this.setState((prevState, props) => {
+            return {
+              deleting: false,
+            };
+          });
+          toastr.success("Delete Successful");
+          hashHistory.push('/');
+        }).catch(error => {
+          toastr.error(error);
+          hashHistory.push('/');
         });
-        toastr.success("Delete Successful");
-        hashHistory.push('/');
-      }).catch(error => {
-        toastr.error(error);
-        hashHistory.push('/');
-      });
     }
     this.hideModal();
   }
@@ -203,10 +223,45 @@ class Addon extends Component {
     });
   }
 
+  hideMsgModal() {
+    this.setState(() => {
+      return {
+        showMessageDetail: false,
+      };
+    });
+  }
+
   render() {
-    const { app, isOpen, affectedModules } = this.state;
+    const { app, isOpen, showMessageDetail, affectedModules } = this.state;
+    const message = app.startupErrorMessage && app.startupErrorMessage.length > 0 ?
+      'Error starting '
+      : null;
     return (
       <div className="container-fluid addon">
+        {
+          app.startupErrorMessage && app.startupErrorMessage.length > 0 ?
+            <div className="message-container">
+              <div className="col-sm-12 alert alert-danger alert-dismissable action-message">
+                <span className="glyphicon glyphicon-warning-sign" id="error-msg-logo" />
+                <span>{message}</span>
+                <div>
+                  <a
+                    href="#"
+                    className="btn btn-danger error-detail"
+                    onClick={this.handleMessageClick}>
+                    Click for details
+                  </a>
+                </div>
+              </div>
+              <StartErrorModal
+                app={app}
+                message={message}
+                isOpen={showMessageDetail}
+                hideMsgModal={this.hideMsgModal}
+              />
+            </div>
+            : null
+        }
         <Link to="/">
           <div className="btn back-nav">
             <span className="glyphicon glyphicon-chevron-left back-nav" />
@@ -268,7 +323,7 @@ class Addon extends Component {
           className="btn btn-danger btn-delete"
           onClick={(event) => this.handleAddonDelete(event)}
         >
-        Delete
+          Delete
         </button>
 
         {
@@ -299,7 +354,7 @@ class Addon extends Component {
             isOpen={isOpen}
             hideModal={this.hideModal}
             appUuid={app.uuid ? app.uuid : null}
-            affectedModules = {affectedModules}/>
+            affectedModules={affectedModules} />
         ) : null}
       </div>
     );
