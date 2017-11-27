@@ -243,6 +243,7 @@ export default class ManageApps extends React.Component {
 
   handleOmodUploadRequest() {
     const applicationDistribution = location.href.split('/')[2];
+    const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
     const url = location.href.split('/')[3];
     const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
     const requestUrl = '/v1/module';
@@ -253,7 +254,7 @@ export default class ManageApps extends React.Component {
     fileName = fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
 
     axios({
-      url: `https:/${apiBaseUrl}${requestUrl}`,
+      url: `${urlPrefix}/${apiBaseUrl}${requestUrl}`,
       method: 'post',
       headers: {
         'Content-Type': undefined,
@@ -269,6 +270,9 @@ export default class ManageApps extends React.Component {
           showMsg: true,
           msgBody: `${fileName} has been successfully installed`,
           msgType: "success",
+          uploadStatus: 0,
+          showProgress: false,
+          files: null,
         };
       });
     }).catch((error) => {
@@ -468,7 +472,7 @@ export default class ManageApps extends React.Component {
       (error) => {
         toastr.error(error);
       }
-      );
+    );
   }
 
   onlineSearchHandler(searchValue) {
