@@ -12,6 +12,7 @@
     "eslint-plugin-import": "^2.7.0",
     "extract-loader": "^1.0.1",
     "jszip": "^3.1.4",
+    "prop-types": "^15.6.0",
     "react": "^15.4.1",
     "react-bootstrap": "^0.31.2",
     "react-dropzone": "^4.2.0",
