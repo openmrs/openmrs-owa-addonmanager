@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { ApiHelper } from '../../helpers/apiHelper';
-import DeleteAddonModal from './DeleteAddonModal.jsx';
-import StartErrorModal from './StartErrorModal.jsx';
+import ActionAddonModal from './ActionAddonModal';
+import StartErrorModal from './StartErrorModal';
 import { Link, hashHistory } from 'react-router';
 
 class Addon extends Component {
@@ -23,7 +23,7 @@ class Addon extends Component {
     this.fetchAddon = this.fetchAddon.bind(this);
     this.handleAction = this.handleAction.bind(this);
     this.actionRunning = this.actionRunning.bind(this);
-    this.handleAddonDelete = this.handleAddonDelete.bind(this);
+    this.handleAddonAction = this.handleAddonAction.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.getAffectedModules = this.getAffectedModules.bind(this);
@@ -78,11 +78,13 @@ class Addon extends Component {
     });
   }
 
-  handleAction(event, moduleUuid, action) {
-    event.preventDefault();
+  handleAction(moduleUuid, action, event=null) {
+    event? event.preventDefault(): this.hideModal();
     if (action === 'stop') {
-      this.setState({
-        stopping: true
+      this.setState((prevState, props) => {
+        return {
+          stopping: true,
+        };
       });
     } else if (action === 'start') {
       this.setState({
@@ -115,6 +117,7 @@ class Addon extends Component {
           stopping: false,
           starting: false,
         });
+        this.fetchAddon();
       }
       );
   }
@@ -126,10 +129,11 @@ class Addon extends Component {
     });
   }
 
-  handleAddonDelete(event) {
+  handleAddonAction(event, action) {
     event.preventDefault();
     this.setState({
       isOpen: true,
+      action: action
     });
   }
 
@@ -152,7 +156,7 @@ class Addon extends Component {
       });
   }
 
-  handleDelete(name, appUuid) {
+  handleDelete(appUuid, name) {
     this.setState((prevState, props) => {
       return {
         deleting: true,
@@ -232,7 +236,7 @@ class Addon extends Component {
   }
 
   render() {
-    const { app, isOpen, showMessageDetail, affectedModules } = this.state;
+    const { app, isOpen, showMessageDetail, affectedModules, action } = this.state;
     const message = app.startupErrorMessage && app.startupErrorMessage.length > 0 ?
       'Error starting '
       : null;
@@ -271,6 +275,11 @@ class Addon extends Component {
         <div className="title-container">
           <h3 id="addon-name">{app.name}</h3>
           <p id="addon-description">{app.description}</p>
+          {app.uuid ?
+            <p id="addon-description">NOTE: Adding, removing, or starting modules will restart OpenMRS, meaning that all scheduled tasks and background processes will be interrupted.</p>
+            :
+            null
+          }
         </div>
         {
           this.actionRunning()
@@ -321,7 +330,7 @@ class Addon extends Component {
         <button
           type="button"
           className="btn btn-danger btn-delete"
-          onClick={(event) => this.handleAddonDelete(event)}
+          onClick={(event) => this.handleAddonAction(event, "delete")}
         >
           Delete
         </button>
@@ -332,7 +341,7 @@ class Addon extends Component {
               <button
                 type="button"
                 className="btn btn-primary module-control"
-                onClick={(event) => this.handleAction(event, app.uuid, "stop")}
+                onClick={(event) => this.handleAddonAction(event, "stop")}
               >
                 Stop
               </button>
@@ -340,7 +349,7 @@ class Addon extends Component {
               <button
                 type="button"
                 className="btn btn-success module-control"
-                onClick={(e) => this.handleAction(e, app.uuid, "start")}
+                onClick={(event) => this.handleAction(app.uuid, "start", event)}
               >
                 Start
               </button>
@@ -348,13 +357,14 @@ class Addon extends Component {
             <span />
         }
         {isOpen ? (
-          <DeleteAddonModal
+          <ActionAddonModal
             app={app}
-            handleDelete={this.handleDelete}
+            handleAction={(action === "delete")? this.handleDelete : this.handleAction}
             isOpen={isOpen}
             hideModal={this.hideModal}
             appUuid={app.uuid ? app.uuid : null}
-            affectedModules={affectedModules} />
+            affectedModules = {affectedModules}
+            action = {action}/>
         ) : null}
       </div>
     );
