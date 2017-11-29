@@ -30,7 +30,15 @@ export const AddonList = ({ handleDownload, appList, openPage, openModal, update
                 />
               </td>
               <td onClick={() => openPage(app.appDetails)}>
-                <div className="addon-name">{app.appDetails && app.appDetails.name}</div>
+                <div className="addon-name">
+                  {
+                    app.appDetails.started === true || app.appDetails.started === undefined ?
+                      <div className="status-icon" id="started-status" />
+                      :
+                      <div className="status-icon" id="stopped-status" />
+                  }
+                  {app.appDetails && app.appDetails.name}
+                </div>
                 <div><h5 className="addon-description">
                   {app.appDetails && app.appDetails.description}
                 </h5></div>
