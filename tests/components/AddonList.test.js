@@ -1,7 +1,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import { mount, shallow } from 'enzyme';
-import  { AddonList }  from '../../app/js/components/manageApps/AddonList.jsx';
+import { AddonList } from '../../app/js/components/manageApps/AddonList.jsx';
 
 
 describe('<AddonList />', () => {
@@ -37,31 +37,42 @@ describe('<AddonList />', () => {
         install: false
     }];
 
-    const openPage = () => {};
-    const openModal = () => {};
-    const addonList = mount( <AddonList appList={appList} openPage={openPage}  openModal={openModal}/ > );
+    const addonList = [];
+    const searchedAddons = [];
+    const openPage = () => { };
+    const openModal = () => { };
+    const handleDownload = () => { };
+    const getInstalled = () => { };
+    const testAddonList = mount(
+        <AddonList
+            addonList={appList}
+            searchedAddons={searchedAddons}
+            openPage={openPage}
+            openModal={openModal}
+            handleDownload={handleDownload}
+            getInstalled={getInstalled} />);
 
     it('should render a tbody', () => {
-        expect(addonList.find("tbody")).to.have.length(1);
+        expect(testAddonList.find("tbody")).to.have.length(1);
     });
 
     it('should render a tr tag', () => {
-        expect(addonList.find("tr")).to.have.length(1);
+        expect(testAddonList.find("tr")).to.have.length(1);
     });
 
     it('should render td tag', () => {
-        expect(addonList.find("td")).to.have.length(5);
+        expect(testAddonList.find("td")).to.have.length(5);
     });
 
     it('should render div tags', () => {
-        expect(addonList.find("div")).to.have.length(3);
+        expect(testAddonList.find("div")).to.have.length(3);
     });
 
     it('should render a h2 tag', () => {
-        expect(addonList.find("h5")).to.have.length(1);
+        expect(testAddonList.find("h5")).to.have.length(1);
     });
 
     it('should render a image tag', () => {
-        expect(addonList.find("img")).to.have.length(1);
+        expect(testAddonList.find("img")).to.have.length(1);
     });
 });
