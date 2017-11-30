@@ -772,3 +772,12 @@ body.loading .waiting-modal {
 .download-update:hover {
     cursor: pointer;
 }
+
+.addon {
+    height: auto;
+    padding-bottom: 20px;
+}
+
+.btn-lower-margin {
+    margin-bottom: 30px;
+}
