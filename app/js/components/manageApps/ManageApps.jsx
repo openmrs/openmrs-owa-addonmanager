@@ -37,6 +37,7 @@ export default class ManageApps extends React.Component {
       displayInvalidZip: false,
       searchComplete: false,
       updatesAvailable: [],
+      searchedAddons: [],
     };
 
     this.apiHelper = new ApiHelper(null);
@@ -58,6 +59,7 @@ export default class ManageApps extends React.Component {
     this.displayManageOwaButtons = this.displayManageOwaButtons.bind(this);
     this.checkForUpdates = this.checkForUpdates.bind(this);
     this.startAllModules = this.startAllModules.bind(this);
+    this.getInstalled = this.getInstalled.bind(this);
   }
 
   componentWillMount() {
@@ -487,6 +489,7 @@ export default class ManageApps extends React.Component {
           if (searchResults.length === 0) {
             this.setState({
               appList: [],
+              searchedAddons: [],
               searchComplete: true
             });
           } else {
@@ -503,25 +506,37 @@ export default class ManageApps extends React.Component {
                 if (index === searchResults.length - 1) {
                   this.setState((prevState, props) => {
                     return {
-                      appList: resultData,
+                      searchedAddons: resultData,
                       searchComplete: true
                     };
                   });
                 }
               }))
               .catch(error => {
-                if (error) this.setState({ appList: [], searchComplete: true });
+                if (error) {
+                  this.setState({
+                    appList: [],
+                    searchedAddons: [],
+                    searchComplete: true,
+                  });}
               });
           }
         })
         .catch(error => {
-          if (error) this.setState({ appList: [], searchComplete: true });
+          if (error) {
+            this.setState({
+              appList: [],
+              searchedAddons: [],
+              searchComplete: true,
+            });
+          }
         });
     } else {
       this.setState((prevState, props) => {
         return {
           appList: staticAppList,
-          searchComplete: true
+          searchedAddons: [],
+          searchComplete: true,
         };
       });
     }
@@ -543,6 +558,19 @@ export default class ManageApps extends React.Component {
     }
   }
 
+  getInstalled(appList, searchedAddons) {
+    const installedSearchResults = [];
+    const installedNames = appList.map((app) => {
+      return app.appDetails.name;
+    });
+    searchedAddons.forEach((addon) => {
+      installedNames.includes(addon.appDetails.name) ?
+        installedSearchResults.push(addon.appDetails.name)
+        : null;
+    });
+    return installedSearchResults;
+  }
+
   render() {
     const {
       files,
@@ -553,6 +581,7 @@ export default class ManageApps extends React.Component {
       msgType,
       msgBody,
       appList,
+      searchedAddons,
       isOpen,
       selectedApp,
       searchComplete,
@@ -640,11 +669,13 @@ export default class ManageApps extends React.Component {
                         </tr>
                       </tbody> :
                       <AddonList
-                        handleDownload={this.handleDownload}
-                        appList={appList}
+                        addonList={appList}
+                        searchedAddons={searchedAddons}
                         updatesAvailable={updatesAvailable}
                         openPage={this.openPage}
                         openModal={this.openModal}
+                        handleDownload={this.handleDownload}
+                        getInstalled={this.getInstalled}
                       />
                     }
                   </table>
@@ -661,9 +692,9 @@ export default class ManageApps extends React.Component {
           </div>
         </div>
         {disableUploadElements &&
-            <div className="waiting-modal">
-              <p className="upload-text">Uploading {uploadStatus}%</p>
-            </div>}
+          <div className="waiting-modal">
+            <p className="upload-text">Uploading {uploadStatus}%</p>
+          </div>}
       </div>
     );
   }

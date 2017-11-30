@@ -8,13 +8,32 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router';
 
-export const AddonList = ({ handleDownload, appList, openPage, openModal, updatesAvailable }) => {
+export const AddonList = ({
+  handleDownload,
+  addonList,
+  openPage,
+  openModal,
+  updatesAvailable,
+  searchedAddons,
+  getInstalled,
+}) => {
+  let installedSearchResults;
+  const appList =  searchedAddons.length > 0 ? searchedAddons : addonList;
+  searchedAddons.length > 0 ? installedSearchResults = getInstalled(addonList, searchedAddons) : null;
+
   return (
     <tbody>
       {
         appList.map((app, key) => {
+          let found = null;
+          searchedAddons.length > 0 && installedSearchResults.includes(app.appDetails.name) ?
+            found = addonList.find(addon => addon.appDetails.name === app.appDetails.name) : null;
+          if (found) {
+            app = found;
+          }
           let addonParam = app.appDetails.uuid ?
             'module-' + app.appDetails.uuid : 'owa-' + app.appDetails.name;
           return (
@@ -93,8 +112,10 @@ export const AddonList = ({ handleDownload, appList, openPage, openModal, update
 };
 
 AddonList.propTypes = {
-  handleDownload: React.PropTypes.func.isRequired,
-  appList: React.PropTypes.array.isRequired,
-  openPage: React.PropTypes.func.isRequired,
-  openModal: React.PropTypes.func.isRequired
+  addonList: PropTypes.array.isRequired,
+  openPage: PropTypes.func.isRequired,
+  openModal: PropTypes.func.isRequired,
+  handleDownload: PropTypes.func.isRequired,
+  searchedAddons: PropTypes.array.isRequired,
+  getInstalled: PropTypes.func.isRequired,
 };
