@@ -10,6 +10,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
+import SingleAddon from './SingleAddon.jsx';
 
 export const AddonList = ({
   handleDownload,
@@ -37,73 +38,25 @@ export const AddonList = ({
           let addonParam = app.appDetails.uuid ?
             'module-' + app.appDetails.uuid : 'owa-' + app.appDetails.name;
           return (
-            <tr key={key}>
-              <td onClick={() => openPage(app.appDetails)}>
-                <img
-                  src={app.appDetails &&
-                    app.appDetails.icon !== null &&
-                    app.appDetails.icons !== undefined ?
-                    `/${location.href.split('/')[3]}/owa/openmrs-addonmanager/${app.appDetails.icons[48]}` :
-                    `./img/omrs-button.png`}
-                  alt="addon logo"
+            updatesAvailable?
+              updatesAvailable.hasOwnProperty(app.appDetails.name)?
+                <SingleAddon
+                  app={app}
+                  key={key}
+                  addonParam={addonParam}
+                  updatesVersion={updatesAvailable[app.appDetails.name]}
                 />
-              </td>
-              <td onClick={() => openPage(app.appDetails)}>
-                <div className="addon-name">
-                  {
-                    app.appDetails.started === true || app.appDetails.started === undefined ?
-                      <div className="status-icon" id="started-status" />
-                      :
-                      <div className="status-icon" id="stopped-status" />
-                  }
-                  {app.appDetails && app.appDetails.name}
-                </div>
-                <div><h5 className="addon-description">
-                  {app.appDetails && app.appDetails.description}
-                </h5></div>
-                {updatesAvailable && updatesAvailable.hasOwnProperty(app.appDetails.name) ? <span className="update-notification">New version Available </span>: null}
-                {updatesAvailable && updatesAvailable.hasOwnProperty(app.appDetails.name) ? updatesAvailable[app.appDetails.name]: null}
-
-              </td>
-              <td onClick={() => openPage(app.appDetails)}>
-                {
-                  app.appDetails && app.appDetails.uuid ?
-                    app.appDetails.author :
-                    app.appDetails && app.appDetails.developer ?
-                      app.appDetails.developer.name :
-                      app.appDetails.maintainers[0].name
-                }
-              </td>
-              <td onClick={() => openPage(app.appDetails)}>
-                {app.appDetails.version ?
-                  app.appDetails.version :
-                  app.appDetails.latestVersion}
-              </td>
-              <td
-                className="text-center"
-                id="view-icon-wrapper"
-              >
-                {
-                  app.install === false ?
-                    <Link
-                      to={{
-                        pathname: "addon/" + addonParam,
-                      }}
-                    >
-                      <button id="view-addon-btn" className="btn btn-secondary">
-                        <i className="glyphicon glyphicon-option-vertical view-icon" />
-                        View
-                      </button>
-                    </Link>
-                    :
-                    <i
-                      className="glyphicon glyphicon-download-alt text-primary install-icon"
-                      id="icon-btn"
-                      onClick={(e) => handleDownload(app.downloadUri)(e)}
-                    />
-                }
-              </td>
-            </tr>
+                :
+                null
+              :
+              <SingleAddon
+                app={app}
+                key={key}
+                handleDownload={handleDownload}
+                openPage={openPage}
+                addonParam={addonParam}
+                updatesVersion={null}
+              />
           );
         })
       }
