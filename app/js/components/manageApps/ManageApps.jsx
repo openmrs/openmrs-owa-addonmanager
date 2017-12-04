@@ -329,10 +329,9 @@ export default class ManageApps extends React.Component {
                 showMsg: true,
                 msgBody: `${fileName} has been successfully installed`,
                 msgType: "success",
-                appList: resultData,
-                staticAppList: resultData,
               };
             });
+            this.handleApplist();
           }
         });
       }.bind(this),
