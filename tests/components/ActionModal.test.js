@@ -1,9 +1,9 @@
 import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
-import DeleteModal from '../../app/js/components/manageApps/DeleteAddonModal.jsx';
+import ActionModal from '../../app/js/components/manageApps/ActionAddonModal.jsx';
 
-describe('<DeleteModal />', () => {
+describe('<ActionModal />', () => {
     const selectedApp = {
         "version": "1.0.0",
         "name": "CohortBuilder",
@@ -32,14 +32,14 @@ describe('<DeleteModal />', () => {
         "default_locale": "en",
         "deployed.owa.name": null
     };
-    const renderedComponent = 
-    shallow( < DeleteModal 
-        app={selectedApp} 
-        handleDelete= {(CohortBuilder) => {}}
-        isOpen={true}  
-        hideModal= {() => {}}/ > 
+    const renderedComponent =
+    shallow( < ActionModal
+        app={selectedApp}
+        handleAction= {(CohortBuilder) => {}}
+        isOpen={true}
+        hideModal= {() => {}}/ >
         );
-    
+
     it('should render a Modal', () => {
         expect(renderedComponent.find("Modal")).to.have.length(1);
     });
@@ -71,4 +71,4 @@ describe('<DeleteModal />', () => {
     it('should render a button', () => {
         expect(renderedComponent.find("button")).to.have.length(2);
     });
-}); 
+});
