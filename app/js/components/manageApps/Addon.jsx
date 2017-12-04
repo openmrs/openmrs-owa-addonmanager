@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Loader from 'react-loader';
 import { ApiHelper } from '../../helpers/apiHelper';
 import ActionAddonModal from './ActionAddonModal';
 import StartErrorModal from './StartErrorModal';
@@ -16,6 +17,7 @@ class Addon extends Component {
       starting: false,
       isOpen: false,
       showMessageDetail: false,
+      loadingComplete: false
     };
     this.apiHelper = new ApiHelper(null);
     this.fetchOwa = this.fetchOwa.bind(this);
@@ -46,6 +48,7 @@ class Addon extends Component {
   }
 
   fetchModule(fileName) {
+    this.state.loadingComplete === true ? this.setState({ loadingComplete: false }) : null;
     const moduleName = fileName.substr(fileName.indexOf('-') + 1, fileName.length - 1);
     const applicationDistribution = location.href.split('/')[2];
     const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
@@ -57,20 +60,24 @@ class Addon extends Component {
         this.getAffectedModules(response.data.uuid);
         this.setState({
           app: response.data,
+          loadingComplete: true
         });
       }).catch((error) => {
         toastr.error(error);
+        this.setState({ loadingComplete: true });
       });
 
   }
 
   fetchOwa(fileName) {
+    this.state.loadingComplete === true ? this.setState({ loadingComplete: false }) : null;
     const owaName = fileName.substr(fileName.indexOf('-') + 1, fileName.length - 1);
     this.apiHelper.get('/owa/applist').then(response => {
       response.forEach((data, index) => {
         if (data.name === owaName) {
           this.setState({
-            app: data
+            app: data,
+            loadingComplete: true
           });
           return true;
         }
@@ -236,7 +243,7 @@ class Addon extends Component {
   }
 
   render() {
-    const { app, isOpen, showMessageDetail, affectedModules, action } = this.state;
+    const { app, isOpen, showMessageDetail, affectedModules, action, loadingComplete } = this.state;
     const message = app.startupErrorMessage && app.startupErrorMessage.length > 0 ?
       'Error starting '
       : null;
@@ -272,100 +279,103 @@ class Addon extends Component {
             Back to All Add-ons
           </div>
         </Link>
-        <div className="title-container">
-          <h3 id="addon-name">{app.name}</h3>
-          <p id="addon-description">{app.description}</p>
-          {app.uuid ?
-            <p id="addon-description">NOTE: Adding, removing, or starting modules will restart OpenMRS, meaning that all scheduled tasks and background processes will be interrupted.</p>
-            :
-            null
-          }
-        </div>
-        {
-          this.actionRunning()
-        }
-        <table className="table addon-table">
-          <tbody>
-            <tr>
-              <td className="row-title">Status:</td>
-              <td>
-                {
-                  app.started == true || app.started == undefined ?
-                    <div className="status-icon" id="started-status" />
-                    :
-                    <div className="status-icon" id="stopped-status" />
-                }
-              </td>
-            </tr>
-            <tr>
-              <td className="row-title">Version:</td>
-              <td>{app.version}</td>
-            </tr>
-            <tr>
-              <td className="row-title">Type:</td>
-              <td>
-                {
-                  app.uuid ?
-                    "Module" :
-                    "OWA"
-                }
-              </td>
-            </tr>
-            <tr>
-              <td className="row-title">Maintainers/Developers:</td>
-              <td>
-                {
-                  app.uuid ?
-                    app.author :
-                    app.developer ?
-                      app.developer.name :
-                      app.maintainers ?
-                        app.maintainers[0].name : ""
-                }
-              </td>
-            </tr>
-          </tbody>
-        </table>
 
-        <button
-          type="button"
-          className="btn btn-danger btn-delete"
-          onClick={(event) => this.handleAddonAction(event, "delete")}
-        >
-          Delete
-        </button>
-
-        {
-          app.uuid ?
-            app.started ?
-              <button
-                type="button"
-                className="btn btn-primary module-control"
-                onClick={(event) => this.handleAddonAction(event, "stop")}
-              >
-                Stop
-              </button>
+        <Loader loaded={loadingComplete} top="35%">
+          <div className="title-container">
+            <h3 id="addon-name">{app.name}</h3>
+            <p id="addon-description">{app.description}</p>
+            {app.uuid ?
+              <p id="addon-description">NOTE: Adding, removing, or starting modules will restart OpenMRS, meaning that all scheduled tasks and background processes will be interrupted.</p>
               :
-              <button
-                type="button"
-                className="btn btn-success module-control"
-                onClick={(event) => this.handleAction(app.uuid, "start", event)}
-              >
-                Start
-              </button>
-            :
-            <span />
-        }
-        {isOpen ? (
-          <ActionAddonModal
-            app={app}
-            handleAction={(action === "delete")? this.handleDelete : this.handleAction}
-            isOpen={isOpen}
-            hideModal={this.hideModal}
-            appUuid={app.uuid ? app.uuid : null}
-            affectedModules = {affectedModules}
-            action = {action}/>
-        ) : null}
+              null
+            }
+          </div>
+          {
+            this.actionRunning()
+          }
+          <table className="table addon-table">
+            <tbody>
+              <tr>
+                <td className="row-title">Status:</td>
+                <td>
+                  {
+                    app.started == true || app.started == undefined ?
+                      <div className="status-icon" id="started-status" />
+                      :
+                      <div className="status-icon" id="stopped-status" />
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td className="row-title">Version:</td>
+                <td>{app.version}</td>
+              </tr>
+              <tr>
+                <td className="row-title">Type:</td>
+                <td>
+                  {
+                    app.uuid ?
+                      "Module" :
+                      "OWA"
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td className="row-title">Maintainers/Developers:</td>
+                <td>
+                  {
+                    app.uuid ?
+                      app.author :
+                      app.developer ?
+                        app.developer.name :
+                        app.maintainers ?
+                          app.maintainers[0].name : ""
+                  }
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button
+            type="button"
+            className="btn btn-danger btn-delete btn-lower-margin"
+            onClick={(event) => this.handleAddonAction(event, "delete")}
+          >
+            Delete
+          </button>
+
+          {
+            app.uuid ?
+              app.started ?
+                <button
+                  type="button"
+                  className="btn btn-primary module-control btn-lower-margin"
+                  onClick={(event) => this.handleAddonAction(event, "stop")}
+                >
+                  Stop
+                </button>
+                :
+                <button
+                  type="button"
+                  className="btn btn-success module-control btn-lower-margin"
+                  onClick={(event) => this.handleAction(app.uuid, "start", event)}
+                >
+                  Start
+                </button>
+              :
+              <span />
+          }
+          {isOpen ? (
+            <ActionAddonModal
+              app={app}
+              handleAction={(action === "delete")? this.handleDelete : this.handleAction}
+              isOpen={isOpen}
+              hideModal={this.hideModal}
+              appUuid={app.uuid ? app.uuid : null}
+              affectedModules = {affectedModules}
+              action = {action}/>
+          ) : null}
+        </Loader>
       </div>
     );
   }
