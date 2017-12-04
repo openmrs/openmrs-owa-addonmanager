@@ -28,6 +28,7 @@ export default class SingleAddon extends React.Component{
       addonParam,
       updatesVersion,
       handleDownload,
+      handleOWAInstallation,
       openPage
     } = this.props;
 
@@ -61,7 +62,9 @@ export default class SingleAddon extends React.Component{
             {app.appDetails && app.appDetails.description}
           </h5></div>
           {updatesVersion ? <span className="update-notification">New version Available {updatesVersion.version} </span>: null}
-          {updatesVersion ? <span className="glyphicon glyphicon-download-alt download-update" onClick={(e) => this.getUpdate(e, updatesVersion.uid)} />: null}
+          {updatesVersion 
+            ? <span className="glyphicon glyphicon-download-alt download-update"
+              onClick={(e) => this.getUpdate(e, updatesVersion.uid)} /> : null}
         </td>
         <td>
           {
@@ -94,11 +97,23 @@ export default class SingleAddon extends React.Component{
                 </button>
               </Link>
               :
-              <i
-                className="glyphicon glyphicon-download-alt text-primary install-icon"
-                id="icon-btn"
-                onClick={(e) => handleDownload(app.downloadUri)(e)}
-              />
+              <div>
+                <i
+                  className="glyphicon glyphicon-download-alt text-primary download-icon"
+                  id="icon-btn"
+                  onClick={(e) => handleDownload(app.downloadUri)(e)}
+                />
+                {/* <i
+                  className="glyphicon glyphicon-download-alt text-primary install-icon"
+                  id="icon-btn"
+                  onClick={(e) => handleOWAInstallation(app.downloadUri)(e)}
+                /> */}
+                <button
+                  onClick={(e) => handleOWAInstallation(app.downloadUri)(e)}
+                >
+                    Ins
+                </button>
+              </div>
           }
         </td>
       </tr>

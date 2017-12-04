@@ -62,6 +62,7 @@ export default class ManageApps extends React.Component {
     this.clearUpdates = this.clearUpdates.bind(this);
     this.startAllModules = this.startAllModules.bind(this);
     this.getInstalled = this.getInstalled.bind(this);
+    this.handleOWAInstallation = this.handleOWAInstallation.bind(this);
   }
 
   componentWillMount() {
@@ -103,7 +104,7 @@ export default class ManageApps extends React.Component {
       (error) => {
         toastr.error(error);
       }
-      );
+    );
   }
 
   handleDrop(files) {
@@ -311,7 +312,7 @@ export default class ManageApps extends React.Component {
       },
 
       type: "POST",
-      url: `https:/${apiBaseUrl}${this.requestUrl}`,
+      url: `http:/${apiBaseUrl}${this.requestUrl}`,
       data: addonFile,
       contentType: false,
       processData: false,
@@ -356,6 +357,42 @@ export default class ManageApps extends React.Component {
         this.displayManageOwaButtons();
       }.bind(this)
     });
+  }
+
+  handleOWAInstallation(downloadUri) {
+    const applicationDistribution = location.href.split('/')[2];
+    const url = location.href.split('/')[3];
+    const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
+    this.requestUrl = '/owa/installapp';
+
+    return (e) => {
+      e.preventDefault();
+      axios({
+        url: `http:/${apiBaseUrl}${this.requestUrl}`,
+        method: 'post',
+        headers: {
+          'Content-Type': undefined,
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'
+        },
+        data: downloadUri,
+        onUploadProgress: (event) => {
+          this.handleProgress(event);
+        }
+      }).then((response) => {
+        this.setState((prevState, props) => {
+          return {
+            showMsg: true,
+            msgBody: `module has been successfully installed`,
+            msgType: "success",
+            uploadStatus: 0,
+            showProgress: false,
+            files: null,
+          };
+        });
+      }).catch((error) => {
+        toastr.error(error);
+      });
+    };
   }
 
   handleProgress(event) {
@@ -462,7 +499,7 @@ export default class ManageApps extends React.Component {
     });
     const installedAddons = this.state.appList;
     const updatesAvailable = {};
-    axios.get(`https://addons.openmrs.org/api/v1/addon`).then((response) => {
+    axios.get(`http://addons.openmrs.org/api/v1/addon`).then((response) => {
       this.state.appList.forEach((addon) => {
         response.data.forEach((result) => {
           if (addon.appDetails.name === result.name) {
@@ -478,7 +515,7 @@ export default class ManageApps extends React.Component {
       this.setState({ 
         updatesAvailable,
         searchComplete: true,
-       });
+      });
     }).catch(
       (error) => {
         toastr.error(error);
@@ -501,7 +538,7 @@ export default class ManageApps extends React.Component {
     const resultData = [];
     const { staticAppList } = this.state;
     if (searchValue) {
-      axios.get(`https://addons.openmrs.org/api/v1//addon?&q=${searchValue}`)
+      axios.get(`http://addons.openmrs.org/api/v1//addon?&q=${searchValue}`)
         .then(response => {
           const searchResults = response.data;
           if (searchResults.length === 0) {
@@ -512,7 +549,7 @@ export default class ManageApps extends React.Component {
             });
           } else {
             const searchResultsPromise = searchResults.map(result => axios.get(
-              `https://addons.openmrs.org/api/v1//addon/${result.uid}`
+              `http://addons.openmrs.org/api/v1//addon/${result.uid}`
             ));
             Promise.all(searchResultsPromise)
               .then(results => results.forEach((result, index) => {
@@ -695,6 +732,7 @@ export default class ManageApps extends React.Component {
                         openPage={this.openPage}
                         openModal={this.openModal}
                         handleDownload={this.handleDownload}
+                        handleOWAInstallation={this.handleOWAInstallation}
                         getInstalled={this.getInstalled}
                       />
                     }

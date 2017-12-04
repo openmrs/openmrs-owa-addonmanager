@@ -14,6 +14,7 @@ import SingleAddon from './SingleAddon.jsx';
 
 export const AddonList = ({
   handleDownload,
+  handleOWAInstallation,
   addonList,
   openPage,
   openModal,
@@ -53,6 +54,7 @@ export const AddonList = ({
                 app={app}
                 key={key}
                 handleDownload={handleDownload}
+                handleOWAInstallation={handleOWAInstallation}
                 openPage={openPage}
                 addonParam={addonParam}
                 updatesVersion={null}
@@ -69,6 +71,7 @@ AddonList.propTypes = {
   openPage: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   handleDownload: PropTypes.func.isRequired,
+  handleOWAInstallation: PropTypes.func.isRequired,
   searchedAddons: PropTypes.array.isRequired,
   getInstalled: PropTypes.func.isRequired,
 };
