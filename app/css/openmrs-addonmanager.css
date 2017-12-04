@@ -315,12 +315,9 @@ legend.scheduler-border {
 }
 
 .install-icon, .view-icon {
-    font-size: 20px;
-    color: #1F78D5;
-}
-
-td {
-    cursor: pointer;
+    font-size: 1.05em;
+    color: #363463;
+    margin-right: 4px;
 }
 
 .close {
@@ -761,4 +758,17 @@ body.loading .waiting-modal {
 .btn-mark-ok {
     background: #5b57a6;
     color: #ffffff;
+}
+.app-details:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.download-update {
+    color: #3bb300;
+    font-size: 1.1em;
+}
+
+.download-update:hover {
+    cursor: pointer;
 }

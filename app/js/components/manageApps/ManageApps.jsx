@@ -1,4 +1,5 @@
-/* * This Source Code Form is subject to the terms of the Mozilla Public License,
+/*
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
  * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
@@ -36,7 +37,7 @@ export default class ManageApps extends React.Component {
       files: null,
       displayInvalidZip: false,
       searchComplete: false,
-      updatesAvailable: [],
+      updatesAvailable: null,
       searchedAddons: [],
     };
 
@@ -58,6 +59,7 @@ export default class ManageApps extends React.Component {
     this.handleOmodUploadRequest = this.handleOmodUploadRequest.bind(this);
     this.displayManageOwaButtons = this.displayManageOwaButtons.bind(this);
     this.checkForUpdates = this.checkForUpdates.bind(this);
+    this.clearUpdates = this.clearUpdates.bind(this);
     this.startAllModules = this.startAllModules.bind(this);
     this.getInstalled = this.getInstalled.bind(this);
   }
@@ -101,7 +103,7 @@ export default class ManageApps extends React.Component {
       (error) => {
         toastr.error(error);
       }
-    );
+      );
   }
 
   handleDrop(files) {
@@ -455,6 +457,9 @@ export default class ManageApps extends React.Component {
   }
 
   checkForUpdates() {
+    this.setState({
+      searchComplete: false
+    });
     const installedAddons = this.state.appList;
     const updatesAvailable = {};
     axios.get(`https://addons.openmrs.org/api/v1/addon`).then((response) => {
@@ -462,7 +467,7 @@ export default class ManageApps extends React.Component {
         response.data.forEach((result) => {
           if (addon.appDetails.name === result.name) {
             result.latestVersion > addon.appDetails.version ?
-              updatesAvailable[addon.appDetails.name] = result.latestVersion
+              updatesAvailable[addon.appDetails.name] = { version: result.latestVersion, uid: result.uid }
               :
               null
             return;
@@ -470,12 +475,25 @@ export default class ManageApps extends React.Component {
         });
       });
 
-      this.setState({ updatesAvailable });
+      this.setState({ 
+        updatesAvailable,
+        searchComplete: true,
+       });
     }).catch(
       (error) => {
         toastr.error(error);
       }
     );
+  }
+
+  clearUpdates(){
+    this.setState({
+      searchComplete: false
+    });
+    this.setState({ 
+      updatesAvailable: null,
+      searchComplete: true
+    });
   }
 
   onlineSearchHandler(searchValue) {
@@ -609,7 +627,9 @@ export default class ManageApps extends React.Component {
             <div className="col-sm-12">
               <h2 className="manage-addon-title">Add-on Manager</h2>
               <span className="pull-right manage-settings-wrapper">
-                <button className="button" onClick={this.checkForUpdates}>Check For Updates</button>
+                <span id="startall-modules-btn"
+                  className="btn btn-secondary" 
+                  onClick={updatesAvailable? this.clearUpdates : this.checkForUpdates}>{updatesAvailable? 'Back to all Addons': 'Check For Updates'}</span>
                 <span
                   id="startall-modules-btn"
                   className="btn btn-secondary"
