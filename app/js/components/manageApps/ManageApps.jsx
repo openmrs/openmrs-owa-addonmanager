@@ -1,8 +1,8 @@
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
- * the terms of the Healthcare Disclaimer located at http://openmrs.org/license.
+ * obtain one at https://mozilla.org/MPL/2.0/. OpenMRS is also distributed under
+ * the terms of the Healthcare Disclaimer located at https://openmrs.org/license.
  *
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
@@ -312,7 +312,7 @@ export default class ManageApps extends React.Component {
       },
 
       type: "POST",
-      url: `http:/${apiBaseUrl}${this.requestUrl}`,
+      url: `https:/${apiBaseUrl}${this.requestUrl}`,
       data: addonFile,
       contentType: false,
       processData: false,
@@ -368,7 +368,7 @@ export default class ManageApps extends React.Component {
     return (e) => {
       e.preventDefault();
       axios({
-        url: `http:/${apiBaseUrl}${this.requestUrl}`,
+        url: `https:/${apiBaseUrl}${this.requestUrl}`,
         method: 'post',
         headers: {
           'Content-Type': undefined,
@@ -499,7 +499,7 @@ export default class ManageApps extends React.Component {
     });
     const installedAddons = this.state.appList;
     const updatesAvailable = {};
-    axios.get(`http://addons.openmrs.org/api/v1/addon`).then((response) => {
+    axios.get(`https://addons.openmrs.org/api/v1/addon`).then((response) => {
       this.state.appList.forEach((addon) => {
         response.data.forEach((result) => {
           if (addon.appDetails.name === result.name) {
@@ -538,7 +538,7 @@ export default class ManageApps extends React.Component {
     const resultData = [];
     const { staticAppList } = this.state;
     if (searchValue) {
-      axios.get(`http://addons.openmrs.org/api/v1//addon?&q=${searchValue}`)
+      axios.get(`https://addons.openmrs.org/api/v1//addon?&q=${searchValue}`)
         .then(response => {
           const searchResults = response.data;
           if (searchResults.length === 0) {
@@ -549,7 +549,7 @@ export default class ManageApps extends React.Component {
             });
           } else {
             const searchResultsPromise = searchResults.map(result => axios.get(
-              `http://addons.openmrs.org/api/v1//addon/${result.uid}`
+              `https://addons.openmrs.org/api/v1//addon/${result.uid}`
             ));
             Promise.all(searchResultsPromise)
               .then(results => results.forEach((result, index) => {
