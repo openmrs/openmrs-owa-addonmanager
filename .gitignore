@@ -14,3 +14,4 @@ libs
 package-lock.json
 # Vscode autogen folders
 .vscode/
+.idea
