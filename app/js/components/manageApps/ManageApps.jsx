@@ -278,8 +278,10 @@ export default class ManageApps extends React.Component {
           uploadStatus: 0,
           showProgress: false,
           files: null,
+          updatesAvailable: null,
         };
       });
+      this.handleApplist();
     }).catch((error) => {
       toastr.error(error);
     });
@@ -329,6 +331,7 @@ export default class ManageApps extends React.Component {
                 showMsg: true,
                 msgBody: `${fileName} has been successfully installed`,
                 msgType: "success",
+                updatesAvailable: null,
               };
             });
             this.handleApplist();
