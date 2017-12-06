@@ -17,6 +17,7 @@ import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent.jsx';
 import { ApiHelper } from '../../helpers/apiHelper';
 import { AddonList } from './AddonList.jsx';
 import InvalidZipUploadModal from './InvalidZipUploadModal.jsx';
+import ModuleClickAlert from './ModuleClickModal.jsx';
 import Utility from './../../utility';
 
 export default class ManageApps extends React.Component {
@@ -31,6 +32,7 @@ export default class ManageApps extends React.Component {
       uploadStatus: 0,
       showProgress: false,
       isOpen: false,
+      isOpenAlert : false,
       selectedApp: null,
       downloadUri: null,
       addonAlreadyInstalled: null,
@@ -45,6 +47,7 @@ export default class ManageApps extends React.Component {
     this.alertMessage = '';
     this.openPage = this.openPage.bind(this);
     this.openModal = this.openModal.bind(this);
+    this.handleAlert = this.handleAlert.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
     this.handleClear = this.handleClear.bind(this);
@@ -427,6 +430,13 @@ export default class ManageApps extends React.Component {
     });
   }
 
+
+  handleAlert(){
+    this.setState({
+      isOpenAlert : !this.state.isOpenAlert
+    })
+  }
+
   openModal(app) {
     return (e) => {
       this.setState((prevState, props) => {
@@ -603,6 +613,7 @@ export default class ManageApps extends React.Component {
       appList,
       searchedAddons,
       isOpen,
+      isOpenAlert,
       selectedApp,
       searchComplete,
       displayInvalidZip } = this.state;
@@ -694,6 +705,7 @@ export default class ManageApps extends React.Component {
                         addonList={appList}
                         searchedAddons={searchedAddons}
                         updatesAvailable={updatesAvailable}
+                        handleAlert={this.handleAlert}
                         openPage={this.openPage}
                         openModal={this.openModal}
                         handleDownload={this.handleDownload}
@@ -701,6 +713,10 @@ export default class ManageApps extends React.Component {
                       />
                     }
                   </table>
+                  <ModuleClickAlert
+                    isOpenAlert={isOpenAlert}
+                    handleAlert={this.handleAlert}
+                  />
                 </Loader>
                 {
                   displayInvalidZip && (

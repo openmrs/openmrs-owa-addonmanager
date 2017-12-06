@@ -16,6 +16,7 @@ export const AddonList = ({
   handleDownload,
   addonList,
   openPage,
+  handleAlert,
   openModal,
   updatesAvailable,
   searchedAddons,
@@ -43,6 +44,7 @@ export const AddonList = ({
                 <SingleAddon
                   app={app}
                   key={key}
+                  handleAlert={handleAlert}
                   addonParam={addonParam}
                   updatesVersion={updatesAvailable[app.appDetails.name]}
                 />
@@ -53,6 +55,7 @@ export const AddonList = ({
                 app={app}
                 key={key}
                 handleDownload={handleDownload}
+                handleAlert={handleAlert}
                 openPage={openPage}
                 addonParam={addonParam}
                 updatesVersion={null}
