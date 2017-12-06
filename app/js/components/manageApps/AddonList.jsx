@@ -17,6 +17,7 @@ export const AddonList = ({
   addonList,
   openPage,
   openModal,
+  handleUserClick,
   updatesAvailable,
   searchedAddons,
   getInstalled,
@@ -44,6 +45,7 @@ export const AddonList = ({
                   app={app}
                   key={key}
                   addonParam={addonParam}
+                  handleUserClick={handleUserClick}
                   updatesVersion={updatesAvailable[app.appDetails.name]}
                 />
                 :
@@ -52,6 +54,7 @@ export const AddonList = ({
               <SingleAddon
                 app={app}
                 key={key}
+                handleUserClick={handleUserClick}
                 handleDownload={handleDownload}
                 openPage={openPage}
                 addonParam={addonParam}
@@ -67,6 +70,7 @@ export const AddonList = ({
 AddonList.propTypes = {
   addonList: PropTypes.array.isRequired,
   openPage: PropTypes.func.isRequired,
+  handleUserClick: PropTypes.func.isRequired,
   openModal: PropTypes.func.isRequired,
   handleDownload: PropTypes.func.isRequired,
   searchedAddons: PropTypes.array.isRequired,

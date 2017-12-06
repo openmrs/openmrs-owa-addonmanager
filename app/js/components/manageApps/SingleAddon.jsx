@@ -27,6 +27,7 @@ export default class SingleAddon extends React.Component{
       key,
       addonParam,
       updatesVersion,
+      handleUserClick,
       handleDownload,
       openPage
     } = this.props;
@@ -52,9 +53,17 @@ export default class SingleAddon extends React.Component{
                 <div className="status-icon" id="stopped-status" />
             }
             {app.appDetails.started === true || app.appDetails.started === false ?
-              app.appDetails && app.appDetails.name
+              <span
+                className="module-click-cursor"
+                onClick={() => handleUserClick(app.appDetails.name)}>
+                {app.appDetails && app.appDetails.name}
+              </span>
               :
-              <span className="app-details" onClick={() => openPage(app.appDetails)}>{app.appDetails && app.appDetails.name}</span>
+              <span
+                className="app-details"
+                onClick={() => openPage(app.appDetails)}>
+                {app.appDetails && app.appDetails.name}
+              </span>
             }
           </div>
           <div><h5 className="addon-description">

@@ -46,6 +46,7 @@ export default class ManageApps extends React.Component {
     this.openPage = this.openPage.bind(this);
     this.openModal = this.openModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
+    this.handleUserClick = this.handleUserClick.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
@@ -287,6 +288,10 @@ export default class ManageApps extends React.Component {
     });
   }
 
+  handleUserClick(name){
+    toastr.info(`Sorry, there is no open web app for ${name}`);
+  }
+
   handleUploadRequest() {
     const resultData = [];
     const applicationDistribution = location.href.split('/')[2];
@@ -477,7 +482,7 @@ export default class ManageApps extends React.Component {
         });
       });
 
-      this.setState({ 
+      this.setState({
         updatesAvailable,
         searchComplete: true,
        });
@@ -492,7 +497,7 @@ export default class ManageApps extends React.Component {
     this.setState({
       searchComplete: false
     });
-    this.setState({ 
+    this.setState({
       updatesAvailable: null,
       searchComplete: true
     });
@@ -630,7 +635,7 @@ export default class ManageApps extends React.Component {
               <h2 className="manage-addon-title">Add-on Manager</h2>
               <span className="pull-right manage-settings-wrapper">
                 <span id="startall-modules-btn"
-                  className="btn btn-secondary" 
+                  className="btn btn-secondary"
                   onClick={updatesAvailable? this.clearUpdates : this.checkForUpdates}>{updatesAvailable? 'Back to all Addons': 'Check For Updates'}</span>
                 <span
                   id="startall-modules-btn"
@@ -693,6 +698,7 @@ export default class ManageApps extends React.Component {
                       <AddonList
                         addonList={appList}
                         searchedAddons={searchedAddons}
+                        handleUserClick={this.handleUserClick}
                         updatesAvailable={updatesAvailable}
                         openPage={this.openPage}
                         openModal={this.openModal}
