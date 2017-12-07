@@ -772,3 +772,6 @@ body.loading .waiting-modal {
 .download-update:hover {
     cursor: pointer;
 }
+.install {
+    margin-top: 5px 
+}
