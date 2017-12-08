@@ -109,9 +109,9 @@ export default class SingleAddon extends React.Component{
                   onClick={(e) => handleOWAInstallation(app.downloadUri)(e)}
                 /> */}
                 <button
-                  onClick={(e) => handleOWAInstallation(app.downloadUri)(e)}
+                  className="btn btn-default alert-success install"
                 >
-                    Ins
+                  Install
                 </button>
               </div>
           }
