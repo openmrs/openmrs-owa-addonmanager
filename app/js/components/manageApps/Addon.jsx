@@ -17,7 +17,10 @@ class Addon extends Component {
       starting: false,
       isOpen: false,
       showMessageDetail: false,
-      loadingComplete: false
+      loadingComplete: false,
+      messageBody: '',
+      messageType: 'success',
+      showMessage: false,
     };
     this.apiHelper = new ApiHelper(null);
     this.fetchOwa = this.fetchOwa.bind(this);
@@ -113,10 +116,17 @@ class Addon extends Component {
     }
 
     axios.post(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`, postData)
-      .then(response => {
+      .then(response => {       
+        const moduleName = response.data.modules[0].display;
         this.setState({
           stopping: false,
           starting: false,
+          messageBody: response.data.action == 'START' ? 
+            `${moduleName} module has started` 
+            : 
+            `${moduleName} module has stopped`,
+          messageType: 'success',
+          showMessage: true,
         });
         this.fetchAddon();
       }).catch((error) => {
@@ -243,10 +253,28 @@ class Addon extends Component {
   }
 
   render() {
-    const { app, isOpen, showMessageDetail, affectedModules, action, loadingComplete } = this.state;
+    const {
+      app, 
+      isOpen, 
+      showMessageDetail, 
+      affectedModules, 
+      action, 
+      loadingComplete,
+      messageBody,
+      messageType,
+      showMessage } = this.state;
+      
     const message = app.startupErrorMessage && app.startupErrorMessage.length > 0 ?
       'Error starting '
       : null;
+
+    const alert = (
+      <div className={`col-sm-12 alert alert-${messageType} alert-dismissable`}>
+        <button className="close" data-dismiss="alert" aria-label="close">×</button>
+        {messageBody}
+      </div>
+    );
+
     return (
       <div className="container-fluid addon">
         {
@@ -279,6 +307,10 @@ class Addon extends Component {
             Back to All Add-ons
           </div>
         </Link>
+
+        <div id="notification-wrapper">
+          {showMessage && alert }
+        </div>
 
         <Loader loaded={loadingComplete} top="35%">
           <div className="title-container">
