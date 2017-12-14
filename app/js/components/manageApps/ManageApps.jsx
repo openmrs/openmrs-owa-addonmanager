@@ -55,6 +55,7 @@ export default class ManageApps extends React.Component {
     this.handleUploadRequest = this.handleUploadRequest.bind(this);
     this.handleAlertBehaviour = this.handleAlertBehaviour.bind(this);
     this.handleAddonUploadModal = this.handleAddonUploadModal.bind(this);
+    this.handleStartModules = this.handleStartModules.bind(this);
     this.initiateSearch = this.initiateSearch.bind(this);
     this.handleOmodUploadRequest = this.handleOmodUploadRequest.bind(this);
     this.displayManageOwaButtons = this.displayManageOwaButtons.bind(this);
@@ -103,7 +104,7 @@ export default class ManageApps extends React.Component {
       (error) => {
         toastr.error(error);
       }
-      );
+    );
   }
 
   handleDrop(files) {
@@ -159,6 +160,22 @@ export default class ManageApps extends React.Component {
 
       });
     });
+  }
+
+  handleStartModules(){
+    const { appList } = this.state;
+    const allStartedModules = appList.filter(addon => addon.appDetails.started)
+    const appListModules = appList.filter(app => app.appType === "module");
+    if (allStartedModules.length === appListModules.length){
+      this.setState({
+        msgBody: "All modules are already started",
+        msgType: "info",
+        showMsg: true,
+        searchComplete: true,
+      });
+    }else {
+      this.startAllModules();
+    }
   }
 
   handleAddonUploadModal(addonName, action, response) {
@@ -471,16 +488,16 @@ export default class ManageApps extends React.Component {
             result.latestVersion > addon.appDetails.version ?
               updatesAvailable[addon.appDetails.name] = { version: result.latestVersion, uid: result.uid }
               :
-              null
+              null;
             return;
           }
         });
       });
 
-      this.setState({ 
+      this.setState({
         updatesAvailable,
         searchComplete: true,
-       });
+      });
     }).catch(
       (error) => {
         toastr.error(error);
@@ -492,7 +509,7 @@ export default class ManageApps extends React.Component {
     this.setState({
       searchComplete: false
     });
-    this.setState({ 
+    this.setState({
       updatesAvailable: null,
       searchComplete: true
     });
@@ -630,12 +647,12 @@ export default class ManageApps extends React.Component {
               <h2 className="manage-addon-title">Add-on Manager</h2>
               <span className="pull-right manage-settings-wrapper">
                 <span id="startall-modules-btn"
-                  className="btn btn-secondary" 
+                  className="btn btn-secondary"
                   onClick={updatesAvailable? this.clearUpdates : this.checkForUpdates}>{updatesAvailable? 'Back to all Addons': 'Check For Updates'}</span>
                 <span
                   id="startall-modules-btn"
                   className="btn btn-secondary"
-                  onClick={this.startAllModules}
+                  onClick={this.handleStartModules}
                 >
                   <span className="glyphicon glyphicon-play" />
                   Start All Modules
