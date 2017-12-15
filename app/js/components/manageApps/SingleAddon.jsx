@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router';
+import PropTypes from 'prop-types';
 
 export default class SingleAddon extends React.Component{
   constructor(props){
@@ -105,3 +106,10 @@ export default class SingleAddon extends React.Component{
     );
   }
 }
+
+SingleAddon.propTypes = {
+  app: PropTypes.object.isRequired,
+  addonParam: PropTypes.func.isRequired,
+  updatesVersion: PropTypes.object.isRequired,
+};
+
