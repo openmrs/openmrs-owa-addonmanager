@@ -46,6 +46,7 @@ export default class ManageApps extends React.Component {
     this.openPage = this.openPage.bind(this);
     this.openModal = this.openModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
+    this.handleUserClick = this.handleUserClick.bind(this);
     this.handleDrop = this.handleDrop.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
@@ -302,6 +303,10 @@ export default class ManageApps extends React.Component {
     }).catch((error) => {
       toastr.error(error);
     });
+  }
+
+  handleUserClick(name){
+    toastr.info(`Sorry, there is no open web app for ${name}`);
   }
 
   handleUploadRequest() {
@@ -712,6 +717,7 @@ export default class ManageApps extends React.Component {
                       <AddonList
                         addonList={appList}
                         searchedAddons={searchedAddons}
+                        handleUserClick={this.handleUserClick}
                         updatesAvailable={updatesAvailable}
                         openPage={this.openPage}
                         openModal={this.openModal}

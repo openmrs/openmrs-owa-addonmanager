@@ -781,3 +781,7 @@ body.loading .waiting-modal {
 .btn-lower-margin {
     margin-bottom: 30px;
 }
+
+.module-click-cursor {
+    cursor: pointer;
+}
