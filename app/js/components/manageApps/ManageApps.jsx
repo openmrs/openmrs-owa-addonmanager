@@ -671,7 +671,9 @@ export default class ManageApps extends React.Component {
                     id="search-input"
                     ref={value => this.input = value}
                     onKeyDown={this.initiateSearch}
-                    placeholder="Need new add-ons? Type & press ENTER or clear field to display installed add-ons" />
+                    placeholder={!updatesAvailable ? 
+                      "Need new add-ons? Type name of addon & press ENTER or clear field to display installed add-ons" : 
+                      "Need specific updates? Type name of addon & press ENTER or clear field to display all add-ons with updates"} />
                 </div>
                 <Loader loaded={searchComplete}>
                   <table className="table table-bordered table-striped table-hover">
