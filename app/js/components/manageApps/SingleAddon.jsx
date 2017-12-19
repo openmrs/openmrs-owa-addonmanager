@@ -30,7 +30,9 @@ export default class SingleAddon extends React.Component{
       updatesVersion,
       handleUserClick,
       handleDownload,
-      openPage
+      openPage,
+      handleInstall,
+      handleUpgrade,
     } = this.props;
 
     return(
@@ -70,8 +72,24 @@ export default class SingleAddon extends React.Component{
           <div><h5 className="addon-description">
             {app.appDetails && app.appDetails.description}
           </h5></div>
-          {updatesVersion ? <span className="update-notification">New version Available {updatesVersion.version} </span>: null}
-          {updatesVersion ? <span className="glyphicon glyphicon-download-alt download-update" onClick={(e) => this.getUpdate(e, updatesVersion.uid)} />: null}
+          {
+            updatesVersion ?
+              <span>
+                <span className="update-notification">New version Available {updatesVersion.version}
+                </span>
+                <span
+                  className="glyphicon glyphicon-download-alt download-update"
+                  onClick={(event) => this.getUpdate(event, updatesVersion.uid)}
+                />
+                <span
+                  className="btn btn-secondary"
+                  id="upgrade-btn"
+                  onClick={(event) => handleUpgrade(app, updatesVersion.version, updatesVersion.uid)}>Upgrade
+                </span>
+              </span>
+
+              : null
+          }
         </td>
         <td>
           {
@@ -104,11 +122,22 @@ export default class SingleAddon extends React.Component{
                 </button>
               </Link>
               :
-              <i
-                className="glyphicon glyphicon-download-alt text-primary install-icon"
-                id="icon-btn"
-                onClick={(e) => handleDownload(app.downloadUri)(e)}
-              />
+              <span>
+                <span
+                  className="btn btn-secondary"
+                  id="install-addon-btn"
+                  onClick={(event) => handleInstall(app)}>
+                  Install
+                </span>
+                <br />
+                <br />
+                <span>or </span>
+                <a href="#"
+                  className="download-link"
+                  onClick={(event) => handleDownload(app.downloadUri)(event)}>
+                  Download
+                </a>
+              </span>
           }
         </td>
       </tr>
@@ -120,5 +149,7 @@ SingleAddon.propTypes = {
   app: PropTypes.object.isRequired,
   addonParam: PropTypes.func.isRequired,
   updatesVersion: PropTypes.object.isRequired,
+  handleDownload: PropTypes.func.isRequired,
+  handleInstall: PropTypes.func.isRequired,
+  handleUpgrade: PropTypes.func.isRequired,
 };
-

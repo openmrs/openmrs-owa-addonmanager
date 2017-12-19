@@ -21,6 +21,8 @@ export const AddonList = ({
   updatesAvailable,
   searchedAddons,
   getInstalled,
+  handleInstall,
+  handleUpgrade,
 }) => {
   let installedSearchResults;
   const appList =  searchedAddons.length > 0 ? searchedAddons : addonList;
@@ -47,6 +49,7 @@ export const AddonList = ({
                   addonParam={addonParam}
                   handleUserClick={handleUserClick}
                   updatesVersion={updatesAvailable[app.appDetails.name]}
+                  handleUpgrade={handleUpgrade}
                 />
                 :
                 null
@@ -59,6 +62,7 @@ export const AddonList = ({
                 openPage={openPage}
                 addonParam={addonParam}
                 updatesVersion={null}
+                handleInstall={handleInstall}
               />
           );
         })
@@ -75,4 +79,6 @@ AddonList.propTypes = {
   handleDownload: PropTypes.func.isRequired,
   searchedAddons: PropTypes.array.isRequired,
   getInstalled: PropTypes.func.isRequired,
+  handleInstall: PropTypes.func.isRequired,
+  handleUpgrade: PropTypes.func.isRequired,
 };

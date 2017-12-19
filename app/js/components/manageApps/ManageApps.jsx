@@ -13,6 +13,7 @@ import JSZip from 'jszip';
 import Loader from 'react-loader';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
 import AddAddon from '../manageApps/AddAddon.jsx';
+import { ConfirmationModal } from './ConfirmationModal.jsx';
 import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent.jsx';
 import { ApiHelper } from '../../helpers/apiHelper';
 import { AddonList } from './AddonList.jsx';
@@ -39,6 +40,12 @@ export default class ManageApps extends React.Component {
       searchComplete: false,
       updatesAvailable: null,
       searchedAddons: [],
+      progressMsg: null,
+      upgrading: false,
+      upgradeAddon: null,
+      upgradeVersion: null,
+      newAddon: null,
+      openUpgradeConfirmation: false,
     };
 
     this.apiHelper = new ApiHelper(null);
@@ -51,6 +58,10 @@ export default class ManageApps extends React.Component {
     this.handleClear = this.handleClear.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
     this.handleDownload = this.handleDownload.bind(this);
+    this.handleInstall = this.handleInstall.bind(this);
+    this.handleUpgrade = this.handleUpgrade.bind(this);
+    this.confirmUpgrade = this.confirmUpgrade.bind(this);
+    this.dismissUpgradeModal = this.dismissUpgradeModal.bind(this);
     this.handleProgress = this.handleProgress.bind(this);
     this.onlineSearchHandler = this.onlineSearchHandler.bind(this);
     this.handleUploadRequest = this.handleUploadRequest.bind(this);
@@ -132,7 +143,8 @@ export default class ManageApps extends React.Component {
         installedOwas.push({
           appDetails: data,
           appType: 'owa',
-          install: false
+          install: false,
+          upgrading: false,
         });
       });
     }).then(() => {
@@ -480,6 +492,89 @@ export default class ManageApps extends React.Component {
     };
   }
 
+  handleUpgrade(addon, newVersion, addonUid) {
+    this.setState({
+      openUpgradeConfirmation: true,
+      upgradeAddon: addon,
+      upgradeVersion: newVersion,
+      upgrading: true,
+    });
+
+    axios.get(`https://addons.openmrs.org/api/v1//addon/${addonUid}`)
+      .then(response => {
+        const newAddon = {
+          appDetails: response.data,
+          downloadUri: response.data.versions[0].downloadUri,
+        }
+        this.setState({ newAddon });
+      }).catch((error) => {
+        toastr.error(error);
+      });
+  }
+
+  handleInstall(addon) {
+    let addonProcess = this.state.upgrading ? 'Upgrading': 'Installing';
+    this.setState({
+      progressMsg: `${addonProcess} ${addon.appDetails.name}`,
+    });
+
+    if (addon && addon.appDetails.type === 'OMOD') {
+      const applicationDistribution = location.href.split('/')[2];
+      const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
+      const url = location.href.split('/')[3];
+      const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
+      const postData = {
+        "moduleuuid": addon.appDetails.moduleId,
+        "installuri": addon.downloadUri,
+      };
+      this.requestUrl = '/v1/moduleinstall';
+
+      axios({
+        url: `${urlPrefix}/${apiBaseUrl}${this.requestUrl}`,
+        method: 'post',
+        data: postData,
+        onUploadProgress: (event) => {
+          this.handleProgress(event);
+        }
+      }).then((response) => {
+        this.setState((prevState, props) => {
+          return {
+            showMsg: true,
+            msgBody: `${addon.appDetails.name} has been successfully installed`,
+            msgType: "success",
+            uploadStatus: 0,
+            showProgress: false,
+            files: null,
+            updatesAvailable: null,
+            progressMsg: null,
+            searchedAddons: [],
+            newAddon: null,
+            upgrading: false,
+          };
+        });
+        addonProcess === 'Upgrading' && toastr.success(`Ugrade completed successfully`);
+        this.handleApplist();
+      }).catch((error) => {
+        toastr.error(error);
+      });
+    }
+  }
+
+  confirmUpgrade() {
+    this.setState({
+      openUpgradeConfirmation: false,
+    });
+    this.state.newAddon && this.handleInstall(this.state.newAddon);
+  }
+
+  dismissUpgradeModal() {
+    this.setState({
+      openUpgradeConfirmation: false,
+      progressMsg: null,
+      newAddon: null,
+    });
+  }
+
   checkForUpdates() {
     this.setState({
       searchComplete: false
@@ -627,7 +722,11 @@ export default class ManageApps extends React.Component {
       isOpen,
       selectedApp,
       searchComplete,
-      displayInvalidZip } = this.state;
+      progressMsg,
+      upgradeAddon,
+      upgradeVersion,
+      openUpgradeConfirmation,
+      displayInvalidZip, } = this.state;
 
     if (showMsg === true) {
       setTimeout(this.handleAlertBehaviour, 6000);
@@ -722,6 +821,8 @@ export default class ManageApps extends React.Component {
                         openPage={this.openPage}
                         openModal={this.openModal}
                         handleDownload={this.handleDownload}
+                        handleInstall={this.handleInstall}
+                        handleUpgrade={this.handleUpgrade}
                         getInstalled={this.getInstalled}
                       />
                     }
@@ -738,10 +839,24 @@ export default class ManageApps extends React.Component {
             </div>
           </div>
         </div>
-        {disableUploadElements &&
+        {
+          progressMsg ?
+            <div className="waiting-modal">
+              <p className="upload-text">{progressMsg}</p>
+            </div>
+            : disableUploadElements &&
           <div className="waiting-modal">
             <p className="upload-text">Uploading {uploadStatus}%</p>
           </div>}
+        {
+          <ConfirmationModal
+            addon={upgradeAddon}
+            upgradeVersion={upgradeVersion}
+            isOpen={openUpgradeConfirmation}
+            confirmUpgrade={this.confirmUpgrade}
+            dismissUpgradeModal={this.dismissUpgradeModal}
+          />
+        }
       </div>
     );
   }

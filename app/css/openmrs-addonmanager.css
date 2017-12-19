@@ -483,7 +483,7 @@ span.title.breadcrumb-item {
     padding: 2px 5px;
 }
 
-#success-btn, #cancel-btn, #icon-btn, #setting-icon-btn, #view-addon-btn {
+#success-btn, #cancel-btn, #icon-btn, #setting-icon-btn, #view-addon-btn, #install-addon-btn {
     line-height: 1.2em;
     color: white;
     cursor: pointer;
@@ -494,7 +494,7 @@ span.title.breadcrumb-item {
     border-radius: 3px;
 }
 
-#icon-btn, #setting-icon-btn, #startall-modules-btn {
+#icon-btn, #setting-icon-btn, #startall-modules-btn, #upgrade-btn {
     background-color: #dddddd;
     border: #dddddd 1px solid;
     display: inline-block;
@@ -505,11 +505,19 @@ span.title.breadcrumb-item {
     background: -webkit-linear-gradient(top, #ffffff, #dddddd);
 }
 
-#startall-modules-btn {
+#startall-modules-btn, #upgrade-btn {
     padding-top: 4px;
     padding-bottom: 4px;
     margin-bottom: 10px;
     margin-left: 12px;
+    font-weight: bold;
+}
+
+#upgrade-btn {
+    color: #3bb300;
+}
+
+.embolden {
     font-weight: bold;
 }
 
@@ -626,7 +634,7 @@ body.loading .waiting-modal {
     border: 5px solid #ff8080;
 }
 
-#view-addon-btn {
+#view-addon-btn, #install-addon-btn {
     background: -webkit-linear-gradient(top, #ffffff, #dddddd);
     color: #363463;
     font-size: 1.05em;
@@ -701,9 +709,17 @@ body.loading .waiting-modal {
     text-decoration-color: red;
 }
 
-.update-notification {
+.update-notification, .download-link, .download-link:hover {
     color:#3bb300;
     font-size: 0.9em;
+}
+
+.download-link:hover {
+    text-decoration: underline;
+}
+
+#install-addon-btn {
+    color:#3bb300;
 }
 
 .dependency-alert{
