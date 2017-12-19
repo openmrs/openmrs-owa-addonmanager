@@ -63,7 +63,13 @@ describe('<Addon />', () => {
   it('should show error message', () => {
     component.setState({ app: app });
     expect(component.render().find('.error-detail')).to.have.length(1);
-  })
+  });
+
+  it('should not display', () => {
+    app.startupErrorMessage = null;
+    component.setState({ showMessageDetail: true, app });
+    expect(component.find(StartErrorModal)).to.have.length(0);
+  });
 
 });
 
@@ -77,6 +83,8 @@ describe('<StartErrorModal />', () => {
     />);
 
   it('should contain the correct error detail message', () => {
-    expect(errorModal.html()).to.contain('Module Reference Demo Data Module cannot be started');
+    app.startupErrorMessage = "Error while trying to start module\nModule Reference Demo Data Module cannot be started because it requires the following module(s): referencemetadata 2.5.0} Please install and start these modules first.\n";
+    expect(errorModal.html()).to.contain(app.startupErrorMessage);
   });
+
 });
