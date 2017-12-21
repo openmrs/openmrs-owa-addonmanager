@@ -28,7 +28,7 @@ export default class AddAddon extends Component {
           <a id="click-to-select" href=""
             onClick={(e) => {
               e.preventDefault(); this.state.dropzoneRef.open();
-            }}> Click to here select</a>
+            }}> Click here to select</a>
         </p>
       );
     }

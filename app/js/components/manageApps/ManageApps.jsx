@@ -537,11 +537,11 @@ export default class ManageApps extends React.Component {
           this.handleProgress(event);
         }
       }).then((response) => {
+        addonProcess === 'Upgrading' ?
+          toastr.success(`Upgrading ${addon.appDetails.name} to version ${this.state.upgradeVersion} was successful`) :
+          toastr.success(`${addon.appDetails.name} has been successfully installed`);
         this.setState((prevState, props) => {
           return {
-            showMsg: true,
-            msgBody: `${addon.appDetails.name} has been successfully installed`,
-            msgType: "success",
             uploadStatus: 0,
             showProgress: false,
             files: null,
@@ -550,9 +550,9 @@ export default class ManageApps extends React.Component {
             searchedAddons: [],
             newAddon: null,
             upgrading: false,
+            upgradeVersion: null,
           };
         });
-        addonProcess === 'Upgrading' && toastr.success(`Ugrade completed successfully`);
         this.handleApplist();
       }).catch((error) => {
         toastr.error(error);
