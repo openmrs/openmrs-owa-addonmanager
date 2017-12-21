@@ -287,7 +287,7 @@ export default class ManageApps extends React.Component {
     addonFile.append('file', omodFile);
     let fileName = this.state.files[0].name;
     fileName = fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
-
+    
     axios({
       url: `${urlPrefix}/${apiBaseUrl}${requestUrl}`,
       method: 'post',
@@ -336,7 +336,6 @@ export default class ManageApps extends React.Component {
 
     let fileName = this.state.files[0].name;
     fileName = fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
-
     const response = $.ajax({
       xhr: function () {
         let xhrRequest = $.ajaxSetup().xhr();
@@ -514,15 +513,16 @@ export default class ManageApps extends React.Component {
 
   handleInstall(addon) {
     let addonProcess = this.state.upgrading ? 'Upgrading': 'Installing';
+    const applicationDistribution = location.href.split('/')[2];
+    const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
+    const url = location.href.split('/')[3];
+    const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
+
     this.setState({
       progressMsg: `${addonProcess} ${addon.appDetails.name}`,
     });
 
     if (addon && addon.appDetails.type === 'OMOD') {
-      const applicationDistribution = location.href.split('/')[2];
-      const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
-      const url = location.href.split('/')[3];
-      const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
       const postData = {
         "modules": [addon.appDetails.moduleId],
         "action": "install",
@@ -557,6 +557,57 @@ export default class ManageApps extends React.Component {
         this.handleApplist();
       }).catch((error) => {
         toastr.error(error);
+        this.setState((prevState, props) => {
+          return {
+            uploadStatus: 0,
+            showProgress: false,
+          };
+        });
+      });
+    }
+    if (addon && addon.appDetails.type === 'OWA') {
+      this.requestUrl = '/owa/installapp';
+      let urlObject = {
+        'fileName': addon.appDetails.name,
+        'urlValue': addon.appDetails.versions[0].downloadUri,
+      };
+      const data = JSON.stringify(urlObject);
+      axios({
+        url: `${urlPrefix}/${apiBaseUrl}${this.requestUrl}`,
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        data,
+        onUploadProgress: (event) => {
+          this.handleProgress(event);
+        }
+      }).then((response) => {
+        this.setState((prevState, props) => {
+          return {
+            showMsg: true,
+            msgBody: `${addon.appDetails.name} has been successfully installed`,
+            msgType: "success",
+            uploadStatus: 0,
+            showProgress: false,
+            files: null,
+            updatesAvailable: null,
+            progressMsg: null,
+            searchedAddons: [],
+            newAddon: null,
+            upgrading: false,
+          };
+        });
+        addonProcess === 'Upgrading' && toastr.success(`Ugrade completed successfully`);
+        this.handleApplist();
+      }).catch((error) => {
+        toastr.error(error);
+        this.setState((prevState, props) => {
+          return {
+            uploadStatus: 0,
+            showProgress: false,
+          };
+        });
       });
     }
   }
