@@ -50,10 +50,12 @@ export default class SingleAddon extends React.Component{
         <td>
           <div className="addon-name">
             {
+              !app.install ?
               app.appDetails.started === true || app.appDetails.started === undefined ?
                 <div className="status-icon" id="started-status" />
                 :
                 <div className="status-icon" id="stopped-status" />
+                : null
             }
             {app.appDetails.started === true || app.appDetails.started === false ?
               <span
