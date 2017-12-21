@@ -524,10 +524,11 @@ export default class ManageApps extends React.Component {
       const url = location.href.split('/')[3];
       const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
       const postData = {
-        "moduleuuid": addon.appDetails.moduleId,
-        "installuri": addon.downloadUri,
+        "modules": [addon.appDetails.moduleId],
+        "action": "install",
+        "installUri": addon.downloadUri,
       };
-      this.requestUrl = '/v1/moduleinstall';
+      this.requestUrl = '/v1/moduleaction';
 
       axios({
         url: `${urlPrefix}/${apiBaseUrl}${this.requestUrl}`,
