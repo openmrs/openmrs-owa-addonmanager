@@ -801,3 +801,7 @@ body.loading .waiting-modal {
 .module-click-cursor {
     cursor: pointer;
 }
+
+.install {
+    margin-top: 5px 
+}
