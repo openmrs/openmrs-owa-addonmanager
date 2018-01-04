@@ -57,7 +57,7 @@ export default class SingleAddon extends React.Component{
                 <div className="status-icon" id="stopped-status" />
                 : null
             }
-            {app.appDetails.started === true || app.appDetails.started === false ?
+            {app.appType === "module" || app.appDetails.type === "OMOD" ?
               <span
                 className="module-click-cursor"
                 onClick={() => handleUserClick(app.appDetails.name)}>
