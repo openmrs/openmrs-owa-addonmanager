@@ -208,7 +208,7 @@ class Addon extends Component {
         });
     } else {
       const applicationDistribution = location.href.split('/')[3];
-      axios.get(`/${applicationDistribution}/module/owa/deleteApp.form?appName=${name}`)
+      axios.get(`/${applicationDistribution}/module/owa/deleteApp.form?appName=${name}&returnURL=manage.form`)
         .then(response => {
           this.setState((prevState, props) => {
             return {
