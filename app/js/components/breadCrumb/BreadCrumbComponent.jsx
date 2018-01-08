@@ -20,7 +20,8 @@ class BreadCrumbComponent extends Component {
       addonPage: false,
       manageSettingsPage: false,
       manageAddonPage: false,
-      homePage: false
+      homePage: false,
+      helpPage: false
     };
   }
   componentWillMount() {
@@ -33,6 +34,7 @@ class BreadCrumbComponent extends Component {
             addonPage: false,
             manageSettingsPage: false,
             manageAddonPage: false,
+            helpPage: false,
           };
         });
       } else if (currentTab === 'manageSettings') {
@@ -41,7 +43,8 @@ class BreadCrumbComponent extends Component {
             manageSettingsPage: true,
             manageAddonPage: false,
             addonPage: false,
-            homePage: false
+            homePage: false,
+            helpPage: false,
           };
         });
       } else if (currentTab === 'manageApps') {
@@ -51,15 +54,27 @@ class BreadCrumbComponent extends Component {
             manageSettingsPage: false,
             addonPage: false,
             homePage: false,
+            helpPage: false,
           };
         });
-      } else if (location.hash.split('/')[1] === 'addon') {
+      } else if (currentTab === 'help') {
+        this.setState((prevState, props) => {
+          return {
+            helpPage: true,
+            manageAddonPage: false,
+            addonPage: false,
+            homePage: false,
+          };
+        });
+      }
+      else if (location.hash.split('/')[1] === 'addon') {
         this.setState((prevState, props) => {
           return {
             manageAddonPage: false,
             manageSettingsPage: false,
             addonPage: true,
             homePage: false,
+            helpPage: false,
           };
         });
       }
@@ -68,6 +83,7 @@ class BreadCrumbComponent extends Component {
 
   render() {
     let {
+      helpPage,
       addonPage,
       homePage,
       manageSettingsPage,
@@ -79,7 +95,7 @@ class BreadCrumbComponent extends Component {
           <span className="glyphicon glyphicon-home breadcrumb-item" aria-hidden="true" />
         </a>
         {
-          manageAddonPage || manageSettingsPage || addonPage ?
+          manageAddonPage || manageSettingsPage || addonPage || helpPage ?
             <Link to="/">
               <span className="glyphicon glyphicon-chevron-right breadcrumb-item separator"
                 aria-hidden="true" />
@@ -123,6 +139,16 @@ class BreadCrumbComponent extends Component {
               <strong>Add-on</strong>
             </span>
           </span>
+        }
+        {
+          helpPage &&
+          <Link to="help">
+            <span className="glyphicon glyphicon-chevron-right breadcrumb-item separator"
+              aria-hidden="true" />
+            <span className="title breadcrumb-item">
+              <strong>Help</strong>
+            </span>
+          </Link>
         }
       </div>
     );
