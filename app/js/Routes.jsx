@@ -12,6 +12,8 @@ import App from './components/App.jsx';
 import ManageApps from './components/manageApps/ManageApps.jsx';
 import ManageSettings from './components/manageApps/ManageSettings.jsx';
 import Addon from './components/manageApps/Addon.jsx';
+import Help from './components/manageApps/Help.jsx';
+
 
 export default () => {
   return (
@@ -19,6 +21,7 @@ export default () => {
       <Route path="/" component={App} >
         <IndexRoute component={ManageApps} />
         <Route path="manageSettings" component={ManageSettings} />
+        <Route path="help" component={Help}/>
         <Route path="addon/:addonName" component={Addon} />
         <Route path="*" component={ManageApps} />
       </Route>

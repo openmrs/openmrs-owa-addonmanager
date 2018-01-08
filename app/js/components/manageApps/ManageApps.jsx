@@ -19,6 +19,7 @@ import { ApiHelper } from '../../helpers/apiHelper';
 import { AddonList } from './AddonList.jsx';
 import InvalidZipUploadModal from './InvalidZipUploadModal.jsx';
 import Utility from './../../utility';
+import {Popover, OverlayTrigger, Button, ButtonToolbar, MenuItem, DropdownButton} from 'react-bootstrap';
 
 export default class ManageApps extends React.Component {
   constructor(props) {
@@ -795,12 +796,36 @@ export default class ManageApps extends React.Component {
     const disableUploadElements = (uploadStatus > 0) ? true : false;
     disableUploadElements ? document.body.className = 'loading' : document.body.className = '';
 
-    return (
-      <div>
+    
+
+  const buttonsInstance = (
+      <DropdownButton title="Support" id="startall-modules-btn">
+        <MenuItem 
+          eventKey="1">
+          <span>
+            <Link to="/manageSettings" className="manage-settings-button support-dropdown">
+              Settings
+            </Link>
+          </span>
+        </MenuItem>
+        <MenuItem
+          eventKey="2">
+          <span>
+            <Link to="/help" className="manage-settings-button support-dropdown">
+              Help Guide
+            </Link>
+          </span>
+        </MenuItem>
+      </DropdownButton>
+    );
+ return (
+       <div>
         <div className="main-home-page" id="body-wrapper">
           <div className="row">
             <div className="col-sm-12">
               <h2 className="manage-addon-title">Add-on Manager</h2>
+              <span className="pull-right manage-settings-wrapper">
+              </span>                      
               <span className="pull-right manage-settings-wrapper">
                 <span id="startall-modules-btn"
                   className="btn btn-secondary"
@@ -813,9 +838,7 @@ export default class ManageApps extends React.Component {
                   <span className="glyphicon glyphicon-play" />
                   Start All Modules
                 </span>
-                <Link to="/manageSettings" className="manage-settings-button">
-                  <i className="glyphicon glyphicon-cog settings-icon" id="setting-icon-btn" />
-                </Link>
+                {buttonsInstance}
               </span>
             </div>
           </div>
@@ -910,6 +933,6 @@ export default class ManageApps extends React.Component {
           />
         }
       </div>
-    );
+   )
   }
 }
