@@ -15,3 +15,4 @@ package-lock.json
 # Vscode autogen folders
 .vscode/
 .idea
+.nyc_output
