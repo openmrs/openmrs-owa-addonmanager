@@ -17,7 +17,7 @@ import axios from 'axios';
 const NUMBER_OF_COLUMNS = 3;
 
 export default class Header extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
       locationTags: [],
@@ -196,7 +196,7 @@ export default class Header extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{...this.props.style, zIndex: 1}}>
         <header>
           <div className="logo">
             <a href="../../">
@@ -238,4 +238,3 @@ export default class Header extends Component {
     );
   }
 }
-
