@@ -637,9 +637,16 @@ export default class ManageApps extends React.Component {
     axios.get(`https://addons.openmrs.org/api/v1/addon`).then((response) => {
       this.state.appList.forEach((addon) => {
         response.data.forEach((result) => {
-          if (addon.appDetails.name === result.name) {
+          if (result.type === 'OMOD'){
+            result.type = 'module';
+          }
+          if (result.type.toLowerCase() === addon.appType && addon.appDetails.name === result.name) {
             result.latestVersion > addon.appDetails.version ?
-              updatesAvailable[addon.appDetails.name] = { version: result.latestVersion, uid: result.uid }
+              updatesAvailable[addon.appDetails.name] = { 
+                type: result.type.toLowerCase(),
+                version: result.latestVersion,
+                uid: result.uid
+            }
               :
               null;
             return;
