@@ -42,7 +42,7 @@ export const AddonList = ({
             'module-' + app.appDetails.uuid : 'owa-' + app.appDetails.name;
           return (
             updatesAvailable?
-              updatesAvailable.hasOwnProperty(app.appDetails.name)?
+              updatesAvailable.hasOwnProperty(app.appDetails.name) && updatesAvailable[app.appDetails.name].type === app.appType?
                 <SingleAddon
                   app={app}
                   key={key}
