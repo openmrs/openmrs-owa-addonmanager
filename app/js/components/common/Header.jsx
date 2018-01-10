@@ -91,10 +91,8 @@ export default class Header extends Component {
   }
 
   getUri() {
-    this.state.locationTags.map((location) => {
-      let url = location.links[0].uri;
-      let arrUrl = url.split("/"); 
-      let applicationInUse = arrUrl[3].search('http:') == -1 ? arrUrl[3]: arrUrl[3].replace('http:', '');
+    this.state.locationTags.map(() => {
+      let applicationInUse = 'openmrs';
       let customUrl = `/${applicationInUse}/appui/header/logout.action?successUrl=${applicationInUse}`;
       this.setState((prevState, props) => {
         return {
