@@ -99,7 +99,7 @@ export default class SingleAddon extends React.Component{
               app.appDetails.author :
               app.appDetails && app.appDetails.developer ?
                 app.appDetails.developer.name :
-                app.appDetails.maintainers[0].name
+                app.appDetails.maintainers.map(maintainer => maintainer.name).join(', ')
           }
         </td>
         <td>
