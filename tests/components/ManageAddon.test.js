@@ -11,6 +11,7 @@ describe('<ManageApps />', () => {
 
     // simulate a selected file in order to render upload and clear buttons
     renderedComponent.setState({
+        isSearched: true,
         files: [{
             name: "test.zip",
             type: "application/zip"

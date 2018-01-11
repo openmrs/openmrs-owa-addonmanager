@@ -40,6 +40,7 @@ export default class ManageApps extends React.Component {
       files: null,
       displayInvalidZip: false,
       searchComplete: false,
+      isSearched: false,
       updatesAvailable: null,
       searchedAddons: [],
       progressMsg: null,
@@ -691,7 +692,8 @@ export default class ManageApps extends React.Component {
             this.setState({
               appList: [],
               searchedAddons: [],
-              searchComplete: true
+              searchComplete: true,
+              isSearched: true
             });
           } else {
             const searchResultsPromise = searchResults.map(result => axios.get(
@@ -708,7 +710,8 @@ export default class ManageApps extends React.Component {
                   this.setState((prevState, props) => {
                     return {
                       searchedAddons: resultData,
-                      searchComplete: true
+                      searchComplete: true,
+                      isSearched: true
                     };
                   });
                 }
@@ -719,6 +722,7 @@ export default class ManageApps extends React.Component {
                     appList: [],
                     searchedAddons: [],
                     searchComplete: true,
+                    isSearched: true
                   });}
               });
           }
@@ -729,6 +733,7 @@ export default class ManageApps extends React.Component {
               appList: [],
               searchedAddons: [],
               searchComplete: true,
+              isSearched: true,
             });
           }
         });
@@ -738,6 +743,7 @@ export default class ManageApps extends React.Component {
           appList: staticAppList,
           searchedAddons: [],
           searchComplete: true,
+          isSearched: false
         };
       });
     }
@@ -799,6 +805,7 @@ export default class ManageApps extends React.Component {
       isOpen,
       selectedApp,
       searchComplete,
+      isSearched,
       progressMsg,
       upgradeAddon,
       upgradeVersion,
@@ -908,7 +915,7 @@ export default class ManageApps extends React.Component {
                         <th>Action</th>
                       </tr>
                     </thead>
-                    {appList.length < 1 ?
+                    {searchedAddons.length < 1 && isSearched ?
                       <tbody>
                         <tr>
                           <th colSpan="5"><h4>No apps found</h4></th>
