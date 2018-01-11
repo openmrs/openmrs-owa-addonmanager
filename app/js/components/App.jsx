@@ -6,36 +6,64 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-import React, { Component } from 'react';
-import ManageApps from '../components/manageApps/ManageApps.jsx';
+import React from 'react';
 import Header from '../components/common/Header.jsx';
 import { StickyContainer, Sticky } from 'react-sticky';
+import {ApiHelper} from '../helpers/apiHelper';
+import Loader from 'react-loader';
 
 export default class App extends React.Component {
   constructor(props){
     super(props);
+    this.state = {
+      requestComplete: false
+    };
+    this.checkLoginStatus = this.checkLoginStatus.bind(this);
+  }
+
+  componentWillMount(){
+    this.checkLoginStatus();
+  }
+
+  checkLoginStatus(){
+    this.fetchLocation('/session').then((response) => {
+      !response.user ?
+        location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`:
+        this.setState({requestComplete: true});
+    });
+  }
+
+  fetchLocation(url) {
+    const apiHelper = new ApiHelper(null);
+    return new Promise(function(resolve, reject) {
+      apiHelper.get(url).then(response => {
+        resolve(response);
+      });
+    });
   }
 
   render() {
     return (
       <div>
-        <StickyContainer>
-          <Sticky>
-            {
-              ({ isSticky,
-                wasSticky,
-                style,
-                distanceFromTop,
-                distanceFromBottom,
-                calculatedHeight }) => {
-                return  <Header style={style} isSticky={isSticky}/>
+        <Loader loaded={this.state.requestComplete}>
+          <StickyContainer>
+            <Sticky>
+              {
+                ({ isSticky,
+                  wasSticky,
+                  style,
+                  distanceFromTop,
+                  distanceFromBottom,
+                  calculatedHeight }) => {
+                  return  <Header style={style} isSticky={isSticky}/>;
+                }
               }
-            }
-          </Sticky>
-          <div id="body-wrapper">
-            {this.props.children}
-          </div>
-        </StickyContainer>
+            </Sticky>
+            <div id="body-wrapper">
+              {this.props.children}
+            </div>
+          </StickyContainer>
+        </Loader>
       </div>
     );
   }
