@@ -161,7 +161,7 @@ let webpackConfig = {
 				
 				
 						
-      'react', 'react-router'
+      'react', 'react-router', 'react-ga'
 								
 						
     ]
