@@ -859,14 +859,14 @@ export default class ManageApps extends React.Component {
               <span className="pull-right manage-settings-wrapper">
                 <span id="startall-modules-btn"
                   className="btn btn-secondary"
-                  onClick={updatesAvailable? this.clearUpdates : this.checkForUpdates}>{updatesAvailable? 'Back to all Addons': 'Check For Updates'}</span>
+                  onClick={updatesAvailable ? this.clearUpdates : this.checkForUpdates}>{updatesAvailable ? 'Back to all Addons': 'Check for Updates'}</span>
                 <span
                   id="startall-modules-btn"
                   className="btn btn-secondary"
                   onClick={this.handleStartModules}
                 >
                   <span className="glyphicon glyphicon-play" />
-                  Start All Modules
+                  Start all Modules
                 </span>
                 {buttonsInstance}
               </span>
