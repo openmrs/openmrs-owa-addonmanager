@@ -12,6 +12,7 @@ import axios from 'axios';
 import JSZip from 'jszip';
 import Loader from 'react-loader';
 import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
+import ScrollToTop from 'react-scroll-up';
 import AddAddon from '../manageApps/AddAddon.jsx';
 import { ConfirmationModal } from './ConfirmationModal.jsx';
 import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent.jsx';
@@ -852,6 +853,9 @@ export default class ManageApps extends React.Component {
               </span>
             </div>
           </div>
+          <ScrollToTop showUnder={210}>
+            <span className="glyphicon glyphicon-circle-arrow-up scroll-to-top-btn"/>
+          </ScrollToTop>
 
           <div className="home-page-body">
             <div className="container">

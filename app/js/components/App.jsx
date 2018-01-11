@@ -9,6 +9,7 @@
 import React, { Component } from 'react';
 import ManageApps from '../components/manageApps/ManageApps.jsx';
 import Header from '../components/common/Header.jsx';
+import { StickyContainer, Sticky } from 'react-sticky';
 
 export default class App extends React.Component {
   constructor(props){
@@ -18,10 +19,23 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
-        <Header/>
-        <div id="body-wrapper"> 
-          {this.props.children} 
-        </div>
+        <StickyContainer>
+          <Sticky>
+            {
+              ({ isSticky,
+                wasSticky,
+                style,
+                distanceFromTop,
+                distanceFromBottom,
+                calculatedHeight }) => {
+                return  <Header style={style} isSticky={isSticky}/>
+              }
+            }
+          </Sticky>
+          <div id="body-wrapper">
+            {this.props.children}
+          </div>
+        </StickyContainer>
       </div>
     );
   }

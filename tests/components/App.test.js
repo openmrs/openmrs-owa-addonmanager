@@ -12,13 +12,14 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
+import { StickyContainer, Sticky } from 'react-sticky';
 import App from '../../app/js/components/App.jsx';
 import Header from '../../app/js/components/common/Header';
 
 describe('<App />', () => {
 
-    it('should mount the Header in itself', () => {
-        const wrapper = shallow( <App/> )
-        expect(wrapper.contains( <Header/> )).to.equal(true);
+    it('should mount the Sticky Header in itself', () => {
+        const wrapper = mount( <App/>)
+        expect(wrapper.contains( <Sticky/> )).to.equal(true);
     });
 });
