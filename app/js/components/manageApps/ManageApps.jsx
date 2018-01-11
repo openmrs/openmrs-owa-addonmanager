@@ -292,7 +292,7 @@ export default class ManageApps extends React.Component {
     addonFile.append('file', omodFile);
     let fileName = this.state.files[0].name;
     fileName = fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
-    
+
     axios({
       url: `${urlPrefix}/${apiBaseUrl}${requestUrl}`,
       method: 'post',
@@ -646,7 +646,7 @@ export default class ManageApps extends React.Component {
           }
           if (result.type.toLowerCase() === addon.appType && addon.appDetails.name === result.name) {
             result.latestVersion > addon.appDetails.version ?
-              updatesAvailable[addon.appDetails.name] = { 
+              updatesAvailable[addon.appDetails.name] = {
                 type: result.type.toLowerCase(),
                 version: result.latestVersion,
                 uid: result.uid
@@ -760,14 +760,27 @@ export default class ManageApps extends React.Component {
   }
 
   getInstalled(appList, searchedAddons) {
-    const installedSearchResults = [];
-    const installedNames = appList.map((app) => {
-      return app.appDetails.name;
-    });
+    const installedSearchResults = {'modules':[], 'owas': []};
+    const installedUuid = appList.reduce((filtered, app) =>{
+      if(app.appType === "module")filtered.push(app.appDetails.uuid);
+      return filtered;
+    }, []);
+    const installedNames = appList.reduce((filtered, app) => {
+      if(app.appType === "owa")filtered.push(app.appDetails.name);
+      return filtered;
+    }, []);
+
     searchedAddons.forEach((addon) => {
-      installedNames.includes(addon.appDetails.name) ?
-        installedSearchResults.push(addon.appDetails.name)
-        : null;
+      addon.appDetails.type === "OMOD"?
+        installedUuid.includes(addon.appDetails.moduleId)?
+          installedSearchResults['modules'].push(addon.appDetails.moduleId)
+          :
+          null
+        :
+        installedNames.includes(addon.appDetails.name)?
+          installedSearchResults['owas'].push(addon.appDetails.name)
+          :
+          null;
     });
     return installedSearchResults;
   }
@@ -807,11 +820,11 @@ export default class ManageApps extends React.Component {
     const disableUploadElements = (uploadStatus > 0) ? true : false;
     disableUploadElements ? document.body.className = 'loading' : document.body.className = '';
 
-    
+
 
   const buttonsInstance = (
       <DropdownButton title="Support" id="startall-modules-btn">
-        <MenuItem 
+        <MenuItem
           eventKey="1">
           <span>
             <Link to="/manageSettings" className="manage-settings-button support-dropdown">
@@ -829,14 +842,13 @@ export default class ManageApps extends React.Component {
         </MenuItem>
       </DropdownButton>
     );
- return (
-       <div>
+    return (
+      <div>
         <div className="main-home-page" id="body-wrapper">
           <div className="row">
             <div className="col-sm-12">
               <h2 className="manage-addon-title">Add-on Manager</h2>
-              <span className="pull-right manage-settings-wrapper">
-              </span>                      
+              <span className="pull-right manage-settings-wrapper"></span>
               <span className="pull-right manage-settings-wrapper">
                 <span id="startall-modules-btn"
                   className="btn btn-secondary"
@@ -881,8 +893,8 @@ export default class ManageApps extends React.Component {
                     id="search-input"
                     ref={value => this.input = value}
                     onKeyDown={this.initiateSearch}
-                    placeholder={!updatesAvailable ? 
-                      "Need new add-ons? Type name of addon & press ENTER or clear field to display installed add-ons" : 
+                    placeholder={!updatesAvailable ?
+                      "Need new add-ons? Type name of addon & press ENTER or clear field to display installed add-ons" :
                       "Need specific updates? Type name of addon & press ENTER or clear field to display all add-ons with updates"} />
                 </div>
                 <Loader loaded={searchComplete}>
@@ -947,6 +959,6 @@ export default class ManageApps extends React.Component {
           />
         }
       </div>
-   )
+    );
   }
 }

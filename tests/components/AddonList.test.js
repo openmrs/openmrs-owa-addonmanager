@@ -79,7 +79,7 @@ describe('<AddonList />', () => {
     const handleInstall = () => { };
     const handleUpgrade = () => { };
     const getInstalled = () => { };
-    const getInstalledStub = stub().onCall(0).returns(appList);
+    const getInstalledStub = stub().onCall(0).returns({'modules':[], 'owas':[]});
     const testAddonList = mount(
         <AddonList
             addonList={appList}
