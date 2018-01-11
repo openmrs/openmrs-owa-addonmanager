@@ -155,14 +155,18 @@ export default class ManageApps extends React.Component {
       const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
       this.requestUrl = '/v1/module/?v=full';
       axios.get(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`).then(response => {
-        response.data.results.forEach((data) => {
-          installedModules.push({
-            appDetails: data,
-            appType: 'module',
-            install: false
+        return Promise
+          .all(response.data.results.map(data => axios.get(`https://addons.openmrs.org/api/v1/addon/${data.packageName}`)
+          .then(response => response.data)
+          .catch((error) => data)))
+      }).then(response => {
+          response.forEach((data) => {
+            installedModules.push({
+              appDetails: data,
+              appType: 'module',
+              install: false
+            });
           });
-        });
-      }).then(() => {
         const installedAddons = installedOwas.concat(installedModules);
         this.setState((prevState, props) => {
           return {
@@ -171,7 +175,6 @@ export default class ManageApps extends React.Component {
             searchComplete: true
           };
         });
-
       });
     });
   }
