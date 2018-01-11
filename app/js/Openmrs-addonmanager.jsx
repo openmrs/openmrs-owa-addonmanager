@@ -9,10 +9,17 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {Router, Route, hashHistory} from 'react-router';
+import ReactGA from 'react-ga';
 
 import routes from './Routes';
 
+ReactGA.initialize('UA-16695719-3');
+
+function trackView() {
+  ReactGA.pageview(window.location.pathname + window.location.search);
+}
+
 render((
-  <Router history={hashHistory}>
+  <Router onUpdate={trackView} history={hashHistory}>
     {routes()}
   </Router>), document.getElementById('app'));
