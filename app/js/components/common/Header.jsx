@@ -37,7 +37,7 @@ export default class Header extends Component {
   }
 
   componentWillMount() {
-    this.fetchLocation('/location').then((response) => {
+    this.fetchLocation('/v1/location').then((response) => {
       this.setState((prevState, props) => {
         return {
           locationTags: response.results
@@ -52,7 +52,7 @@ export default class Header extends Component {
       this.getUri();
     });
 
-    this.fetchLocation('/session').then((response) => {
+    this.fetchLocation('/v1/session').then((response) => {
       this.setState((prevState, props) => {
         return {
           currentUser: response.user ? response.user.display : ''
@@ -60,7 +60,7 @@ export default class Header extends Component {
       });
     });
 
-    this.fetchCurrentUserLocation('/appui/session').then((response) => {
+    this.fetchCurrentUserLocation('/v1/appui/session').then((response) => {
       this.setState((prevState, props) => {
         return {
           currentLocationTag: response.sessionLocation ? response.sessionLocation.display : ''

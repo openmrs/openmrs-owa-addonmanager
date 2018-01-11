@@ -7,7 +7,7 @@ import AddonList from '../../app/js/components/manageApps/AddonList.jsx';
 import AddAddon from '../../app/js/components/manageApps/AddAddon.jsx';
 
 describe('<ManageApps />', () => {
-    const renderedComponent = shallow(< ManageApps />);
+    const renderedComponent = shallow(< ManageApps checkLoginStatus={() => {}} />);
 
     // simulate a selected file in order to render upload and clear buttons
     renderedComponent.setState({

@@ -12,14 +12,15 @@ import React from 'react';
 import { mount, shallow } from 'enzyme';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { StickyContainer, Sticky } from 'react-sticky';
 import App from '../../app/js/components/App.jsx';
-import Header from '../../app/js/components/common/Header';
+import Loader from 'react-loader';
+import { StickyContainer, Sticky } from 'react-sticky';
+
 
 describe('<App />', () => {
 
-    it('should mount the Sticky Header in itself', () => {
-        const wrapper = mount( <App/>)
-        expect(wrapper.contains( <Sticky/> )).to.equal(true);
+    it('should test that App renders correctly', () => {
+        const wrapper = shallow( <App/>)
+        expect(wrapper.find("div")).to.have.length(2);
     });
 });

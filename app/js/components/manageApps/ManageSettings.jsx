@@ -8,6 +8,7 @@
  */
 import React from 'react';
 import { Link } from 'react-router';
+import PropTypes from 'prop-types';
 
 export default class ManageSettings extends React.Component {
   constructor(props) {
@@ -24,6 +25,7 @@ export default class ManageSettings extends React.Component {
   }
 
   componentWillMount() {
+    this.props.checkLoginStatus();
     this.getDefaultSettings();
   }
 
@@ -164,4 +166,8 @@ export default class ManageSettings extends React.Component {
     );
   }
 }
+
+ManageSettings.propTypes = {
+  checkLoginStatus: PropTypes.func.isRequired,
+};
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Loader from 'react-loader';
+import PropTypes from 'prop-types';
 import { ApiHelper } from '../../helpers/apiHelper';
 import ActionAddonModal from './ActionAddonModal';
 import StartErrorModal from './StartErrorModal';
@@ -36,9 +37,13 @@ class Addon extends Component {
     this.hideMsgModal = this.hideMsgModal.bind(this);
   }
 
+  componentWillMount(){
+    this.props.checkLoginStatus();
+  }
+
   componentDidMount() {
     this.fetchAddon();
-    document.title = "Add-On Information"
+    document.title = "Add-On Information";
   }
 
   fetchAddon() {
@@ -67,7 +72,7 @@ class Addon extends Component {
           loadingComplete: true
         });
       }).catch((error) => {
-        toastr.error(error);
+        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null
         this.setState({ loadingComplete: true });
       });
 
@@ -86,6 +91,8 @@ class Addon extends Component {
           return true;
         }
       });
+    }).catch((error) => {
+      error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null
     });
   }
 
@@ -131,6 +138,7 @@ class Addon extends Component {
         });
         this.fetchAddon();
       }).catch((error) => {
+        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null
         this.setState({
           stopping: false,
           starting: false,
@@ -170,6 +178,7 @@ class Addon extends Component {
           :
           null;
       }).catch((error) => {
+        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null
         toastr.error(error);
       });
   }
@@ -205,6 +214,7 @@ class Addon extends Component {
           hashHistory.push('/');
         }).catch(error => {
           toastr.error(error);
+          error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null
           hashHistory.push('/');
         });
     } else {
@@ -220,6 +230,7 @@ class Addon extends Component {
           hashHistory.push('/');
         }).catch(error => {
           toastr.error(error);
+          error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null
           hashHistory.push('/');
         });
     }
@@ -415,3 +426,6 @@ class Addon extends Component {
 }
 
 export default Addon;
+Addon.propTypes = {
+  checkLoginStatus: PropTypes.func.isRequired,
+};

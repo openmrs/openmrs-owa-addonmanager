@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import PropTypes from 'prop-types';
 import checkforupdates from '../../../img/checkforupdates.png';
 import updateslist from '../../../img/updateslist.png';
 import view from '../../../img/view.png';
@@ -22,6 +22,7 @@ export default class Help extends React.Component {
     }
 
     componentWillMount() {
+        this.props.checkLoginStatus();
         this.getDefaultSettings();
     }
 
@@ -134,3 +135,6 @@ export default class Help extends React.Component {
     }
 }
 
+Help.propTypes = {
+  checkLoginStatus: PropTypes.func.isRequired,
+};

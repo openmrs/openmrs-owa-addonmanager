@@ -33,7 +33,7 @@ const app = {
 describe('<Addon />', () => {
   let component;
   beforeEach(() => {
-    component = shallow(<Addon />);
+    component = shallow(<Addon checkLoginStatus={() => {}} />);
   });
 
   it('should render', () => {
