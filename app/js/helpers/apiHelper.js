@@ -68,4 +68,8 @@ export class ApiHelper {
   delete(requestUrl) {
     return this.build(requestUrl, 'DELETE').send();
   }
+
+  static getAddonUrl() {
+    return "https://addons.openmrs.org/api/v1/addon";
+  }
 }
