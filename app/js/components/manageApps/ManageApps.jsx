@@ -158,7 +158,7 @@ export default class ManageApps extends React.Component {
       this.requestUrl = '/v1/module/?v=full';
       axios.get(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`).then(response => {
         return Promise
-          .all(response.data.results.map(data => axios.get(`https://addons.openmrs.org/api/v1/addon/${data.packageName}`)
+          .all(response.data.results.map(data => axios.get(`${ApiHelper.getAddonUrl()}/${data.packageName}`)
           .then(response => response.data)
           .catch((error) => data)))
       }).then(response => {
@@ -505,7 +505,7 @@ export default class ManageApps extends React.Component {
       upgrading: true,
     });
 
-    axios.get(`https://addons.openmrs.org/api/v1//addon/${addonUid}`)
+    axios.get(`${ApiHelper.getAddonUrl()}/${addonUid}`)
       .then(response => {
         const newAddon = {
           appDetails: response.data,
@@ -639,7 +639,7 @@ export default class ManageApps extends React.Component {
     });
     const installedAddons = this.state.appList;
     const updatesAvailable = {};
-    axios.get(`https://addons.openmrs.org/api/v1/addon`).then((response) => {
+    axios.get(ApiHelper.getAddonUrl()).then((response) => {
       this.state.appList.forEach((addon) => {
         response.data.forEach((result) => {
           if (result.type === 'OMOD'){
@@ -685,7 +685,7 @@ export default class ManageApps extends React.Component {
     const resultData = [];
     const { staticAppList } = this.state;
     if (searchValue) {
-      axios.get(`https://addons.openmrs.org/api/v1//addon?&q=${searchValue}`)
+      axios.get(`${ApiHelper.getAddonUrl()}?&q=${searchValue}`)
         .then(response => {
           const searchResults = response.data;
           if (searchResults.length === 0) {
@@ -697,7 +697,7 @@ export default class ManageApps extends React.Component {
             });
           } else {
             const searchResultsPromise = searchResults.map(result => axios.get(
-              `https://addons.openmrs.org/api/v1//addon/${result.uid}`
+              `${ApiHelper.getAddonUrl()}/${result.uid}`
             ));
             Promise.all(searchResultsPromise)
               .then(results => results.forEach((result, index) => {

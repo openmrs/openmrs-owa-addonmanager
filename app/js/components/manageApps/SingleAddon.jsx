@@ -3,6 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router';
 import PropTypes from 'prop-types';
 
+import { ApiHelper } from '../../helpers/apiHelper';
+
 export default class SingleAddon extends React.Component{
   constructor(props){
     super(props);
@@ -11,7 +13,7 @@ export default class SingleAddon extends React.Component{
 
   getUpdate(e, uid){
     e.preventDefault();
-    axios.get(`https://addons.openmrs.org/api/v1//addon/${uid}`)
+    axios.get(`${ApiHelper.getAddonUrl()}/${uid}`)
       .then(response => {
         response.data.versions[0].downloadUri?
           location.href = response.data.versions[0].downloadUri
