@@ -642,7 +642,7 @@ body.loading .waiting-modal {
 }
 
 .addon {
-    background: #f2f2f2;
+    background: none;
     margin-top: 1.2%;
     border-radius: 5px;
     max-width: 90%;
@@ -811,7 +811,7 @@ body.loading .waiting-modal {
   background-color: #100e0e;
   border-radius: 50%;
   padding: 2px;
-
+  z-index: 5000;
 }
 
 .help-page-images {

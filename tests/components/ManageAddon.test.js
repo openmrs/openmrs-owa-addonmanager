@@ -37,7 +37,7 @@ describe('<ManageApps />', () => {
     it('Should render a heading', () => {
         expect(renderedComponent.find("h2")).to.have.length(1);
         expect(renderedComponent.find("h2").getNode()
-          .props.children).to.equal('Add-on Manager');
+          .props.children).to.equal('Add-On Manager');
     });
 
     it('Should render 5 table head titles', () => {

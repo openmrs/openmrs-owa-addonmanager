@@ -38,6 +38,7 @@ class Addon extends Component {
 
   componentDidMount() {
     this.fetchAddon();
+    document.title = "Add-On Information"
   }
 
   fetchAddon() {
@@ -304,7 +305,7 @@ class Addon extends Component {
         <Link to="/">
           <div className="btn back-nav">
             <span className="glyphicon glyphicon-chevron-left back-nav" />
-            Back to All Add-ons
+            Back to Add-Ons List
           </div>
         </Link>
 
