@@ -141,6 +141,7 @@ export default class ManageApps extends React.Component {
   handleApplist() {
     const installedOwas = [];
     const installedModules = [];
+    let installedAddons = [];
 
     this.apiHelper.get('/owa/applist').then(response => {
       response.forEach((data, index) => {
@@ -158,10 +159,25 @@ export default class ManageApps extends React.Component {
       const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
       this.requestUrl = '/v1/module/?v=full';
       axios.get(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`).then(response => {
+        response.data.results.forEach(data => {
+          installedModules.push({
+            appDetails: data,
+            appType: "module",
+            install: false
+          });
+        });
+        installedAddons = installedOwas.concat(installedModules);
         return Promise
           .all(response.data.results.map(data => axios.get(`${ApiHelper.getAddonUrl()}/${data.packageName}`)
           .then(response => response.data)
-          .catch((error) => data)))
+          .catch(error => {
+            this.setState((prevState, nextProps) => ({
+              appList: installedAddons,
+              staticAppList: installedAddons,
+              searchComplete: true
+            }));
+            return data;
+          })))
       }).then(response => {
           response.forEach((data) => {
             installedModules.push({
@@ -170,7 +186,7 @@ export default class ManageApps extends React.Component {
               install: false
             });
           });
-        const installedAddons = installedOwas.concat(installedModules);
+        installedAddons = installedOwas.concat(installedModules);
         this.setState((prevState, props) => {
           return {
             appList: installedAddons,
