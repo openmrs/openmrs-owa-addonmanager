@@ -197,7 +197,7 @@ export default class Header extends Component {
   render() {
     return (
       <div style={{...this.props.style, zIndex: 1}}>
-        <header>
+        <header style={this.props.isSticky ? {borderRadius: "0px"} : null}>
           <div className="logo">
             <a href="../../">
               <img src="img/openmrs-with-title-small.png"/>

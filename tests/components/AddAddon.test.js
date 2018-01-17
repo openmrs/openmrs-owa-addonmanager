@@ -33,8 +33,8 @@ describe('<AddAddon />', () => {
         expect(renderedComponent.find("Dropzone")).to.have.length(1);
     });
 
-    it('Should display select Add-on message', () => {
-        expect(renderedComponent.text()).to.contain('Select an Add-on');
+    it('Should display select Add-On message', () => {
+        expect(renderedComponent.text()).to.contain('Select an Add-On');
     });
 
     it('Should have true disableClick initial state', function () {
