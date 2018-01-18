@@ -915,10 +915,10 @@ export default class ManageApps extends React.Component {
                         <th>Action</th>
                       </tr>
                     </thead>
-                    {searchedAddons.length < 1 && isSearched ?
+                    {searchedAddons.length < 1 && isSearched || updatesAvailable ?
                       <tbody>
                         <tr>
-                          <th colSpan="5"><h4>No apps found</h4></th>
+                          <th colSpan="5"><h4>No {searchedAddons.length < 1 && isSearched ? 'apps': 'updates'} found</h4></th>
                         </tr>
                       </tbody> :
                       <AddonList
