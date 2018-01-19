@@ -6,36 +6,75 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-import React, { Component } from 'react';
-import ManageApps from '../components/manageApps/ManageApps.jsx';
+import React from 'react';
 import Header from '../components/common/Header.jsx';
 import { StickyContainer, Sticky } from 'react-sticky';
+import {ApiHelper} from '../helpers/apiHelper';
+import Loader from 'react-loader';
 
 export default class App extends React.Component {
   constructor(props){
     super(props);
+    this.state = {
+      loggedIn: false
+    };
+    this.checkLoginStatus = this.checkLoginStatus.bind(this);
+  }
+
+  componentWillMount(){
+    this.checkLoginStatus();
+  }
+
+  componentWillReceiveProps(nextProps){
+    const routeChanged = nextProps.location !== this.props.location;
+    this.setState({routeChanged: routeChanged});
+  }
+
+  checkLoginStatus(){
+    this.fetchLocation('/v1/session').then((response) => {
+      !response.user ?
+        location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`:
+        this.setState({loggedIn: true, routeChanged: false});
+    });
+  }
+
+  fetchLocation(url) {
+    const apiHelper = new ApiHelper(null);
+    return new Promise(function(resolve, reject) {
+      apiHelper.get(url).then(response => {
+        resolve(response);
+      });
+    });
   }
 
   render() {
+    const childrenWithExtraProp = React.Children.map(this.props.children, child => {
+      return React.cloneElement(child, {
+        checkLoginStatus: this.checkLoginStatus
+      });
+    });
+
     return (
       <div>
-        <StickyContainer>
-          <Sticky>
-            {
-              ({ isSticky,
-                wasSticky,
-                style,
-                distanceFromTop,
-                distanceFromBottom,
-                calculatedHeight }) => {
-                return  <Header style={style} isSticky={isSticky}/>
+        <Loader loaded={this.state.loggedIn}>
+          <StickyContainer>
+            <Sticky>
+              {
+                ({ isSticky,
+                  wasSticky,
+                  style,
+                  distanceFromTop,
+                  distanceFromBottom,
+                  calculatedHeight }) => {
+                  return  <Header style={style} isSticky={isSticky}/>;
+                }
               }
-            }
-          </Sticky>
-          <div id="body-wrapper">
-            {this.props.children}
-          </div>
-        </StickyContainer>
+            </Sticky>
+            <div id="body-wrapper">
+              {childrenWithExtraProp}
+            </div>
+          </StickyContainer>
+        </Loader>
       </div>
     );
   }

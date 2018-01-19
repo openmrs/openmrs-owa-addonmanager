@@ -15,7 +15,7 @@ import sinon from 'sinon';
 import Help from '../../app/js/components/manageApps/Help';
 
 describe('<Help />', () => {
-  const renderedComponent = shallow(<Help />);
+  const renderedComponent = shallow(<Help checkLoginStatus={() => {}} />);
 
   it('should render its children', () => {
     expect(renderedComponent.find("div")).to.have.length(4)

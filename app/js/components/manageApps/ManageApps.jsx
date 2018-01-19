@@ -11,16 +11,15 @@ import React from 'react';
 import axios from 'axios';
 import JSZip from 'jszip';
 import Loader from 'react-loader';
-import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import ScrollToTop from 'react-scroll-up';
+import PropTypes from 'prop-types';
 import AddAddon from '../manageApps/AddAddon.jsx';
 import { ConfirmationModal } from './ConfirmationModal.jsx';
-import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent.jsx';
 import { ApiHelper } from '../../helpers/apiHelper';
 import { AddonList } from './AddonList.jsx';
 import InvalidZipUploadModal from './InvalidZipUploadModal.jsx';
-import Utility from './../../utility';
-import {Popover, OverlayTrigger, Button, ButtonToolbar, MenuItem, DropdownButton} from 'react-bootstrap';
+import {MenuItem, DropdownButton} from 'react-bootstrap';
 
 export default class ManageApps extends React.Component {
   constructor(props) {
@@ -52,7 +51,6 @@ export default class ManageApps extends React.Component {
     };
 
     this.apiHelper = new ApiHelper(null);
-    this.alertMessage = '';
     this.openPage = this.openPage.bind(this);
     this.openModal = this.openModal.bind(this);
     this.hideModal = this.hideModal.bind(this);
@@ -81,6 +79,7 @@ export default class ManageApps extends React.Component {
   }
 
   componentWillMount() {
+    this.props.checkLoginStatus();
     this.handleApplist();
   }
 
@@ -91,7 +90,7 @@ export default class ManageApps extends React.Component {
         this.hideModal();
       }
     });
-    document.title = "Add-On Manager"
+    document.title = "Add-On Manager";
   }
 
   startAllModules() {
@@ -107,7 +106,6 @@ export default class ManageApps extends React.Component {
       "action": "start",
       "allModules": "true"
     };
-
     axios.post(`${urlPrefix}/${apiBaseUrl}${requestUrl}`, postData).then(response => {
       this.setState({
         msgBody: "All modules started successfully",
@@ -118,6 +116,7 @@ export default class ManageApps extends React.Component {
       this.handleApplist();
     }).catch(
       (error) => {
+        location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`;
         toastr.error(error);
       }
     );
@@ -169,40 +168,42 @@ export default class ManageApps extends React.Component {
         installedAddons = installedOwas.concat(installedModules);
         return Promise
           .all(response.data.results.map(data => axios.get(`${ApiHelper.getAddonUrl()}?modulePackage=${data.packageName}`)
-          .then(response => response.data)
-          .catch(error => {
-            this.setState((prevState, nextProps) => ({
-              appList: installedAddons,
-              staticAppList: installedAddons,
-              searchComplete: true
-            }));
-            return data;
-          })))
+            .then(response => response.data)
+            .catch(error => {
+              this.setState((prevState, nextProps) => ({
+                appList: installedAddons,
+                staticAppList: installedAddons,
+                searchComplete: true
+              }));
+              return data;
+            })));
       }).then(response => {
-          installedAddons = [];
-          installedModules = [];
-          response.forEach((data) => {
-            installedModules.push({
-              appDetails: data,
-              appType: 'module',
-              install: false
-            });
+        installedAddons = [];
+        installedModules = [];
+        response.forEach((data) => {
+          installedModules.push({
+            appDetails: data,
+            appType: 'module',
+            install: false
           });
-        installedAddons = installedOwas.concat(installedModules);
-        this.setState((prevState, props) => {
-          return {
-            appList: installedAddons,
-            staticAppList: installedAddons,
-            searchComplete: true
-          };
+
         });
+      });
+      installedAddons = installedOwas.concat(installedModules);
+      this.setState((prevState, props) => {
+        return {
+          appList: installedAddons,
+          staticAppList: installedAddons,
+          searchComplete: true
+        };
       });
     });
   }
 
   handleStartModules(){
+    this.props.checkLoginStatus();
     const { appList } = this.state;
-    const allStartedModules = appList.filter(addon => addon.appDetails.started)
+    const allStartedModules = appList.filter(addon => addon.appDetails.started);
     const appListModules = appList.filter(app => app.appType === "module");
     if (allStartedModules.length === appListModules.length){
       this.setState({
@@ -236,6 +237,7 @@ export default class ManageApps extends React.Component {
   }
 
   handleUpload() {
+    this.props.checkLoginStatus();
     const uploadFile = this.state.files[0];
     if (uploadFile.type === 'application/zip') {
       const readZippedAddon = new Promise((resolve, reject) => {
@@ -338,6 +340,7 @@ export default class ManageApps extends React.Component {
       });
       this.handleApplist();
     }).catch((error) => {
+      error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null;
       toastr.error(error);
     });
   }
@@ -397,6 +400,7 @@ export default class ManageApps extends React.Component {
         });
       }.bind(this),
       error: function (xhr, status, error) {
+        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null;
         this.setState((prevState, props) => {
           return {
             msgBody: "App has not been installed",
@@ -523,15 +527,16 @@ export default class ManageApps extends React.Component {
       upgradeVersion: newVersion,
       upgrading: true,
     });
-
+    this.props.checkLoginStatus();
     axios.get(`${ApiHelper.getAddonUrl()}/${addonUid}`)
       .then(response => {
         const newAddon = {
           appDetails: response.data,
           downloadUri: response.data.versions[0].downloadUri,
-        }
+        };
         this.setState({ newAddon });
       }).catch((error) => {
+        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
         toastr.error(error);
       });
   }
@@ -581,6 +586,7 @@ export default class ManageApps extends React.Component {
         });
         this.handleApplist();
       }).catch((error) => {
+        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
         toastr.error(error);
         this.setState((prevState, props) => {
           return {
@@ -652,12 +658,21 @@ export default class ManageApps extends React.Component {
     });
   }
 
+  fetchLocation(url) {
+    const apiHelper = new ApiHelper(null);
+    return new Promise(function(resolve, reject) {
+      apiHelper.get(url).then(response => {
+        resolve(response);
+      });
+    });
+  }
+
   checkForUpdates() {
     this.setState({
       searchComplete: false
     });
-    const installedAddons = this.state.appList;
     const updatesAvailable = {};
+    this.props.checkLoginStatus();
     axios.get(ApiHelper.getAddonUrl()).then((response) => {
       this.state.appList.forEach((addon) => {
         response.data.forEach((result) => {
@@ -670,7 +685,7 @@ export default class ManageApps extends React.Component {
                 type: result.type.toLowerCase(),
                 version: result.latestVersion,
                 uid: result.uid
-            }
+              }
               :
               null;
             return;
@@ -690,6 +705,7 @@ export default class ManageApps extends React.Component {
   }
 
   clearUpdates(){
+    this.props.checkLoginStatus();
     this.setState({
       searchComplete: false
     });
@@ -703,6 +719,7 @@ export default class ManageApps extends React.Component {
     this.state.searchComplete === true ? this.setState({ searchComplete: false }) : null;
     const resultData = [];
     const { staticAppList } = this.state;
+    this.props.checkLoginStatus();
     if (searchValue) {
       axios.get(`${ApiHelper.getAddonUrl()}?&q=${searchValue}`)
         .then(response => {
@@ -848,7 +865,7 @@ export default class ManageApps extends React.Component {
 
 
 
-  const buttonsInstance = (
+    const buttonsInstance = (
       <DropdownButton title="Support" id="startall-modules-btn">
         <MenuItem
           eventKey="1">
@@ -874,7 +891,7 @@ export default class ManageApps extends React.Component {
           <div className="row">
             <div className="col-sm-12">
               <h2 className="manage-addon-title">Add-On Manager</h2>
-              <span className="pull-right manage-settings-wrapper"></span>
+              <span className="pull-right manage-settings-wrapper" />
               <span className="pull-right manage-settings-wrapper">
                 <span id="startall-modules-btn"
                   className="btn btn-secondary"
@@ -988,3 +1005,7 @@ export default class ManageApps extends React.Component {
     );
   }
 }
+
+ManageApps.propTypes = {
+  checkLoginStatus: PropTypes.func.isRequired,
+};

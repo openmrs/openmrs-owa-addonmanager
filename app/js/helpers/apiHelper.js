@@ -10,7 +10,7 @@
 import fetchPolyfill from 'whatwg-fetch';
 
 const applicationDistribution = location.href.split('/')[3];
-let apiBaseUrl = `/${applicationDistribution}/ws/rest/v1`; 
+let apiBaseUrl = `/${applicationDistribution}/ws/rest`;
 
 export class ApiHelper {
   constructor(requestLibrary) {

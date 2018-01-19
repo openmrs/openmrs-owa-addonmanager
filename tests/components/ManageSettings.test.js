@@ -15,7 +15,7 @@ import  ManageSettings  from '../../app/js/components/manageApps/ManageSettings.
 import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent.jsx';
 
 describe('<ManageSettings />', () => {
-    const renderedComponent = shallow( < ManageSettings / > );
+    const renderedComponent = shallow( < ManageSettings checkLoginStatus={() => {}} /> );
     it('Should render a Form', () => {
         expect(renderedComponent.find("form")).to.have.length(1);
     });
