@@ -168,7 +168,7 @@ export default class ManageApps extends React.Component {
         });
         installedAddons = installedOwas.concat(installedModules);
         return Promise
-          .all(response.data.results.map(data => axios.get(`${ApiHelper.getAddonUrl()}/${data.packageName}`)
+          .all(response.data.results.map(data => axios.get(`${ApiHelper.getAddonUrl()}?modulePackage=${data.packageName}`)
           .then(response => response.data)
           .catch(error => {
             this.setState((prevState, nextProps) => ({
