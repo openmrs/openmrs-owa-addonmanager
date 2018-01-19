@@ -35,6 +35,7 @@ export default class ManageApps extends React.Component {
       isOpen: false,
       selectedApp: null,
       downloadUri: null,
+      checkUpdates: false,
       addonAlreadyInstalled: null,
       files: null,
       displayInvalidZip: false,
@@ -167,7 +168,7 @@ export default class ManageApps extends React.Component {
         });
         installedAddons = installedOwas.concat(installedModules);
         return Promise
-          .all(response.data.results.map(data => axios.get(`${ApiHelper.getAddonUrl()}?modulePackage=${data.packageName}`)
+          .all(response.data.results.map(data => axios.get(`${ApiHelper.getAddonUrl()}/${data.packageName}`)
             .then(response => response.data)
             .catch(error => {
               this.setState((prevState, nextProps) => ({
@@ -669,7 +670,8 @@ export default class ManageApps extends React.Component {
 
   checkForUpdates() {
     this.setState({
-      searchComplete: false
+      searchComplete: false,
+      checkUpdates: true,
     });
     const updatesAvailable = {};
     this.props.checkLoginStatus();
@@ -707,11 +709,10 @@ export default class ManageApps extends React.Component {
   clearUpdates(){
     this.props.checkLoginStatus();
     this.setState({
-      searchComplete: false
-    });
-    this.setState({
+      searchComplete: false,
       updatesAvailable: null,
-      searchComplete: true
+      searchComplete: true,
+      checkUpdates: false
     });
   }
 
@@ -838,6 +839,7 @@ export default class ManageApps extends React.Component {
       msgBody,
       appList,
       searchedAddons,
+      checkUpdates,
       isOpen,
       selectedApp,
       searchComplete,
@@ -951,7 +953,7 @@ export default class ManageApps extends React.Component {
                         <th>Action</th>
                       </tr>
                     </thead>
-                    {searchedAddons.length < 1 && isSearched || updatesAvailable ?
+                    {searchedAddons.length < 1 && isSearched || (!updatesAvailable && checkUpdates) ?
                       <tbody>
                         <tr>
                           <th colSpan="5"><h4>No {searchedAddons.length < 1 && isSearched ? 'apps': 'updates'} found</h4></th>
