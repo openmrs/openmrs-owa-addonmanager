@@ -337,6 +337,7 @@ export default class ManageApps extends React.Component {
 
     let fileName = this.state.files[0].name;
     fileName = fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
+    const protocol = window.location.protocol;
     const response = $.ajax({
       xhr: function () {
         let xhrRequest = $.ajaxSetup().xhr();
@@ -347,7 +348,7 @@ export default class ManageApps extends React.Component {
       },
 
       type: "POST",
-      url: `https:/${apiBaseUrl}${this.requestUrl}`,
+      url: `${protocol}/${apiBaseUrl}${this.requestUrl}`,
       data: addonFile,
       contentType: false,
       processData: false,
