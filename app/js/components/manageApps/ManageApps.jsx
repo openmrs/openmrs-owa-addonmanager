@@ -140,7 +140,7 @@ export default class ManageApps extends React.Component {
 
   handleApplist() {
     const installedOwas = [];
-    const installedModules = [];
+    let installedModules = [];
     let installedAddons = [];
 
     this.apiHelper.get('/owa/applist').then(response => {
@@ -179,6 +179,8 @@ export default class ManageApps extends React.Component {
             return data;
           })))
       }).then(response => {
+          installedAddons = [];
+          installedModules = [];
           response.forEach((data) => {
             installedModules.push({
               appDetails: data,
