@@ -2,13 +2,19 @@ import React from 'react';
 import axios from 'axios';
 import { Link } from 'react-router';
 import PropTypes from 'prop-types';
+import StartErrorModal from './StartErrorModal';
 
 import { ApiHelper } from '../../helpers/apiHelper';
 
 export default class SingleAddon extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      showMessageDetail: false
+    };
     this.getUpdate = this.getUpdate.bind(this);
+    this.handleMessageClick = this.handleMessageClick.bind(this);
+    this.hideMessageModal = this.hideMessageModal.bind(this);
   }
 
   getUpdate(e, uid) {
@@ -24,7 +30,22 @@ export default class SingleAddon extends React.Component {
       });
   }
 
-  render() {
+  handleMessageClick(event) {
+    event.preventDefault();
+    this.setState({
+      showMessageDetail: true,
+    });
+  }
+
+  hideMessageModal() {
+    this.setState(() => {
+      return {
+        showMessageDetail: false,
+      };
+    });
+  }
+
+  render(){
     const {
       app,
       key,
@@ -35,9 +56,13 @@ export default class SingleAddon extends React.Component {
       openPage,
       handleInstall,
       handleUpgrade,
+      showMessageDetail
     } = this.props;
 
     const maintainers = app.appDetails.maintainers ? app.appDetails.maintainers : app.appDetails.developer.name;
+    const message = app.appDetails.startupErrorMessage && app.appDetails.startupErrorMessage.length > 0 ?
+      'Error starting '
+      : null;
 
     return (
       <tr key={key}>
@@ -54,13 +79,23 @@ export default class SingleAddon extends React.Component {
         <td>
           <div className="addon-name">
             {
-              !app.install ?
-                app.appDetails.started === true || app.appDetails.started === undefined ?
-                  <div className="status-icon" id="started-status" />
-                  :
-                  <div className="status-icon" id="stopped-status" />
-                : null
+              app.appType === "owa"?
+                <div className="status-icon" id="started-status"/>
+                : !app.install ?
+                  app.appDetails.started === true?
+                    <div className="status-icon" id="started-status" />
+                    :
+                    !app.appDetails.startupErrorMessage ?
+                      <div className="status-icon" id="stopped-status" />
+                      : <span className="glyphicon glyphicon-warning-sign" id="error-title-logo"  onClick={(event) => this.handleMessageClick(event)}/>
+                  : null
             }
+            <StartErrorModal
+              app={app.appDetails}
+              message={message}
+              isOpen={this.state.showMessageDetail}
+              hideMessageModal={this.hideMessageModal}
+            />
             {app.appType === "module" || app.appDetails.type === "OMOD" ?
               <span
                 className="module-click-cursor"
@@ -153,4 +188,7 @@ SingleAddon.propTypes = {
   handleDownload: PropTypes.func.isRequired,
   handleInstall: PropTypes.func.isRequired,
   handleUpgrade: PropTypes.func.isRequired,
+  openPage: PropTypes.func.isRequired,
+  handleUserClick: PropTypes.func.isRequired,
+  showMessageDetail: PropTypes.bool.isRequired,
 };

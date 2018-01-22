@@ -121,8 +121,12 @@ export default class ManageApps extends React.Component {
       this.handleApplist();
     }).catch(
       (error) => {
-        location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`;
-        toastr.error(error);
+        error.response.status === 401 ?
+          location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`
+          : error.response.status === 500 ?
+            toastr.error("Some modules failed to start")
+            : toastr.error(error);
+        this.handleApplist();
       }
     );
   }
@@ -175,32 +179,32 @@ export default class ManageApps extends React.Component {
         return Promise.all(response.data.results.map(data => {
           return axios.get(`${ApiHelper.getAddonUrl()}?modulePackage=${data.packageName}`)
             .then(response => {
-              return Object.assign({}, data, { maintainers: response.data.maintainers });
+              return Object.assign({}, data, {maintainers: response.data.maintainers});
             }).then(result => {
               installedModules.push({
                 appDetails: result,
                 appType: 'module',
-                install: false,
+                install: false
               });
               return result;
             }).catch(error => {
-              const installedAddons = installedOwas.concat(installedModules);
+              const installedAddons = this.sortApplist(installedOwas.concat(installedModules));
               this.setState((prevState, nextProps) => ({
                 appList: installedAddons,
                 staticAppList: installedAddons,
                 searchComplete: true
-              }));
+              }));       
               return data;
             });
         }));
 
       }).then(() => {
-        const installedAddons = installedOwas.concat(installedModules);
+        const installedAddons = this.sortApplist(installedOwas.concat(installedModules));
         this.setState((prevState, props) => {
           return {
             appList: installedAddons,
             staticAppList: installedAddons,
-            searchComplete: true,
+            searchComplete: true
           };
         });
       });

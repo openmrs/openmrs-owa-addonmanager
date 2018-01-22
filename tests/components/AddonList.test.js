@@ -125,11 +125,6 @@ describe('<AddonList />', () => {
         expect(searchedAddonslist.find("td")).to.have.length(10);
     });
 
-    it('should render div tags', () => {
-        expect(testAddonList.find("div")).to.have.length(6);
-        expect(searchedAddonslist.find("div")).to.have.length(6);
-    });
-
     it('should render a h2 tag', () => {
         expect(testAddonList.find("h5")).to.have.length(2);
         expect(searchedAddonslist.find("h5")).to.have.length(2);
