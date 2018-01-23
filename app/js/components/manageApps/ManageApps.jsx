@@ -699,8 +699,7 @@ export default class ManageApps extends React.Component {
       });
     }).catch(
       (error) => {
-        error.message === "Network Error" ? toastr.error("There is no internet connection") : toastr.error(error);
-        this.handleApplist();
+        toastr.error(error);
       }
     );
   }
