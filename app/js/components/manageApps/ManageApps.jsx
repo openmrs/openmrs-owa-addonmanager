@@ -143,7 +143,6 @@ export default class ManageApps extends React.Component {
   handleApplist() {
     const installedOwas = [];
     let installedModules = [];
-    let installedAddons = [];
 
     this.apiHelper.get('/owa/applist').then(response => {
       response.forEach((data, index) => {
@@ -154,50 +153,54 @@ export default class ManageApps extends React.Component {
           upgrading: false,
         });
       });
+
+      const installedAddons = installedOwas.concat(installedModules);
+      this.setState((prevState, props) => {
+        return {
+          appList: installedAddons,
+          staticAppList: installedAddons,
+          searchComplete: false
+        };
+      });
     }).then(() => {
       const applicationDistribution = location.href.split('/')[2];
       const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
       const url = location.href.split('/')[3];
       const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
       this.requestUrl = '/v1/module/?v=full';
-      axios.get(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`).then(response => {
-        response.data.results.forEach(data => {
-          installedModules.push({
-            appDetails: data,
-            appType: "module",
-            install: false
-          });
-        });
-        installedAddons = this.sortApplist(installedOwas.concat(installedModules));
-        return Promise
-          .all(response.data.results.map(data => axios.get(`${ApiHelper.getAddonUrl()}/${data.packageName}`)
-            .then(response => response.data)
-            .catch(error => {
-              this.setState((prevState, nextProps) => ({
-                appList: installedAddons,
-                staticAppList: installedAddons,
-                searchComplete: true
+
+        axios.get(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`).then(response => {
+          return Promise.all(response.data.results.map(data => {
+            return axios.get(`${ApiHelper.getAddonUrl()}?modulePackage=${data.packageName}`)
+              .then(response => {
+                return Object.assign({}, data, {maintainers: response.data.maintainers});
+              }).then(result => {
+                installedModules.push({
+                  appDetails: result,
+                  appType: 'module',
+                  install: false
+                });
+                return result;
+              }).catch(error => {
+                const installedAddons = installedOwas.concat(installedModules);
+                this.setState((prevState, nextProps) => ({
+                  appList: installedAddons,
+                  staticAppList: installedAddons,
+                  searchComplete: true
+                }));       
+                return data;
+              });
               }));
-              return data;
-            })));
-      }).then(response => {
-        installedAddons = [];
-        installedModules = [];
-        response.forEach((data) => {
-          installedModules.push({
-            appDetails: data,
-            appType: 'module',
-            install: false
+
+        }).then(() => {
+          const installedAddons = installedOwas.concat(installedModules);
+          this.setState((prevState, props) => {
+            return {
+              appList: installedAddons,
+              staticAppList: installedAddons,
+              searchComplete: true
+            };
           });
-        });
-      });
-      installedAddons = this.sortApplist(installedOwas.concat(installedModules));
-      this.setState((prevState, props) => {
-        return {
-          appList: installedAddons,
-          staticAppList: installedAddons,
-          searchComplete: true
-        };
       });
     });
   }

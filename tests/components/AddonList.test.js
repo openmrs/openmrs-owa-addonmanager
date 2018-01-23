@@ -51,6 +51,12 @@ describe('<AddonList />', () => {
          "requireOpenmrsVersion":"1.7.4",
          "awareOfModules":["org.openmrs.module.legacyui"],
          "requiredModules":["org.openmrs.module.uiframework"],
+         "developer": {
+            "url": "https://github.com/openmrs/openmrs-owa-cohortbuilder",
+            "name": "andela-odaniel, wanjikum, andela-jomadoye, andela-pupendo, kingisaac95",
+            "company": null,
+            "email": null
+        },
          "links":[
            {
              "rel":"ref",

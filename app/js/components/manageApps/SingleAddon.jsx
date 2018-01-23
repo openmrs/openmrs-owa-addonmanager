@@ -37,6 +37,8 @@ export default class SingleAddon extends React.Component{
       handleUpgrade,
     } = this.props;
 
+    const maintainers = app.appDetails.maintainers ? app.appDetails.maintainers : app.appDetails.developer.name;
+
     return(
       <tr key={key}>
         <td>
@@ -97,11 +99,8 @@ export default class SingleAddon extends React.Component{
         </td>
         <td>
           {
-            app.appDetails && app.appDetails.uuid ?
-              app.appDetails.author :
-              app.appDetails && app.appDetails.developer ?
-                app.appDetails.developer.name :
-                app.appDetails.maintainers.map(maintainer => maintainer.name).join(', ')
+            Array.isArray(maintainers) ?  maintainers.map(maintainer => maintainer.name).join(', ') : maintainers
+            
           }
         </td>
         <td>
