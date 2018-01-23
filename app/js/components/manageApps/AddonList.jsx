@@ -33,13 +33,14 @@ export const AddonList = ({
       {
         appList.map((app, key) => {
           let found = null;
-          if(app.appDetails.type === "OMOD"){
-            searchedAddons.length > 0 && installedSearchResults['modules'].includes(app.appDetails.moduleId)?
-              found = addonList.find(addon => addon.appDetails.uuid === app.appDetails.moduleId) : null;
-          }else{
-            searchedAddons.length > 0 && installedSearchResults['owas'].includes(app.appDetails.name) ?
-              found = addonList.find(addon => addon.appDetails.name === app.appDetails.name) : null;
-          }
+          (app.appType === "owa" || app.appDetails.type === "OWA")?
+            searchedAddons.length > 0 && (installedSearchResults['owas'].includes(app.appDetails.name) || installedSearchResults['owas'].includes(app.appDetails.folderName)) ?
+              found = addonList.find(addon => (addon.appDetails.folderName === app.appDetails.name || addon.appDetails.name === app.appDetails.name)):null
+            :
+            searchedAddons.length > 0 && (installedSearchResults['modules'].includes(app.appDetails.moduleId) || installedSearchResults['modules'].includes(app.appDetails.uid))?
+              found = addonList.find(addon => (addon.appDetails.uuid === app.appDetails.moduleId || addon.appDetails.uid === app.appDetails.uid)
+              ) : null;
+
           if (found) {
             app = found;
           }

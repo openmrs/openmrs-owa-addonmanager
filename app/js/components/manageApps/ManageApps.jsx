@@ -187,7 +187,6 @@ export default class ManageApps extends React.Component {
             appType: 'module',
             install: false
           });
-
         });
       });
       installedAddons = installedOwas.concat(installedModules);
@@ -580,7 +579,6 @@ export default class ManageApps extends React.Component {
             files: null,
             updatesAvailable: null,
             progressMsg: null,
-            searchedAddons: [],
             newAddon: null,
             upgrading: false,
             upgradeVersion: null,
@@ -626,7 +624,6 @@ export default class ManageApps extends React.Component {
             files: null,
             updatesAvailable: null,
             progressMsg: null,
-            searchedAddons: [],
             newAddon: null,
             upgrading: false,
           };
@@ -806,25 +803,25 @@ export default class ManageApps extends React.Component {
   getInstalled(appList, searchedAddons) {
     const installedSearchResults = {'modules':[], 'owas': []};
     const installedUuid = appList.reduce((filtered, app) =>{
-      if(app.appType === "module")filtered.push(app.appDetails.uuid);
+      if(app.appType === "module") app.appDetails.uuid ? filtered.push(app.appDetails.uuid) : filtered.push(app.appDetails.uid);
       return filtered;
     }, []);
     const installedNames = appList.reduce((filtered, app) => {
-      if(app.appType === "owa")filtered.push(app.appDetails.name);
+      if(app.appType === "owa")app.appDetails.folderName ? filtered.push(app.appDetails.folderName) : filtered.push(app.appDetails.name);
       return filtered;
     }, []);
 
     searchedAddons.forEach((addon) => {
-      addon.appDetails.type === "OMOD"?
-        installedUuid.includes(addon.appDetails.moduleId)?
-          installedSearchResults['modules'].push(addon.appDetails.moduleId)
-          :
-          null
+      (addon.appDetails.type === "OMOD") ?
+        (installedUuid.includes(addon.appDetails.moduleId) || installedUuid.includes(addon.appDetails.uid)) ?
+          addon.appDetails.moduleId ? installedSearchResults['modules'].push(addon.appDetails.moduleId)
+            : installedSearchResults['modules'].push(addon.appDetails.uid)
+          : null
         :
-        installedNames.includes(addon.appDetails.name)?
-          installedSearchResults['owas'].push(addon.appDetails.name)
-          :
-          null;
+        (installedNames.includes(addon.appDetails.folderName) || installedNames.includes(addon.appDetails.name))?
+          addon.appDetails.folderName? installedSearchResults['owas'].push(addon.appDetails.folderName)
+            : installedSearchResults['owas'].push(addon.appDetails.name)
+          : null;
     });
     return installedSearchResults;
   }
@@ -954,24 +951,25 @@ export default class ManageApps extends React.Component {
                         <th>Action</th>
                       </tr>
                     </thead>
-                    {searchedAddons.length < 1 && isSearched || (!updatesAvailable && checkUpdates) ?
-                      <tbody>
-                        <tr>
-                          <th colSpan="5"><h4>No {searchedAddons.length < 1 && isSearched ? 'apps': 'updates'} found</h4></th>
-                        </tr>
-                      </tbody> :
-                      <AddonList
-                        addonList={appList}
-                        searchedAddons={searchedAddons}
-                        handleUserClick={this.handleUserClick}
-                        updatesAvailable={updatesAvailable}
-                        openPage={this.openPage}
-                        openModal={this.openModal}
-                        handleDownload={this.handleDownload}
-                        handleInstall={this.handleInstall}
-                        handleUpgrade={this.handleUpgrade}
-                        getInstalled={this.getInstalled}
-                      />
+                    {
+                      searchedAddons.length < 1 && isSearched ?
+                        <tbody>
+                          <tr>
+                            <th colSpan="5"><h4>No apps found</h4></th>
+                          </tr>
+                        </tbody> :
+                        <AddonList
+                          addonList={appList}
+                          searchedAddons={searchedAddons}
+                          handleUserClick={this.handleUserClick}
+                          updatesAvailable={updatesAvailable}
+                          openPage={this.openPage}
+                          openModal={this.openModal}
+                          handleDownload={this.handleDownload}
+                          handleInstall={this.handleInstall}
+                          handleUpgrade={this.handleUpgrade}
+                          getInstalled={this.getInstalled}
+                        />
                     }
                   </table>
                 </Loader>

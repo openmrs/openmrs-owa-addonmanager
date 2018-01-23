@@ -29,10 +29,6 @@ describe('<AddAddon />', () => {
         expect(renderedComponent.length).equal(1);
     });
 
-    it('Should render a dropzone component', () => {
-        expect(renderedComponent.find("Dropzone")).to.have.length(1);
-    });
-
     it('Should display select Add-On message', () => {
         expect(renderedComponent.text()).to.contain('Select an Add-On');
     });
@@ -44,7 +40,7 @@ describe('<AddAddon />', () => {
     it('should render drag or click to select message', () => {
         expect(renderedComponent.find('#click-to-select')).to.have.length(1);
     });
-    
+
     it('should render manage owa buttons', () => {
         expect(spy.calledOnce).to.equal(true);
     })
