@@ -6,7 +6,7 @@ import {
   ModalTitle,
   ModalClose,
   ModalBody,
-  ModalFooter
+  ModalFooter,
 } from 'react-modal-bootstrap';
 
 export const ConfirmationModal = ({
@@ -50,7 +50,7 @@ export const ConfirmationModal = ({
       </ModalFooter>
     </Modal>
   );
-}
+};
 
 ConfirmationModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,

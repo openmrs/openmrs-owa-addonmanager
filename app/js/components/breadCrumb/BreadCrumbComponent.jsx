@@ -21,7 +21,7 @@ class BreadCrumbComponent extends Component {
       manageSettingsPage: false,
       manageAddonPage: false,
       homePage: false,
-      helpPage: false
+      helpPage: false,
     };
   }
   componentWillMount() {
@@ -89,6 +89,7 @@ class BreadCrumbComponent extends Component {
       manageSettingsPage,
       manageAddonPage
     } = this.state;
+    
     return (
       <div className="breadcrumb">
         <a href="../../" className="breadcrumb-item">

@@ -7,8 +7,8 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 import React from 'react';
-import {render} from 'react-dom';
-import {Router, Route, hashHistory} from 'react-router';
+import { render } from 'react-dom';
+import { Router, Route, hashHistory } from 'react-router';
 
 import routes from './Routes';
 

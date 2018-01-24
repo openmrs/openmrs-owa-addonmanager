@@ -15,7 +15,8 @@
     }
   },
   "globals": {
-    "toastr": true
+    "toastr": true,
+    "swal": true
   },
   "env": {
     "es6": true,
@@ -69,6 +70,11 @@
     "import/extensions": 1,
     "react/self-closing-comp": 1,
     "react/sort-comp": 1,
-    "react/jsx-wrap-multilines": 1
+    "react/jsx-wrap-multilines": 1,
+     "keyword-spacing": [
+       "error", 
+       { "before": true }
+      ]
+
   }
 }

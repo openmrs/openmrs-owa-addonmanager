@@ -8,9 +8,9 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 
-import React, {Component} from 'react';
-import {Link, IndexLink} from 'react-router';
-import {ApiHelper} from '../../helpers/apiHelper';
+import React, { Component } from 'react';
+import { Link, IndexLink } from 'react-router';
+import { ApiHelper } from '../../helpers/apiHelper';
 import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent';
 import axios from 'axios';
 
@@ -94,7 +94,7 @@ export default class Header extends Component {
     this.state.locationTags.map((location) => {
       let url = location.links[0].uri;
       let arrUrl = url.split("/"); 
-      let applicationInUse = arrUrl[3].search('http:') == -1 ? arrUrl[3]: arrUrl[3].replace('http:', '');
+      let applicationInUse = arrUrl[3].search('http:') == -1 ? arrUrl[3] : arrUrl[3].replace('http:', '');
       let customUrl = `/${applicationInUse}/appui/header/logout.action?successUrl=${applicationInUse}`;
       this.setState((prevState, props) => {
         return {
@@ -151,7 +151,7 @@ export default class Header extends Component {
     const numPerColumn = Math.ceil(locationTags.length / NUMBER_OF_COLUMNS);
     const styles = {
       marginTop: '5px',
-      fontSize: '14px'
+      fontSize: '14px',
     };
 
     for (let cols = 0; cols < NUMBER_OF_COLUMNS; cols++) {
