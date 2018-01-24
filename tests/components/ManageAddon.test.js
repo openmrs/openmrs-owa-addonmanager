@@ -11,6 +11,7 @@ describe('<ManageApps />', () => {
     // simulate a selected file in order to render upload and clear buttons
     renderedComponent.setState({
         isSearched: true,
+        isAdmin: true,
         files: [{
             name: "test.zip",
             type: "application/zip"
@@ -51,7 +52,7 @@ describe('<ManageApps />', () => {
     it('should mount the AddAddon component in itself', () => {
         expect(renderedComponent.find("AddAddon")).to.have.length(1);
     });
-    
+
     it('Should render clear and upload buttons when file is selected', () => {
         const AddAddon = renderedComponent.find("AddAddon").first();
         expect(AddAddon.find("#upload-btn").first().length).to.equal(1);

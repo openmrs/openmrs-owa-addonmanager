@@ -36,15 +36,18 @@ export default class ManageApps extends React.Component {
       uploadStatus: 0,
       showProgress: false,
       isOpen: false,
+      isAdmin: false,
       selectedApp: null,
       downloadUri: null,
       checkUpdates: false,
       addonAlreadyInstalled: null,
       files: null,
       displayInvalidZip: false,
+      allowWebAdmin: true,
       searchComplete: false,
       isSearched: false,
       updatesAvailable: null,
+      cannotViewAddons : false,
       searchedAddons: [],
       progressMsg: null,
       upgrading: false,
@@ -78,6 +81,9 @@ export default class ManageApps extends React.Component {
     this.displayManageOwaButtons = this.displayManageOwaButtons.bind(this);
     this.checkForUpdates = this.checkForUpdates.bind(this);
     this.clearUpdates = this.clearUpdates.bind(this);
+    this.checkIsAdmin = this.checkIsAdmin.bind(this);
+    this.fetchCurrentUser = this.fetchCurrentUser.bind(this);
+    this.fetchAdminProperties = this.fetchAdminProperties.bind(this);
     this.startAllModules = this.startAllModules.bind(this);
     this.getInstalled = this.getInstalled.bind(this);
     this.sortApplist = this.sortApplist.bind(this);
@@ -86,6 +92,8 @@ export default class ManageApps extends React.Component {
   componentWillMount() {
     this.props.checkLoginStatus();
     this.handleApplist();
+    this.checkIsAdmin();
+    this.fetchAdminProperties();
   }
 
   componentDidMount() {
@@ -129,6 +137,80 @@ export default class ManageApps extends React.Component {
         this.handleApplist();
       }
     );
+  }
+
+  fetchCurrentUser(){
+    const apiHelper = new ApiHelper(null);
+    const getUserData = new Promise(function(resolve, reject) {
+      apiHelper.get('/v1/session').then(response => {
+        resolve(response);
+      }).catch(error => {
+        toastr.error(error.message);
+      });
+    });
+    return getUserData;
+  }
+
+  fetchAdminProperties () {
+    const applicationDistribution = location.href.split('/')[2];
+    const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
+    const url = location.href.split('/')[3];
+    const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
+    const requestUrl = '/owa/allowModuleWebUpload';
+    axios.get(`${urlPrefix}/${apiBaseUrl}${requestUrl}`)
+      .then(response => {
+        this.setState((prevState, props) => {
+          return {
+            allowWebAdmin : response.data,
+          };
+        });
+      })
+      .catch(error => {
+        toastr.error(error.message);
+      });
+  }
+
+  checkIsAdmin() {
+    this.fetchCurrentUser().then((response) => {
+      if (response.user) {
+        const user = response.user;
+        let userPrivileges = [];
+        let userCanManageModules;
+        let userHasPermittedRoles;
+        userPrivileges = userPrivileges.concat(user.privileges);
+        if (user.roles.length > 0){
+          const roles = user.roles;
+          const userRoles = roles.find((userRole) => {
+            if (userRole.display === "System Developer") {
+              return userHasPermittedRoles = true;
+            }
+            return userHasPermittedRoles = false;
+          });
+        }
+        if (userPrivileges.length > 0) {
+          const managePrivilege = userPrivileges.find((managemodules) => {
+            if (managemodules.display === "Manage Modules") {
+              return userCanManageModules = true;
+            }
+            return userCanManageModules = false;
+          });
+        }
+        if (userCanManageModules || userHasPermittedRoles){
+          this.setState((prevState, props) => {
+            return {
+              isAdmin : true,
+            };
+          });
+        }
+        if (!userCanManageModules && !userHasPermittedRoles){
+          this.setState((prevState, props) => {
+            return {
+              cannotViewAddons : true,
+            };
+          });
+        }
+      }
+    });
   }
 
   handleDrop(files) {
@@ -193,7 +275,7 @@ export default class ManageApps extends React.Component {
                 appList: installedAddons,
                 staticAppList: installedAddons,
                 searchComplete: true
-              }));       
+              }));
               return data;
             });
         }));
@@ -858,12 +940,18 @@ export default class ManageApps extends React.Component {
       msgBody,
       appList,
       searchedAddons,
+      checkUpdates,
+      isOpen,
+      isAdmin,
+      allowWebAdmin,
+      selectedApp,
       searchComplete,
       isSearched,
       progressMsg,
       upgradeAddon,
       upgradeVersion,
       openUpgradeConfirmation,
+      cannotViewAddons,
       displayInvalidZip, } = this.state;
 
     if (showMsg === true) {
@@ -903,27 +991,52 @@ export default class ManageApps extends React.Component {
         </MenuItem>
       </DropdownButton>
     );
+    if (cannotViewAddons){
+      return (
+        <div className="main-home-page none-user-page" id="body-wrapper">
+          <p>
+            You cannot View or Manage the Add-ons since you dont have the priviledges
+            and you are not an admin.<br/>
+            <br/>
+
+            To Gain the permissions contact  the system administrator.
+            <br/>
+            <a href="../../" className="btn btn-secondary"   id="startall-modules-btn">
+                Go back Home
+            </a>
+          </p>
+        </div>
+      );
+    }
     return (
       <div>
         <div className="main-home-page" id="body-wrapper">
-          <div className="row">
-            <div className="col-sm-12">
-              <span className="pull-right manage-settings-wrapper">
-                <span id="startall-modules-btn"
-                  className="btn btn-secondary"
-                  onClick={updatesAvailable ? this.clearUpdates : this.checkForUpdates}>{updatesAvailable ? 'Back to all Add-ons': 'Check for Updates'}</span>
-                <span
-                  id="startall-modules-btn"
-                  className="btn btn-secondary"
-                  onClick={this.handleStartModules}
-                >
-                  <span className="glyphicon glyphicon-play" />
-                  Start all Modules
-                </span>
-                {buttonsInstance}
-              </span>
-            </div>
-          </div>
+          {allowWebAdmin ?
+            isAdmin ?
+              <div className="row">
+                <div className="col-sm-12">
+                  <span className="pull-right manage-settings-wrapper">
+                    <span id="startall-modules-btn"
+                      className="btn btn-secondary"
+                      onClick={updatesAvailable ? this.clearUpdates : this.checkForUpdates}>{updatesAvailable ? 'Back to all Addons': 'Check for Updates'}</span>
+                    <span
+                      id="startall-modules-btn"
+                      className="btn btn-secondary"
+                      onClick={this.handleStartModules}
+                    >
+                      <span className="glyphicon glyphicon-play" />
+                          Start all Modules
+                    </span>
+                    {buttonsInstance}
+                  </span>
+                </div>
+              </div>
+              : null
+            :   <p>
+              Settings, upload and check updates are disabled from the website at this time. The runtime property module.allow_web_admin must be set to true.
+              <br/>
+            </p>
+          }
           <ScrollToTop showUnder={210}>
             <span className="glyphicon glyphicon-circle-arrow-up scroll-to-top-btn" />
           </ScrollToTop>
@@ -934,13 +1047,14 @@ export default class ManageApps extends React.Component {
                 {showMsg && alert}
               </div>
 
-              <AddAddon
-                files={files}
-                handleDrop={this.handleDrop}
-                handleClear={this.handleClear}
-                handleUpload={this.handleUpload}
-                displayManageOwaButtons={this.displayManageOwaButtons}
-              />
+              {allowWebAdmin ?
+                isAdmin ? <AddAddon
+                  files={files}
+                  handleDrop={this.handleDrop}
+                  handleClear={this.handleClear}
+                  handleUpload={this.handleUpload}
+                  displayManageOwaButtons={this.displayManageOwaButtons}
+                /> : null :null}
 
               <div className="manage-app-table col-sm-12">
                 <div
@@ -975,6 +1089,7 @@ export default class ManageApps extends React.Component {
                         </tbody> :
                         <AddonList
                           addonList={appList}
+                          isAdmin={isAdmin}
                           searchedAddons={searchedAddons}
                           handleUserClick={this.handleUserClick}
                           updatesAvailable={updatesAvailable}
