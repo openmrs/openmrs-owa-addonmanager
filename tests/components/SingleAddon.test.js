@@ -59,6 +59,12 @@ describe('<SingleAddon/>', () => {
         "requireOpenmrsVersion":"1.7.4",
         "awareOfModules":["org.openmrs.module.legacyui"],
         "requiredModules":["org.openmrs.module.uiframework"],
+        "developer": {
+            "url":"https://github.com/openmrs/openmrs-owa-addonmanager",
+            "name":"andela-pupendo, kingisaac95, andela-wanjikum, andela-jomadoye",
+            "company":null,
+            "email":null,
+        },
         "links":[
           {
             "rel":"ref",
