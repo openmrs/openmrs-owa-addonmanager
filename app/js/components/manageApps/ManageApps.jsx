@@ -20,6 +20,7 @@ import { ApiHelper } from '../../helpers/apiHelper';
 import { AddonList } from './AddonList.jsx';
 import InvalidZipUploadModal from './InvalidZipUploadModal.jsx';
 import {MenuItem, DropdownButton} from 'react-bootstrap';
+import _ from 'lodash';
 
 export default class ManageApps extends React.Component {
   constructor(props) {
@@ -77,6 +78,7 @@ export default class ManageApps extends React.Component {
     this.clearUpdates = this.clearUpdates.bind(this);
     this.startAllModules = this.startAllModules.bind(this);
     this.getInstalled = this.getInstalled.bind(this);
+    this.sortApplist = this.sortApplist.bind(this);
   }
 
   componentWillMount() {
@@ -166,7 +168,7 @@ export default class ManageApps extends React.Component {
             install: false
           });
         });
-        installedAddons = installedOwas.concat(installedModules);
+        installedAddons = this.sortApplist(installedOwas.concat(installedModules));
         return Promise
           .all(response.data.results.map(data => axios.get(`${ApiHelper.getAddonUrl()}/${data.packageName}`)
             .then(response => response.data)
@@ -189,7 +191,7 @@ export default class ManageApps extends React.Component {
           });
         });
       });
-      installedAddons = installedOwas.concat(installedModules);
+      installedAddons = this.sortApplist(installedOwas.concat(installedModules));
       this.setState((prevState, props) => {
         return {
           appList: installedAddons,
@@ -198,6 +200,12 @@ export default class ManageApps extends React.Component {
         };
       });
     });
+  }
+
+  sortApplist(list){
+    return _.sortBy(list, [function(object){
+      return object.appDetails.name.toLowerCase();
+    }])
   }
 
   handleStartModules(){
@@ -673,8 +681,9 @@ export default class ManageApps extends React.Component {
     });
     const updatesAvailable = {};
     this.props.checkLoginStatus();
+    const appList = this.sortApplist(this.state.appList);
     axios.get(ApiHelper.getAddonUrl()).then((response) => {
-      this.state.appList.forEach((addon) => {
+      appList.forEach((addon) => {
         response.data.forEach((result) => {
           if (result.type === 'OMOD'){
             result.type = 'module';
@@ -716,7 +725,7 @@ export default class ManageApps extends React.Component {
 
   onlineSearchHandler(searchValue) {
     this.state.searchComplete === true ? this.setState({ searchComplete: false }) : null;
-    const resultData = [];
+    let resultData = [];
     const { staticAppList } = this.state;
     this.props.checkLoginStatus();
     if (searchValue) {
@@ -742,6 +751,7 @@ export default class ManageApps extends React.Component {
                   install: true
                 });
                 if (index === searchResults.length - 1) {
+                  resultData = this.sortApplist(resultData);
                   this.setState((prevState, props) => {
                     return {
                       searchedAddons: resultData,
