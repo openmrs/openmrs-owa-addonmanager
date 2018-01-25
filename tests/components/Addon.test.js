@@ -79,7 +79,7 @@ describe('<StartErrorModal />', () => {
       isOpen={true}
       app={app}
       message="Error Failed to start"
-      hideMsgModal={() => { }}
+      hideMessageModal={() => { }}
     />);
 
   it('should contain the correct error detail message', () => {

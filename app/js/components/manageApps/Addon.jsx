@@ -36,7 +36,7 @@ class Addon extends Component {
     this.handleDelete = this.handleDelete.bind(this);
     this.getAffectedModules = this.getAffectedModules.bind(this);
     this.handleMessageClick = this.handleMessageClick.bind(this);
-    this.hideMsgModal = this.hideMsgModal.bind(this);
+    this.hideMessageModal = this.hideMessageModal.bind(this);
   }
 
   componentWillMount(){
@@ -258,7 +258,7 @@ class Addon extends Component {
     });
   }
 
-  hideMsgModal() {
+  hideMessageModal() {
     this.setState(() => {
       return {
         showMessageDetail: false,
@@ -310,7 +310,7 @@ class Addon extends Component {
                 app={app}
                 message={message}
                 isOpen={showMessageDetail}
-                hideMsgModal={this.hideMsgModal}
+                hideMessageModal={this.hideMessageModal}
               />
             </div>
             : null

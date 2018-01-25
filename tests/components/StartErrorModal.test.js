@@ -47,7 +47,7 @@ describe('<StartErrorModal />', () => {
   shallow(<StartErrorModal
     app={app}
     isOpen={true}
-    hideMsgModal={() => { }}/>);
+    hideMessageModal={() => { }}/>);
     
     it('Should render 2 spans on initial render', () => {
       expect(renderedComponent.find("span")).to.have.length(2);

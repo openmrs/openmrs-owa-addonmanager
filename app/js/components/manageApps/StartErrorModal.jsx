@@ -14,15 +14,15 @@ export default class StartErrorModal extends Component {
   render() {
     const {
       isOpen,
-      hideMsgModal,
+      hideMessageModal,
       message,
       app,
     } = this.props;
 
     return (
-      <Modal isOpen={isOpen} onRequestHide={hideMsgModal}>
+      <Modal isOpen={isOpen} onRequestHide={hideMessageModal}>
         <ModalHeader>
-          <ModalClose onClick={hideMsgModal} />
+          <ModalClose onClick={hideMessageModal} />
           <ModalTitle>
             <span id="msg-modal-title">
               <span className="glyphicon glyphicon-warning-sign" id="error-title-logo" />
@@ -36,7 +36,7 @@ export default class StartErrorModal extends Component {
         <ModalFooter>
           <button
             className="btn btn-default btn-mark-ok"
-            onClick={hideMsgModal}>
+            onClick={hideMessageModal}>
             Ok
           </button>
         </ModalFooter>
@@ -49,5 +49,5 @@ StartErrorModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   app: PropTypes.object.isRequired,
   message: PropTypes.string.isRequired,
-  hideMsgModal: PropTypes.func.isRequired,
+  hideMessageModal: PropTypes.func.isRequired,
 };
