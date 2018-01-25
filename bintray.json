@@ -1,0 +1,15 @@
+{
+    "package": {
+        "name": "OpenMRS-Add-On-Manager",
+        "repo": "Apps",
+        "subject": "openmrs"
+    },
+
+    "version": {
+        "name": "1.0.0",
+        "released": "2018-02-01"
+    },
+
+    "files":[{"includePattern": "build/(.*\\.zip)", "uploadPattern": "$1"}],
+    "publish": true
+}
