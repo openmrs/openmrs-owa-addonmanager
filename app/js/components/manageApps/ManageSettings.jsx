@@ -64,7 +64,7 @@ export default class ManageSettings extends React.Component {
       return { 
         AppFolderPathValue: settingsPaths != undefined ? settingsPaths[0].propertyValue : appFolderPath,
         AppBaseURLValue: settingsPaths != undefined ? settingsPaths[1].propertyValue : '/owa',
-        AppStoreURLValue: settingsPaths != undefined ? settingsPaths[2].propertyValue : 'http://modules.openmrs.org',
+        AppStoreURLValue: 'http://addons.openmrs.org'
       };
     });
   }

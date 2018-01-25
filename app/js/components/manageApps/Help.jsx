@@ -87,24 +87,24 @@ export default class Help extends React.Component {
       AppFolderPathValue,
       AppStoreURLValue,
     } = this.state;
-
     return (
       <div>
         <div className="row">
           <div className="col-sm-6">
-            <h2 id="title-heading">Add On Manager</h2>
+            <h2 id="title-heading">Add-on Manager</h2>
           </div>
         </div>
         <div className="container-fluid" id="manage-settings">
           <form className="form-horizontal">
             <fieldset className="scheduler-border">
-              <legend className="scheduler-border">Having trouble?We're here to help</legend>
+              <legend className="scheduler-border">Having trouble? We're here to help</legend>
+
 
               <section>
                 <p><strong>How do you check for updates?</strong></p>
                 <p>To check for newer versions of installed addons click on the check for updates button
                   <img src={(checkforupdates)} className="help-page-images" alt="Add-On manager homepage" /><br />
-                      If any addons have updates they'll be in the resulting list e.g
+                  If any addons have updates they'll be in the resulting list e.g
                   <img src={(updateslist)} className="help-page-images" alt="Add-On manager homepage" /></p>
                 <p> The latest version will be displayed as shown above
                     A user can upgrade by clicking on the upgrade button or download the new file.
@@ -116,13 +116,13 @@ export default class Help extends React.Component {
                 <p>In order to view the interface of a particular module, you click on the view button as shown
                   <img src={(view)} className="help-page-images" alt="Add-On manager homepage" /><br /></p>
                 <p>When you click on a module, the resulting UI should be as shown below.Only modules have the stop and start button.When a module starts it is indicated by a green icon
-                   and when it stops, a red icon is displayed on the status.A stopped module is still loaded, it just doesn't have any effect on the system</p>
+                                and when it stops, a red icon is displayed on the status.A stopped module is still loaded, it just doesn't have any effect on the system</p>
                 <p><strong>The start icon</strong></p>
                 <img src={(start)} className="help-page-images" alt="Add-On manager homepage" />
                 <p>If you start a module while the modules it depends on to run are not started, that module will not start.</p>
                 <p><strong>The stop icon</strong></p>
                 <img src={(stop)} className="help-page-images" alt="Add-On manager homepage" /><br />
-                                Additionally, stopping a module that is depended on by other modules will cause all dependent modules to stop
+                Additionally, stopping a module that is depended on by other modules will cause all dependent modules to stop
                 <p>You might want to start all the modules at once.This has been made possible by simply clicking on the start all modules button as shown</p>
                 <img src={(startingallmodules)} className="help-page-images" alt="Add-On manager homepage" />
 

@@ -43,7 +43,7 @@ export default class AddAddon extends Component {
     return (
       <div className="container-fluid">
         <div className="row drop-zone-container">
-          <span>Select an Add-On to upload</span>
+          <span>Select an Add-on to upload</span>
           <Dropzone
             className="drop-zone"
             acceptClassName="drop-zone-accept"

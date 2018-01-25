@@ -596,8 +596,8 @@ body.loading .waiting-modal {
     background: #dddddd;
     border: 2px solid #dddddd;
     font-size: 1.2em;
-    height: 120px;
-    line-height: 120px;
+    height: 60px;
+    line-height: 60px;
     margin-left: 15px;
     margin-top: 10px;
     outline: 2px dashed #BBBBBB;

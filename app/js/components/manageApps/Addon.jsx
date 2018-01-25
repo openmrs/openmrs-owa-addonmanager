@@ -318,7 +318,7 @@ class Addon extends Component {
         <Link to="/">
           <div className="btn back-nav">
             <span className="glyphicon glyphicon-chevron-left back-nav" />
-            Back to Add-Ons List
+            Back to All Add-ons
           </div>
         </Link>
 

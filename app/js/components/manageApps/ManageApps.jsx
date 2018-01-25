@@ -95,7 +95,7 @@ export default class ManageApps extends React.Component {
         this.hideModal();
       }
     });
-    document.title = "Add-On Manager";
+    document.title = "Add-on Manager";
   }
 
   startAllModules() {
@@ -910,12 +910,12 @@ export default class ManageApps extends React.Component {
         <div className="main-home-page" id="body-wrapper">
           <div className="row">
             <div className="col-sm-12">
-              <h2 className="manage-addon-title">Add-On Manager</h2>
+              <h2 className="manage-addon-title">Add-on Manager</h2>
               <span className="pull-right manage-settings-wrapper" />
               <span className="pull-right manage-settings-wrapper">
                 <span id="startall-modules-btn"
                   className="btn btn-secondary"
-                  onClick={updatesAvailable ? this.clearUpdates : this.checkForUpdates}>{updatesAvailable ? 'Back to all Addons' : 'Check for Updates'}</span>
+                  onClick={updatesAvailable ? this.clearUpdates : this.checkForUpdates}>{updatesAvailable ? 'Back to all Add-ons': 'Check for Updates'}</span>
                 <span
                   id="startall-modules-btn"
                   className="btn btn-secondary"
@@ -964,7 +964,6 @@ export default class ManageApps extends React.Component {
                   <table className="table table-bordered table-striped table-hover">
                     <thead>
                       <tr>
-                        <th>Logo</th>
                         <th>Name</th>
                         <th>Developer</th>
                         <th>Version</th>
