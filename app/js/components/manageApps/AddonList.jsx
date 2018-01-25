@@ -10,6 +10,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router';
+
 import SingleAddon from './SingleAddon.jsx';
 
 export const AddonList = ({
@@ -33,11 +34,11 @@ export const AddonList = ({
       {
         appList.map((app, key) => {
           let found = null;
-          (app.appType === "owa" || app.appDetails.type === "OWA")?
+          (app.appType === "owa" || app.appDetails.type === "OWA") ?
             searchedAddons.length > 0 && (installedSearchResults['owas'].includes(app.appDetails.name) || installedSearchResults['owas'].includes(app.appDetails.folderName)) ?
               found = addonList.find(addon => (addon.appDetails.folderName === app.appDetails.name || addon.appDetails.name === app.appDetails.name)):null
             :
-            searchedAddons.length > 0 && (installedSearchResults['modules'].includes(app.appDetails.moduleId) || installedSearchResults['modules'].includes(app.appDetails.uid))?
+            searchedAddons.length > 0 && (installedSearchResults['modules'].includes(app.appDetails.moduleId) || installedSearchResults['modules'].includes(app.appDetails.uid)) ?
               found = addonList.find(addon => (addon.appDetails.uuid === app.appDetails.moduleId || addon.appDetails.uid === app.appDetails.uid)
               ) : null;
 
@@ -47,8 +48,8 @@ export const AddonList = ({
           let addonParam = app.appDetails.uuid ?
             'module-' + app.appDetails.uuid : 'owa-' + app.appDetails.name;
           return (
-            updatesAvailable?
-              updatesAvailable.hasOwnProperty(app.appDetails.name) && updatesAvailable[app.appDetails.name].type === app.appType?
+            updatesAvailable ?
+              updatesAvailable.hasOwnProperty(app.appDetails.name) && updatesAvailable[app.appDetails.name].type === app.appType ?
                 <SingleAddon
                   app={app}
                   key={key}

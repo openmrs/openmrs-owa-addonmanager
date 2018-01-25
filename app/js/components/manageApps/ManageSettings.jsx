@@ -16,7 +16,7 @@ export default class ManageSettings extends React.Component {
     this.state = {
       AppBaseURLValue: '',
       AppFolderPathValue: '',
-      AppStoreURLValue: ''
+      AppStoreURLValue: '',
     };
 
     this.onChange = this.onChange.bind(this);
@@ -50,8 +50,8 @@ export default class ManageSettings extends React.Component {
 
     try {
       return jsonData.list["org.openmrs.GlobalProperty"];
-    } catch(e) {
-      if(e instanceof TypeError) {
+    } catch (e) {
+      if (e instanceof TypeError) {
         e;
       }
     }
@@ -64,7 +64,7 @@ export default class ManageSettings extends React.Component {
       return { 
         AppFolderPathValue: settingsPaths != undefined ? settingsPaths[0].propertyValue : appFolderPath,
         AppBaseURLValue: settingsPaths != undefined ? settingsPaths[1].propertyValue : '/owa',
-        AppStoreURLValue: settingsPaths != undefined ? settingsPaths[2].propertyValue : 'http://modules.openmrs.org'
+        AppStoreURLValue: settingsPaths != undefined ? settingsPaths[2].propertyValue : 'http://modules.openmrs.org',
       };
     });
   }
@@ -87,8 +87,9 @@ export default class ManageSettings extends React.Component {
     let {
       AppBaseURLValue,
       AppFolderPathValue,
-      AppStoreURLValue
+      AppStoreURLValue,
     } = this.state;
+    
     return (
       <div>
         <div className="row">

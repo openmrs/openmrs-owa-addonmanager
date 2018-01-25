@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Loader from 'react-loader';
 import PropTypes from 'prop-types';
+import { Link, hashHistory } from 'react-router';
+
 import { ApiHelper } from '../../helpers/apiHelper';
 import ActionAddonModal from './ActionAddonModal';
 import StartErrorModal from './StartErrorModal';
-import { Link, hashHistory } from 'react-router';
+
 
 class Addon extends Component {
   constructor(props) {
@@ -69,10 +71,10 @@ class Addon extends Component {
         this.getAffectedModules(response.data.uuid);
         this.setState({
           app: response.data,
-          loadingComplete: true
+          loadingComplete: true,
         });
       }).catch((error) => {
-        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null
+        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
         this.setState({ loadingComplete: true });
       });
 
@@ -86,13 +88,13 @@ class Addon extends Component {
         if (data.name === owaName) {
           this.setState({
             app: data,
-            loadingComplete: true
+            loadingComplete: true,
           });
           return true;
         }
       });
     }).catch((error) => {
-      error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null
+      error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
     });
   }
 
@@ -138,7 +140,7 @@ class Addon extends Component {
         });
         this.fetchAddon();
       }).catch((error) => {
-        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null
+        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
         this.setState({
           stopping: false,
           starting: false,
@@ -159,7 +161,7 @@ class Addon extends Component {
     event.preventDefault();
     this.setState({
       isOpen: true,
-      action: action
+      action,
     });
   }
 
@@ -178,7 +180,7 @@ class Addon extends Component {
           :
           null;
       }).catch((error) => {
-        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null
+        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
         toastr.error(error);
       });
   }
@@ -214,7 +216,7 @@ class Addon extends Component {
           hashHistory.push('/');
         }).catch(error => {
           toastr.error(error);
-          error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null
+          error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
           hashHistory.push('/');
         });
     } else {
@@ -230,7 +232,7 @@ class Addon extends Component {
           hashHistory.push('/');
         }).catch(error => {
           toastr.error(error);
-          error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`: null
+          error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
           hashHistory.push('/');
         });
     }
@@ -251,7 +253,7 @@ class Addon extends Component {
     this.setState((prevState, props) => {
       return {
         isOpen: false,
-        displayInvalidZip: false
+        displayInvalidZip: false,
       };
     });
   }
@@ -358,9 +360,7 @@ class Addon extends Component {
                 <td className="row-title">Type:</td>
                 <td>
                   {
-                    app.uuid ?
-                      "Module" :
-                      "OWA"
+                    app.uuid ? "Module" : "OWA"
                   }
                 </td>
               </tr>
@@ -412,7 +412,7 @@ class Addon extends Component {
           {isOpen ? (
             <ActionAddonModal
               app={app}
-              handleAction={(action === "delete")? this.handleDelete : this.handleAction}
+              handleAction={(action === "delete") ? this.handleDelete : this.handleAction}
               isOpen={isOpen}
               hideModal={this.hideModal}
               appUuid={app.uuid ? app.uuid : null}

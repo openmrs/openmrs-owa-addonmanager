@@ -5,26 +5,26 @@ import PropTypes from 'prop-types';
 
 import { ApiHelper } from '../../helpers/apiHelper';
 
-export default class SingleAddon extends React.Component{
-  constructor(props){
+export default class SingleAddon extends React.Component {
+  constructor(props) {
     super(props);
     this.getUpdate = this.getUpdate.bind(this);
   }
 
-  getUpdate(e, uid){
+  getUpdate(e, uid) {
     e.preventDefault();
     axios.get(`${ApiHelper.getAddonUrl()}/${uid}`)
       .then(response => {
-        response.data.versions[0].downloadUri?
+        response.data.versions[0].downloadUri ?
           location.href = response.data.versions[0].downloadUri
           :
           null;
-      }).catch((error) =>{
+      }).catch((error) => {
         toastr.error(error);
       });
   }
 
-  render(){
+  render() {
     const {
       app,
       key,
@@ -39,13 +39,13 @@ export default class SingleAddon extends React.Component{
 
     const maintainers = app.appDetails.maintainers ? app.appDetails.maintainers : app.appDetails.developer.name;
 
-    return(
+    return (
       <tr key={key}>
         <td>
           <img
             src={app.appDetails &&
-                        app.appDetails.icon !== null &&
-                        app.appDetails.icons !== undefined ?
+              app.appDetails.icon !== null &&
+              app.appDetails.icons !== undefined ?
               `/${location.href.split('/')[3]}/owa/openmrs-addonmanager/${app.appDetails.icons[48]}` :
               `./img/omrs-button.png`}
             alt="addon logo"
@@ -93,14 +93,12 @@ export default class SingleAddon extends React.Component{
                   onClick={(event) => handleUpgrade(app, updatesVersion.version, updatesVersion.uid)}>Upgrade
                 </span>
               </span>
-
               : null
           }
         </td>
         <td>
           {
-            Array.isArray(maintainers) ?  maintainers.map(maintainer => maintainer.name).join(', ') : maintainers
-            
+            Array.isArray(maintainers) ? maintainers.map(maintainer => maintainer.name).join(', ') : maintainers
           }
         </td>
         <td>
@@ -121,7 +119,7 @@ export default class SingleAddon extends React.Component{
               >
                 <button id="view-addon-btn" className="btn btn-secondary">
                   <i className="glyphicon glyphicon-expand view-icon" />
-                            View
+                  View
                 </button>
               </Link>
               :

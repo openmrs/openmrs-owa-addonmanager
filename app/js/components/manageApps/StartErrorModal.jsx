@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import {
   Modal,
   ModalHeader,
   ModalTitle,
   ModalClose,
   ModalBody,
-  ModalFooter
+  ModalFooter,
 } from 'react-modal-bootstrap';
 
 export default class StartErrorModal extends Component {
@@ -17,6 +18,7 @@ export default class StartErrorModal extends Component {
       message,
       app,
     } = this.props;
+
     return (
       <Modal isOpen={isOpen} onRequestHide={hideMsgModal}>
         <ModalHeader>

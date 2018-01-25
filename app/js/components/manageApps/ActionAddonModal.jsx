@@ -9,7 +9,7 @@
  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Modal, ModalHeader, ModalTitle, ModalClose, ModalBody, ModalFooter} from 'react-modal-bootstrap';
+import { Modal, ModalHeader, ModalTitle, ModalClose, ModalBody, ModalFooter } from 'react-modal-bootstrap';
 
 export default class ActionModal extends Component {
   render() {
@@ -32,18 +32,18 @@ export default class ActionModal extends Component {
               className="btn btn-danger"
               data-dismiss="modal"
               id="cancel-btn"
-              onClick={() => (action === 'delete')? handleAction(appUuid, app.name): handleAction(appUuid, action)}
-            >{(action === 'delete')? 'Delete' : 'Stop'}</button>
+              onClick={() => (action === 'delete') ? handleAction(appUuid, app.name): handleAction(appUuid, action)}
+            >{(action === 'delete') ? 'Delete' : 'Stop'}</button>
           </ModalFooter>
         </Modal>
         :
         <Modal isOpen={isOpen} onRequestHide={hideModal}>
           <ModalHeader>
             <ModalClose onClick={hideModal}/>
-            <ModalTitle>Confirm {(action === 'delete')? 'Delete' : 'Stop'}</ModalTitle>
+            <ModalTitle>Confirm {(action === 'delete') ? 'Delete' : 'Stop'}</ModalTitle>
           </ModalHeader>
           <ModalBody>
-            <p>Are you sure you want to {(action === 'delete')? 'delete' : 'stop'} <strong>{app.name}</strong>?</p>
+            <p>Are you sure you want to {(action === 'delete') ? 'delete' : 'stop'} <strong>{app.name}</strong>?</p>
           </ModalBody>
           <ModalFooter>
             <button className="btn btn-default" onClick={hideModal}>Cancel</button>
@@ -52,8 +52,8 @@ export default class ActionModal extends Component {
               className="btn btn-danger"
               data-dismiss="modal"
               id="cancel-btn"
-              onClick={() => (action === 'delete')? handleAction(appUuid, app.name): handleAction(appUuid, action)}
-            >{(action === 'delete')? 'Delete' : 'Stop'}</button>
+              onClick={() => (action === 'delete') ? handleAction(appUuid, app.name) : handleAction(appUuid, action)}
+            >{(action === 'delete') ? 'Delete' : 'Stop'}</button>
           </ModalFooter>
         </Modal>
     );

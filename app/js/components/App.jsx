@@ -9,7 +9,7 @@
 import React from 'react';
 import Header from '../components/common/Header.jsx';
 import { StickyContainer, Sticky } from 'react-sticky';
-import {ApiHelper} from '../helpers/apiHelper';
+import { ApiHelper } from '../helpers/apiHelper';
 import Loader from 'react-loader';
 
 export default class App extends React.Component {
@@ -33,7 +33,7 @@ export default class App extends React.Component {
   checkLoginStatus(){
     this.fetchLocation('/v1/session').then((response) => {
       !response.user ?
-        location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm`:
+        location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` :
         this.setState({loggedIn: true, routeChanged: false});
     });
   }

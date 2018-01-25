@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+
 import {
   Modal,
   ModalHeader,
   ModalTitle,
   ModalClose,
   ModalBody,
-  ModalFooter } from 'react-modal-bootstrap';
+  ModalFooter, } from 'react-modal-bootstrap';
 
 const InvalidZipUploadModal = ({ isOpen, hideModal }) => {
   return (
@@ -28,5 +29,5 @@ export default InvalidZipUploadModal;
 
 InvalidZipUploadModal.propTypes = {
   isOpen: React.PropTypes.bool.isRequired,
-  hideModal: React.PropTypes.func.isRequired
+  hideModal: React.PropTypes.func.isRequired,
 };
