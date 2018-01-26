@@ -89,15 +89,22 @@ export default class SingleAddon extends React.Component {
             {app.appType === "module" || app.appDetails.type === "OMOD" ?
               <span
                 className="module-click-cursor"
-                onClick={() => handleUserClick(app.appDetails.name)}>
+                onClick={() => handleUserClick(
+                  app.appType? app.appType: app.appDetails.type, app.appDetails.name)}>
                 {app.appDetails && app.appDetails.name}
               </span>
-              :
-              <span
-                className="app-details"
-                onClick={() => openPage(app.appDetails)}>
-                {app.appDetails && app.appDetails.name}
-              </span>
+              : app.install ?
+                <span
+                  className="module-click-cursor"
+                  onClick={() => handleUserClick(app.appDetails.type, app.appDetails.name)}>
+                  {app.appDetails && app.appDetails.name}
+                </span>
+                :
+                <span
+                  className="app-details"
+                  onClick={() => openPage(app.appDetails)}>
+                  {app.appDetails && app.appDetails.name}
+                </span>
             }
           </div>
           <div><h5 className="addon-description">
