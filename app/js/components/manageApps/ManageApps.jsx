@@ -362,8 +362,11 @@ export default class ManageApps extends React.Component {
     });
   }
 
-  handleUserClick(name) {
-    toastr.info(`Sorry, there is no open web app for ${name}`);
+  handleUserClick(appType, name) {
+    appType === "OWA"?
+      toastr.info(`You would need to install the ${name} addon in order to link to it`)
+      :
+      toastr.info(`Sorry, there is no open web app for ${name}`);
   }
 
   handleUploadRequest() {
