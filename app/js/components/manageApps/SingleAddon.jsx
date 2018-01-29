@@ -45,6 +45,13 @@ export default class SingleAddon extends React.Component {
     });
   }
 
+  truncateAddonLength(addon) {
+    if (addon.length > 140) {
+      return `${addon.substring(0, 140)}...`;
+    }
+    return addon;
+  }
+
   render(){
     const {
       app,
@@ -66,7 +73,7 @@ export default class SingleAddon extends React.Component {
 
     return (
       <tr key={key}>
-        <td>
+        <td className="main-row">
           <div className="addon-name">
             {
               app.appType === "owa"?
@@ -108,7 +115,7 @@ export default class SingleAddon extends React.Component {
             }
           </div>
           <div><h5 className="addon-description">
-            {app.appDetails && app.appDetails.description}
+            {app.appDetails && this.truncateAddonLength(app.appDetails.description)}
           </h5></div>
           {
             updatesVersion ?
@@ -129,14 +136,18 @@ export default class SingleAddon extends React.Component {
           }
         </td>
         <td>
-          {
-            Array.isArray(maintainers) ? maintainers.map(maintainer => maintainer.name).join(', ') : maintainers
-          }
+          <h5>
+            {
+              Array.isArray(maintainers) ? this.truncateAddonLength(maintainers.map(maintainer => maintainer.name).join(', ')) : maintainers
+            }
+          </h5>
         </td>
         <td>
-          {app.appDetails.version ?
-            app.appDetails.version :
-            app.appDetails.latestVersion}
+          <h5>
+            {app.appDetails.version ?
+              app.appDetails.version :
+              app.appDetails.latestVersion}
+          </h5>
         </td>
         <td
           className="text-center"
