@@ -33,7 +33,6 @@ export default class Header extends Component {
     this.fetchLocation = this.fetchLocation.bind(this);
     this.getOpenmrsUrl = this.getOpenmrsUrl.bind(this);
     this.setOpenMRSLocation = this.setOpenMRSLocation.bind(this);
-    this.fetchCurrentUserLocation = this.fetchCurrentUserLocation.bind(this);
   }
 
   componentWillMount() {
@@ -56,14 +55,6 @@ export default class Header extends Component {
       this.setState((prevState, props) => {
         return {
           currentUser: response.user ? response.user.display : ''
-        };
-      });
-    });
-
-    this.fetchCurrentUserLocation('/v1/appui/session').then((response) => {
-      this.setState((prevState, props) => {
-        return {
-          currentLocationTag: response.sessionLocation ? response.sessionLocation.display : ''
         };
       });
     });
@@ -134,16 +125,6 @@ export default class Header extends Component {
   setOpenMRSLocation(locationUuid,locationDisplay) {
     let uploadUrl=this.getOpenmrsUrl()+"/ws/rest/v1/appui/session";
     axios.post(`${uploadUrl}`, {"location" : locationUuid});
-  }
-
-  fetchCurrentUserLocation(url) {
-    const apiHelper = new ApiHelper(null);
-    const getData = new Promise(function(resolve, reject) {
-      apiHelper.get(url).then(response => {
-        resolve(response);
-      });
-    });
-    return getData;
   }
 
   dropDownMenu(locationTags) {
