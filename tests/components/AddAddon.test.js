@@ -30,7 +30,7 @@ describe('<AddAddon />', () => {
     });
 
     it('Should display select Add-On message', () => {
-        expect(renderedComponent.text()).to.contain('Select an Add-On');
+        expect(renderedComponent.text()).to.contain('Select an Add-on');
     });
 
     it('Should have true disableClick initial state', function () {

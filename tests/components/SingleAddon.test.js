@@ -95,24 +95,12 @@ describe('<SingleAddon/>', () => {
     expect(addonComponent.find("tr")).to.have.length(1);
   });
 
-  it('Should render 5 td tags', () => {
-    expect(addonComponent.find("td")).to.have.length(5);
+  it('Should render 4 td tags', () => {
+    expect(addonComponent.find("td")).to.have.length(4);
   });
 
   it('Should render 3 div tags', () => {
     expect(addonComponent.find("div")).to.have.length(3);
-  });
-
-  it('Should render an image tag', () => {
-    expect(addonComponent.find("img")).to.have.length(1);
-  });
-
-  it('Should render an image tag', () => {
-    expect(addonComponent.find("img")).to.have.length(1);
-  });
-
-  it('Should render app icon', () => {
-    expect(addonComponent.find("img").html()).to.contain(owa.appDetails.icons[48]);
   });
 
   it('Should render correct status icon', () => {
@@ -120,15 +108,15 @@ describe('<SingleAddon/>', () => {
   });
 
   it('Should render app name', () => {
-    expect(addonComponent.find("td").at(1).html()).to.contain(owa.appDetails.name);
+    expect(addonComponent.find("td").at(1).html()).to.contain(owa.appDetails.developer.name);
   });
 
   it('Should render app developer name', () => {
-    expect(addonComponent.find("td").at(2).html()).to.contain(owa.appDetails.developer.name);
+    expect(addonComponent.find("td").at(1).html()).to.contain(owa.appDetails.developer.name);
   });
 
   it('Should render app version', () => {
-    expect(addonComponent.find("td").at(3).html()).to.contain(owa.appDetails.version);
+    expect(addonComponent.find("td").at(2).html()).to.contain(owa.appDetails.version);
   });
 
   it('Should render app of type owa', () => {

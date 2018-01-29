@@ -67,16 +67,6 @@ export default class SingleAddon extends React.Component {
     return (
       <tr key={key}>
         <td>
-          <img
-            src={app.appDetails &&
-              app.appDetails.icon !== null &&
-              app.appDetails.icons !== undefined ?
-              `/${location.href.split('/')[3]}/owa/openmrs-addonmanager/${app.appDetails.icons[48]}` :
-              `./img/omrs-button.png`}
-            alt="addon logo"
-          />
-        </td>
-        <td>
           <div className="addon-name">
             {
               app.appType === "owa"?

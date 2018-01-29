@@ -121,19 +121,15 @@ describe('<AddonList />', () => {
     });
 
     it('should render td tag', () => {
-        expect(testAddonList.find("td")).to.have.length(10);
-        expect(searchedAddonslist.find("td")).to.have.length(10);
+        expect(testAddonList.find("td")).to.have.length(8);
+        expect(searchedAddonslist.find("td")).to.have.length(8);
     });
 
     it('should render a h2 tag', () => {
         expect(testAddonList.find("h5")).to.have.length(2);
         expect(searchedAddonslist.find("h5")).to.have.length(2);
     });
-
-    it('should render a image tag', () => {
-        expect(testAddonList.find("img")).to.have.length(2);
-        expect(searchedAddonslist.find("img")).to.have.length(2);
-    });
+    
     it('should render child table correctly', () => {
         expect(testAddonList.find('tbody').children()).to.have.length(appList.length);
         expect(searchedAddonslist.find('tbody').children()).to.have.length(appList.length);
