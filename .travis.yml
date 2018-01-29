@@ -1,5 +1,15 @@
 language: node_js
 node_js:
-  - "8"
+- '8'
 after_success:
-  - npm run coveralls
+- npm run coveralls
+deploy:
+  provider: bintray
+  file: bintray.json
+  user: patlub
+  dry-run: false
+  on:
+    tags: true
+    branch: master
+  key:
+    secure: GWzNVyqkmJpme05DDuBCk51OUjFpSg1Yv1CC40vXFlVR48pYD0kiHZ3vtrvTMGeXONFanClzRQpqsbQ0y/q3QlUHP6UBwCu7K8zFt4QOMkOlRdjoeNThHFWKKSRtkbMaIRUwmOWwh3IIQyVkYr3LtvfjL0qBzXjFBBl5MTmU+n2k2HHed+j4G1TiXbT1ZCxc7vYSkxhKLvBbTDBCuuxvFD5LQ4VX65IEL98SDNaJk9MyhHubQCacUVwLPE6NjrXg9Y73dkx5IpCoyUON/8uLdiLJtXv6EXjKyA449zxp6NCN8jm0p93Wd3MgD0HUdl7yIlvbwSaVe0YhfgYBq8gsKbEEawHqT0N1sNLNBP+tHbk3r31N0+CBdhOkVUU1XxQjob5KfRsWTo9WaIei6Md3N5NaUh7EOD1pqv6AI3yHwueRHL9TvLUBqm1AXp8vIkxT5gT806/GwUfVipgai7JpM6WANA5z9FLNx4bn8VjwEZwrSU9bf554SCY0eamH1AOAsOd6bBgMEZ8naHFZ0zqhCOwDca9SFOkCje3DWe5DlXeCrYZidn5sN4GgjtWDY7lqqasPwdPdk66AsVjFXwnSIQMP54nPuOhfRqn3sP5el9xwDO3nZx384v+6NEFVdaBAjmfFp0AI9+XN/eU4dncLOEZ55hDwvAvnMk1r8lX6ov0=
