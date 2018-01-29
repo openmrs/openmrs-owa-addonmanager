@@ -11,7 +11,7 @@
 import React from 'react';
 import { expect } from 'chai';
 import sinon from 'sinon';
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import AddAddon from '../../app/js/components/manageApps/AddAddon.jsx';
 
 

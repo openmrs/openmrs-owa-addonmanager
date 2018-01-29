@@ -118,7 +118,7 @@ class Addon extends Component {
     this.requestUrl = '/v1/moduleaction';
     let postData = {};
 
-    if (moduleUuid != null) {
+    if (moduleUuid !== null) {
       postData = {
         "action": action,
         "modules": [moduleUuid],

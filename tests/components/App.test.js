@@ -9,13 +9,9 @@
  */
 
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import { expect } from 'chai';
-import sinon from 'sinon';
 import App from '../../app/js/components/App.jsx';
-import Loader from 'react-loader';
-import { StickyContainer, Sticky } from 'react-sticky';
-
 
 describe('<App />', () => {
 

@@ -343,7 +343,7 @@ export default class ManageApps extends React.Component {
       onUploadProgress: (event) => {
         this.handleProgress(event);
       }
-    }).then((response) => {
+    }).then(() => {
       this.setState((prevState, props) => {
         return {
           showMsg: true,
@@ -382,7 +382,7 @@ export default class ManageApps extends React.Component {
     let fileName = this.state.files[0].name;
     fileName = fileName.substr(0, fileName.lastIndexOf('.')) || fileName;
     const protocol = window.location.protocol;
-    const response = $.ajax({
+    $.ajax({
       xhr: function () {
         let xhrRequest = $.ajaxSetup().xhr();
         if (xhrRequest.upload) {
@@ -585,7 +585,7 @@ export default class ManageApps extends React.Component {
         onUploadProgress: (event) => {
           this.handleProgress(event);
         }
-      }).then((response) => {
+      }).then(() => {
         addonProcess === 'Upgrading' ?
           toastr.success(`Upgrading ${addon.appDetails.name} to version ${this.state.upgradeVersion} was successful`) :
           toastr.success(`${addon.appDetails.name} has been successfully installed`);
@@ -630,7 +630,7 @@ export default class ManageApps extends React.Component {
         onUploadProgress: (event) => {
           this.handleProgress(event);
         }
-      }).then((response) => {
+      }).then(() => {
         this.setState((prevState, props) => {
           return {
             showMsg: true,
@@ -706,7 +706,6 @@ export default class ManageApps extends React.Component {
               }
               :
               null;
-            return;
           }
         });
       });
@@ -849,7 +848,6 @@ export default class ManageApps extends React.Component {
   render() {
     const {
       files,
-      showProgress,
       uploadStatus,
       showMsg,
       updatesAvailable,
@@ -857,9 +855,6 @@ export default class ManageApps extends React.Component {
       msgBody,
       appList,
       searchedAddons,
-      checkUpdates,
-      isOpen,
-      selectedApp,
       searchComplete,
       isSearched,
       progressMsg,
@@ -880,7 +875,7 @@ export default class ManageApps extends React.Component {
     );
 
 
-    const disableUploadElements = (uploadStatus > 0) ? true : false;
+    const disableUploadElements = (uploadStatus > 0);
     disableUploadElements ? document.body.className = 'loading' : document.body.className = '';
 
 
@@ -1019,7 +1014,7 @@ export default class ManageApps extends React.Component {
             isOpen={openUpgradeConfirmation}
             confirmUpgrade={this.confirmUpgrade}
             dismissUpgradeModal={this.dismissUpgradeModal}
-          />
+            message={{}} />
         }
       </div>
     );

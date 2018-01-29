@@ -22,7 +22,7 @@ export default class AddAddon extends Component {
 
   showMessage() {
     const { files } = this.props;
-    if (files == null || files.length < 1) {
+    if (files === null || files.length < 1) {
       return (
         <p>Drag file here to upload or
           <a id="click-to-select" href=""

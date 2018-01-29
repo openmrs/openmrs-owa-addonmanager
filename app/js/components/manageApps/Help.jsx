@@ -82,11 +82,6 @@ export default class Help extends React.Component {
   }
 
   render() {
-    let {
-      AppBaseURLValue,
-      AppFolderPathValue,
-      AppStoreURLValue,
-    } = this.state;
     return (
       <div>
         <div className="row">

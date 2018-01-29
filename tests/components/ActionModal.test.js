@@ -37,7 +37,7 @@ describe('<ActionModal />', () => {
         app={selectedApp}
         handleAction= {(CohortBuilder) => {}}
         isOpen={true}
-        hideModal= {() => {}}/ >
+        hideModal= {() => {}} />
         );
 
     it('should render a Modal', () => {
