@@ -24,7 +24,7 @@ export default class AddAddon extends Component {
     const { files } = this.props;
     if (files == null || files.length < 1) {
       return (
-        <p>Drag file here to upload or
+        <p>Drag Add-on here to upload or
           <a id="click-to-select" href=""
             onClick={(e) => {
               e.preventDefault(); this.state.dropzoneRef.open();
@@ -43,7 +43,6 @@ export default class AddAddon extends Component {
     return (
       <div className="container-fluid">
         <div className="row drop-zone-container">
-          <span>Select an Add-on to upload</span>
           <Dropzone
             className="drop-zone"
             acceptClassName="drop-zone-accept"

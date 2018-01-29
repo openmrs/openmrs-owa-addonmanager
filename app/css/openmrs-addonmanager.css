@@ -288,7 +288,6 @@ legend.scheduler-border {
 }
 
 .manage-settings-wrapper {
-    margin-top: 20px;
     padding-right: 35px;
 }
 
@@ -529,7 +528,7 @@ span.title.breadcrumb-item {
 }
 
 #notification-wrapper {
-    margin: 10px 10px 0 10px;
+    margin: 0 10px 0 10px;
 }
 
 input[type=text]:focus {
@@ -599,7 +598,6 @@ body.loading .waiting-modal {
     height: 60px;
     line-height: 60px;
     margin-left: 15px;
-    margin-top: 10px;
     outline: 2px dashed #BBBBBB;
     outline-offset: -10px;
     width: 97%;

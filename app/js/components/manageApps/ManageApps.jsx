@@ -913,8 +913,6 @@ export default class ManageApps extends React.Component {
         <div className="main-home-page" id="body-wrapper">
           <div className="row">
             <div className="col-sm-12">
-              <h2 className="manage-addon-title">Add-on Manager</h2>
-              <span className="pull-right manage-settings-wrapper" />
               <span className="pull-right manage-settings-wrapper">
                 <span id="startall-modules-btn"
                   className="btn btn-secondary"
