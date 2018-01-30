@@ -9,6 +9,13 @@ const app = {
   "display": "Reference Demo Data Module",
   "name": "Reference Demo Data Module",
   "description": "Contains metadata and data required to run an instance of the reference application",
+  "latestVersion": "1.4.4",
+  "maintainers": [
+    {name: "Daniel Kayiwa", url: null},
+    {name: "Wyclif Luyima", url: null},
+    {name: "Darius Jazayeri", url: null},
+    {name: "Rafal Korytkowski", url: null}   
+  ],
   "packageName": "org.openmrs.module.referencedemodata",
   "author": "OpenMRS",
   "version": "1.4.3",
@@ -27,7 +34,8 @@ const app = {
     { "rel": "action", "uri": "http://localhost:8081/openmrs-standalone/ws/rest/v1/moduleaction" },
     { "rel": "self", "uri": "http://localhost:8081/openmrs-standalone/ws/rest/v1/module/referencedemodata" }
   ],
-  "resourceVersion": "1.8"
+  "resourceVersion": "1.8",
+  "uid": "org.openmrs.module.reference-demo-data-module"
 }
 
 describe('<Addon />', () => {
@@ -69,6 +77,27 @@ describe('<Addon />', () => {
     app.startupErrorMessage = null;
     component.setState({ showMessageDetail: true, app });
     expect(component.find(StartErrorModal)).to.have.length(0);
+  });
+
+  it('should display the uid of the module', () => {
+    component.setState({ app: app });
+    expect(component.state().app.uid).to.equal('org.openmrs.module.reference-demo-data-module');
+  });
+
+  it('should display the latestVersion of the module', () => {
+    component.setState({ app: app });
+    expect(component.state().app.latestVersion).to.equal('1.4.4');
+  });
+
+  it('should display the all the developer/maintainers names', () => {
+    component.setState({ app: app });
+    component.instance().fetchModule('module-referencedemodata');
+    expect(component.state().app.maintainers).to.be.deep.eql([
+      {name: "Daniel Kayiwa", url: null},
+      {name: "Wyclif Luyima", url: null},
+      {name: "Darius Jazayeri", url: null},
+      {name: "Rafal Korytkowski", url: null}   
+    ]);
   });
 
 });

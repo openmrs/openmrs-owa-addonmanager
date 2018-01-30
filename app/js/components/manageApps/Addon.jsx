@@ -69,12 +69,15 @@ class Addon extends Component {
     axios.get(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`)
       .then(response => {
         this.getAffectedModules(response.data.uuid);
-        this.setState({
-          app: response.data,
-          loadingComplete: true,
-        });
+        return axios.get(`${ApiHelper.getAddonUrl()}?modulePackage=${response.data.packageName}`)
+          .then(response => {
+            this.setState({
+              app: response.data,
+              loadingComplete: true,
+            });
+          });
       }).catch((error) => {
-        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
+        error && error.response && error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
         this.setState({ loadingComplete: true });
       });
 
@@ -277,7 +280,10 @@ class Addon extends Component {
       messageBody,
       messageType,
       showMessage } = this.state;
-      
+
+    const developerName = app && app.developer ? app.developer.name : null;
+    const maintainers = app.maintainers ? app.maintainers : developerName;
+         
     const message = app.startupErrorMessage && app.startupErrorMessage.length > 0 ?
       'Error starting '
       : null;
@@ -330,7 +336,7 @@ class Addon extends Component {
           <div className="title-container">
             <h3 id="addon-name">{app.name}</h3>
             <p id="addon-description">{app.description}</p>
-            {app.uuid ?
+            {app.uid ?
               <p id="addon-description">NOTE: Adding, removing, or starting modules will restart OpenMRS, meaning that all scheduled tasks and background processes will be interrupted.</p>
               :
               null
@@ -354,7 +360,11 @@ class Addon extends Component {
               </tr>
               <tr>
                 <td className="row-title">Version:</td>
-                <td>{app.version}</td>
+                <td>
+                  {
+                    app.version || app.latestVersion
+                  }
+                </td>
               </tr>
               <tr>
                 <td className="row-title">Type:</td>
@@ -368,12 +378,7 @@ class Addon extends Component {
                 <td className="row-title">Maintainers/Developers:</td>
                 <td>
                   {
-                    app.uuid ?
-                      app.author :
-                      app.developer ?
-                        app.developer.name :
-                        app.maintainers ?
-                          app.maintainers[0].name : ""
+                    Array.isArray(maintainers) ? maintainers.map(maintainer => maintainer.name).join(', ') : maintainers
                   }
                 </td>
               </tr>
