@@ -1,6 +1,6 @@
 import React from 'react';
 import { expect } from 'chai';
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { stub } from 'sinon';
 import { AddonList } from '../../app/js/components/manageApps/AddonList.jsx';
 

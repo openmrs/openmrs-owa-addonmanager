@@ -61,11 +61,7 @@ export default class App extends React.Component {
             <Sticky>
               {
                 ({ isSticky,
-                  wasSticky,
-                  style,
-                  distanceFromTop,
-                  distanceFromBottom,
-                  calculatedHeight }) => {
+                  style}) => {
                   return  <Header style={style} isSticky={isSticky}/>;
                 }
               }

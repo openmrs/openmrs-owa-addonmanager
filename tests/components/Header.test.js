@@ -10,13 +10,13 @@
 
 import React from 'react';
 import { expect } from 'chai';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import  Header  from '../../app/js/components/common/Header';
 import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent.jsx';
 
 
 describe('<Header />', () => {
-    const renderedComponent = shallow( < Header / > );
+    const renderedComponent = shallow( < Header /> );
     it('Should render its children', () => {
         expect(renderedComponent.find("div")).to.have.length(2);
     });

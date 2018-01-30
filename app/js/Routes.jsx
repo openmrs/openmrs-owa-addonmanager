@@ -6,8 +6,8 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-import React, { Component } from 'react';
-import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
+import React from 'react';
+import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import App from './components/App.jsx';
 
 import ManageApps from './components/manageApps/ManageApps.jsx';

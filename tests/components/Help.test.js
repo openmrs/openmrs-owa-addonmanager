@@ -10,8 +10,7 @@
 
 import React from 'react';
 import { expect } from 'chai';
-import { mount, shallow } from 'enzyme';
-import sinon from 'sinon';
+import { shallow } from 'enzyme';
 import Help from '../../app/js/components/manageApps/Help';
 
 describe('<Help />', () => {

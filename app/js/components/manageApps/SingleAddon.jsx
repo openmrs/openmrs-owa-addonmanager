@@ -56,7 +56,6 @@ export default class SingleAddon extends React.Component {
       openPage,
       handleInstall,
       handleUpgrade,
-      showMessageDetail
     } = this.props;
 
     const maintainers = app.appDetails.maintainers ? app.appDetails.maintainers : app.appDetails.developer.name;

@@ -2,7 +2,6 @@ import React from 'react';
 import { expect } from 'chai';
 import { shallow } from 'enzyme';
 import ManageApps from '../../app/js/components/manageApps/ManageApps.jsx';
-import BreadCrumbComponent from '../../app/js/components/breadCrumb/BreadCrumbComponent.jsx';
 import AddonList from '../../app/js/components/manageApps/AddonList.jsx';
 import AddAddon from '../../app/js/components/manageApps/AddAddon.jsx';
 
