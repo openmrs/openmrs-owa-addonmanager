@@ -125,9 +125,9 @@ describe('<AddonList />', () => {
         expect(searchedAddonslist.find("td")).to.have.length(8);
     });
 
-    it('should render a h2 tag', () => {
-        expect(testAddonList.find("h5")).to.have.length(2);
-        expect(searchedAddonslist.find("h5")).to.have.length(2);
+    it('should render a h5 tag', () => {
+        expect(testAddonList.find("h5")).to.have.length(6);
+        expect(searchedAddonslist.find("h5")).to.have.length(6);
     });
     
     it('should render child table correctly', () => {

@@ -823,3 +823,7 @@ body.loading .waiting-modal {
     font-size: 1.0em;
     padding: 5px;
 }
+
+.main-row {
+    width: 30vw;
+}
