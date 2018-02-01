@@ -90,6 +90,9 @@
   "nyc": {
     "exclude": [
       "tests/**/*.js",
+      "openmrs-addonmanager/libs/**/*.js",
+      "webpack.*.js",
+      "server.babel.js",
       "libs/**/*.js",
       "dist/**/*.js",
       "coverage/**/*.js"
