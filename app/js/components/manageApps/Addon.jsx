@@ -336,11 +336,20 @@ class Addon extends Component {
           <div className="title-container">
             <h3 id="addon-name">{app.name}</h3>
             <p id="addon-description">{app.description}</p>
-            {app.uid ?
-              <p id="addon-description">NOTE: Adding, removing, or starting modules will restart OpenMRS, meaning that all scheduled tasks and background processes will be interrupted.</p>
-              :
-              null
-            }
+            <div className="row">
+              {app.uid ?
+                <p className="alert-warning container-fluid" id="addon-description">
+                  <div className="col-xs-1">
+                    <span className="glyphicon glyphicon-warning-sign warning-message" />
+                  </div>
+                  <div className="col-xs-11 error-message">
+                    Adding, removing, or starting modules will restart OpenMRS, meaning that all scheduled tasks and background processes will be interrupted.
+                  </div>
+                </p>
+                :
+                null
+              }
+            </div>
           </div>
           {
             this.actionRunning()
