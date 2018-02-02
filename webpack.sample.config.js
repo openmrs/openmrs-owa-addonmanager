@@ -33,7 +33,7 @@ require.extensions['.webapp'] = function (module, filename) {
 };
 const manifest = require('./app/manifest.webapp');
 
-const THIS_APP_ID = 'openmrs-addonmanager';
+const THIS_APP_ID = 'addonmanager';
 
 const THIS_APP_VERSION = JSON.parse(manifest).version;
 
@@ -43,10 +43,6 @@ const nodeModules = {};
 let outputFile = `.bundle`;
 let vendorOutputFile;
 let outputPath;
-
-let configJson;
-let appEntryPoint;
-let localOwaFolder;
 
 let devtool;
 
