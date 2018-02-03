@@ -22,6 +22,7 @@ export const AddonList = ({
   updatesAvailable,
   searchedAddons,
   getInstalled,
+  getInstalledOwa,
   handleInstall,
   handleUpgrade,
 }) => {
@@ -34,13 +35,15 @@ export const AddonList = ({
       {
         appList.map((app, key) => {
           let found = null;
-          (app.appType === "owa" || app.appDetails.type === "OWA") ?
-            searchedAddons.length > 0 && (installedSearchResults['owas'].includes(app.appDetails.name) || installedSearchResults['owas'].includes(app.appDetails.folderName)) ?
-              found = addonList.find(addon => (addon.appDetails.folderName === app.appDetails.name || addon.appDetails.name === app.appDetails.name)):null
-            :
+          if ((app.appType === "owa" || app.appDetails.type === "OWA") && searchedAddons.length > 0){
+            let installedOwa = getInstalledOwa(installedSearchResults['owas'], app);
+            installedOwa ?
+              found = addonList.find(addon => (addon.appDetails.folderName === installedOwa)):null;
+          } else {
             searchedAddons.length > 0 && (installedSearchResults['modules'].includes(app.appDetails.moduleId) || installedSearchResults['modules'].includes(app.appDetails.uid)) ?
               found = addonList.find(addon => (addon.appDetails.uuid === app.appDetails.moduleId || addon.appDetails.uid === app.appDetails.uid)
               ) : null;
+          }
 
           if (found) {
             app = found;
@@ -88,6 +91,7 @@ AddonList.propTypes = {
   handleDownload: PropTypes.func.isRequired,
   searchedAddons: PropTypes.array.isRequired,
   getInstalled: PropTypes.func.isRequired,
+  getInstalledOwa: PropTypes.func.isRequired,
   handleInstall: PropTypes.func.isRequired,
   handleUpgrade: PropTypes.func.isRequired,
 };
