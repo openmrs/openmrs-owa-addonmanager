@@ -619,7 +619,6 @@ export default class ManageApps extends React.Component {
     if (addon && addon.appDetails.type === 'OWA') {
       this.requestUrl = '/owa/installapp';
       let urlObject = {
-        'fileName': addon.appDetails.name,
         'urlValue': addon.appDetails.versions[0].downloadUri,
       };
       const data = JSON.stringify(urlObject);
