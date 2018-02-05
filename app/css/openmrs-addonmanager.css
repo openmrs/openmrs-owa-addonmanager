@@ -840,3 +840,8 @@ body.loading .waiting-modal {
     position: relative;
     right: 1vw
 }
+
+.none-user-page {
+  text-align: center;
+  padding: 4%;
+}

@@ -57,6 +57,7 @@ export default class SingleAddon extends React.Component {
       app,
       key,
       addonParam,
+      isAdmin,
       updatesVersion,
       handleUserClick,
       handleDownload,
@@ -153,7 +154,7 @@ export default class SingleAddon extends React.Component {
           id="view-icon-wrapper"
         >
           {
-            app.install === false ?
+            !app.install || !isAdmin ?
               <Link
                 to={{
                   pathname: "addon/" + addonParam,

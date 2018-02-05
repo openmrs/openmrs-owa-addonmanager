@@ -20,7 +20,9 @@ class Addon extends Component {
       starting: false,
       isOpen: false,
       showMessageDetail: false,
+      isAdmin: false,
       loadingComplete: false,
+      enableDeleteAndStart: true,
       messageBody: '',
       messageType: 'success',
       showMessage: false,
@@ -32,6 +34,9 @@ class Addon extends Component {
     this.handleAction = this.handleAction.bind(this);
     this.actionRunning = this.actionRunning.bind(this);
     this.handleAddonAction = this.handleAddonAction.bind(this);
+    this.checkIsAdmin = this.checkIsAdmin.bind(this);
+    this.fetchCurrentUser = this.fetchCurrentUser.bind(this);
+    this.enableAdminDeleteAndStart = this.enableAdminDeleteAndStart.bind(this);
     this.hideModal = this.hideModal.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.getAffectedModules = this.getAffectedModules.bind(this);
@@ -41,6 +46,8 @@ class Addon extends Component {
 
   componentWillMount(){
     this.props.checkLoginStatus();
+    this.checkIsAdmin();
+    this.enableAdminDeleteAndStart();
   }
 
   componentDidMount() {
@@ -81,6 +88,71 @@ class Addon extends Component {
         this.setState({ loadingComplete: true });
       });
 
+  }
+
+  fetchCurrentUser(){
+    const apiHelper = new ApiHelper(null);
+    const getUserData = new Promise(function(resolve, reject) {
+      apiHelper.get('/v1/session').then(response => {
+        resolve(response);
+      });
+    });
+    return getUserData;
+  }
+
+  checkIsAdmin() {
+    this.fetchCurrentUser().then((response) => {
+      if (response.user) {
+        const user = response.user;
+        let userPrivileges = [];
+        let userCanManageModules;
+        let userHasPermittedRoles;
+        userPrivileges = userPrivileges.concat(user.privileges);
+        if (user.roles.length > 0){
+          const roles = user.roles;
+          const userRoles = roles.find((userRole) => {
+            if (userRole.display === "System Developer") {
+              return userHasPermittedRoles = true;
+            }
+            return userHasPermittedRoles = false;
+          });
+        }
+        if (userPrivileges.length > 0) {
+          const managePrivilege = userPrivileges.find((managemodules) => {
+            if (managemodules.display === "Manage Modules") {
+              return userCanManageModules = true;
+            }
+            return userCanManageModules = false;
+          });
+        }
+        if (userCanManageModules || userHasPermittedRoles){
+          this.setState((prevState, props) => {
+            return {
+              isAdmin : true,
+            };
+          });
+        }
+      }
+    });
+  }
+
+  enableAdminDeleteAndStart () {
+    const applicationDistribution = location.href.split('/')[2];
+    const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
+    const url = location.href.split('/')[3];
+    const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
+    const requestUrl = '/owa/allowModuleWebUpload';
+    axios.get(`${urlPrefix}/${apiBaseUrl}${requestUrl}`)
+      .then(response => {
+        this.setState((prevState, props) => {
+          return {
+            enableDeleteAndStart : response.data,
+          };
+        });
+      })
+      .catch(error => {
+        toastr.error(error.message);
+      });
   }
 
   fetchOwa(fileName) {
@@ -129,14 +201,14 @@ class Addon extends Component {
     }
 
     axios.post(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`, postData)
-      .then(response => {       
+      .then(response => {
         const moduleName = response.data.modules[0].display;
         this.setState({
           stopping: false,
           starting: false,
-          messageBody: response.data.action == 'START' ? 
-            `${moduleName} module has started` 
-            : 
+          messageBody: response.data.action == 'START' ?
+            `${moduleName} module has started`
+            :
             `${moduleName} module has stopped`,
           messageType: 'success',
           showMessage: true,
@@ -271,19 +343,21 @@ class Addon extends Component {
 
   render() {
     const {
-      app, 
-      isOpen, 
-      showMessageDetail, 
-      affectedModules, 
-      action, 
+      app,
+      isOpen,
+      isAdmin,
+      showMessageDetail,
+      affectedModules,
+      action,
       loadingComplete,
       messageBody,
+      enableDeleteAndStart,
       messageType,
       showMessage } = this.state;
 
     const developerName = app && app.developer ? app.developer.name : null;
     const maintainers = app.maintainers ? app.maintainers : developerName;
-         
+
     const message = app.startupErrorMessage && app.startupErrorMessage.length > 0 ?
       'Error starting '
       : null;
@@ -394,34 +468,38 @@ class Addon extends Component {
             </tbody>
           </table>
 
-          <button
-            type="button"
-            className="btn btn-danger btn-delete btn-lower-margin"
-            onClick={(event) => this.handleAddonAction(event, "delete")}
-          >
-            Delete
-          </button>
-
-          {
-            app.uuid ?
-              app.started ?
+          { enableDeleteAndStart ?
+            isAdmin ?
+              <span>
                 <button
                   type="button"
-                  className="btn btn-primary module-control btn-lower-margin"
-                  onClick={(event) => this.handleAddonAction(event, "stop")}
+                  className="btn btn-danger btn-delete"
+                  onClick={(event) => this.handleAddonDelete(event)}
                 >
-                  Stop
+                  Delete
                 </button>
-                :
-                <button
-                  type="button"
-                  className="btn btn-success module-control btn-lower-margin"
-                  onClick={(event) => this.handleAction(app.uuid, "start", event)}
-                >
-                  Start
-                </button>
-              :
-              <span />
+                <span>
+                  { app.uuid ?
+                    app.started ?
+                      <button
+                        type="button"
+                        className="btn btn-primary module-control"
+                        onClick={(event) => this.handleAction(event, app.uuid, "stop")}
+                      >
+                          Stop
+                      </button>
+                      :
+                      <button
+                        type="button"
+                        className="btn btn-success module-control"
+                        onClick={(e) => this.handleAction(e, app.uuid, "start")}
+                      >
+                          Start
+                      </button>
+                    : null}
+                </span>
+              </span>
+              : null :null
           }
           {isOpen ? (
             <ActionAddonModal

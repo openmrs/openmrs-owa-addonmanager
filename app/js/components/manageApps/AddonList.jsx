@@ -17,6 +17,7 @@ export const AddonList = ({
   addonList,
   openPage,
   openModal,
+  isAdmin,
   handleUserClick,
   updatesAvailable,
   searchedAddons,
@@ -52,6 +53,7 @@ export const AddonList = ({
                 <SingleAddon
                   app={app}
                   key={key}
+                  isAdmin={isAdmin}
                   addonParam={addonParam}
                   handleUserClick={handleUserClick}
                   updatesVersion={updatesAvailable[app.appDetails.name]}
@@ -63,6 +65,7 @@ export const AddonList = ({
               <SingleAddon
                 app={app}
                 key={key}
+                isAdmin={isAdmin}
                 handleUserClick={handleUserClick}
                 handleDownload={handleDownload}
                 openPage={openPage}
