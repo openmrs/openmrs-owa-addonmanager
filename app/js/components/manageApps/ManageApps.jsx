@@ -95,7 +95,7 @@ export default class ManageApps extends React.Component {
         this.hideModal();
       }
     });
-    document.title = "Add-on Manager";
+    document.title = "Add On Manager";
   }
 
   startAllModules() {

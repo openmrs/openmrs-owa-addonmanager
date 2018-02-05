@@ -56,7 +56,7 @@ let getConfig = function () {
     // create file with defaults if not found
     config = {
       'LOCAL_OWA_FOLDER': '/home/sims01/openmrs/openmrs-server/owa/',
-      'APP_ENTRY_POINT': 'http://localhost:8081/openmrs-standalone/owa/openmrs-addonmanager/index.html'
+      'APP_ENTRY_POINT': 'http://localhost:8081/openmrs-standalone/owa/addonmanager/index.html'
     };
 
     fs.writeFile('config.json', JSON.stringify(config));
