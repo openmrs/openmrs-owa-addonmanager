@@ -23,8 +23,8 @@ describe('<BreadCrumbComponent />', () => {
         expect(breadCrumb.find("span")).to.have.length(7);
     });
 
-    it('Should render a `Add-On Manager` in a span', () => {
-        expect(breadCrumb.find("span").getNodes()[2].props.children.props.children).equals("Add-on Manager");
+    it('Should render a `Add On Manager` in a span', () => {
+        expect(breadCrumb.find("span").getNodes()[2].props.children.props.children).equals("Add On Manager");
     });
 
     it('Should render a `Manage app` in a span', () => {
