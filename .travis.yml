@@ -1,24 +1,20 @@
 language: node_js
 node_js:
 - '8'
-
 after_success:
 - npm run coveralls
-
 install:
-  - npm install
+- npm install
 before_script:
-  - chmod +x ./deploy.sh
-  - ./deploy.sh
-
+- chmod +x ./deploy.sh
+- "./deploy.sh"
 script: npm run build:prod
-
 deploy:
   provider: bintray
   file: bintray.json
-  user: patlub
+  user: elbertbiggs360
   dry-run: false
   on:
     branch: master
   key:
-    secure: GWzNVyqkmJpme05DDuBCk51OUjFpSg1Yv1CC40vXFlVR48pYD0kiHZ3vtrvTMGeXONFanClzRQpqsbQ0y/q3QlUHP6UBwCu7K8zFt4QOMkOlRdjoeNThHFWKKSRtkbMaIRUwmOWwh3IIQyVkYr3LtvfjL0qBzXjFBBl5MTmU+n2k2HHed+j4G1TiXbT1ZCxc7vYSkxhKLvBbTDBCuuxvFD5LQ4VX65IEL98SDNaJk9MyhHubQCacUVwLPE6NjrXg9Y73dkx5IpCoyUON/8uLdiLJtXv6EXjKyA449zxp6NCN8jm0p93Wd3MgD0HUdl7yIlvbwSaVe0YhfgYBq8gsKbEEawHqT0N1sNLNBP+tHbk3r31N0+CBdhOkVUU1XxQjob5KfRsWTo9WaIei6Md3N5NaUh7EOD1pqv6AI3yHwueRHL9TvLUBqm1AXp8vIkxT5gT806/GwUfVipgai7JpM6WANA5z9FLNx4bn8VjwEZwrSU9bf554SCY0eamH1AOAsOd6bBgMEZ8naHFZ0zqhCOwDca9SFOkCje3DWe5DlXeCrYZidn5sN4GgjtWDY7lqqasPwdPdk66AsVjFXwnSIQMP54nPuOhfRqn3sP5el9xwDO3nZx384v+6NEFVdaBAjmfFp0AI9+XN/eU4dncLOEZ55hDwvAvnMk1r8lX6ov0=
+    secure: D2nDG02FweJrtiPd/52Y9EiaLD3UPoNbUQYvhkTOUBk0XLzftGxUvt+A5HiMZU5uZAG9v2g8eOZeVRKEEJcLYB3JUt6Jzxzy0SzL2Md6CuccFhJZYmn7LfhjdW5awjg8lSQlSJhQqBHstSjZF4nzZB+oeamUxeINKAV890TLFoOXW+zZ1/7cB7Yw24LWnvt2i6WY7oZl7JW3EhVkSnsSLBkKS1hhECO9F15zxF7S4ohE/zklh9sg55zrS6Y5qVswyveuLI1Iw0s3TERWI2qytAK073VCltJyK8Xv2mBfxCTpXZQ4oTgd0PahfYSdHL8ahjKbzegbXWLpljNxP+cGUGBVBQj6m9A4vpVKRC57B+h7kLbpdZ6H4xa2MrvJiIVnyWOAcamJxXDv+lFCd/L4OPzpiyEpoHsjtR76C9UteuskQp/VttiHrivj1VveFrarIy3PBjOs7qlU6XKAWJ9Q42qtFZ127CLBBVm4NQsW1HEa2ae7kN21AZhRwpBcvcfYDTWXAawyDyrjQ+A2kgzpGIll8ZGswU5h79z8AJMx1Tc+UR1Si1Bfw6HOYY6TSYH9tZLrLaxwbMSoesxGJ3PGLpPdsyn/txMAv1zTbA1N4lgWSGFl8kLGHA6oojQdvmxrnr9P6MxPP55M3srGmd0OQ/V1N4tGESAmDHRiwgV/c4k=
