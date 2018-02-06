@@ -12,9 +12,8 @@ script: npm run build:prod
 deploy:
   provider: bintray
   file: bintray.json
-  user: elbertbiggs360
+  user: rkorytkowski
   dry-run: false
   on:
-    branch: master
-  key:
-    secure: D2nDG02FweJrtiPd/52Y9EiaLD3UPoNbUQYvhkTOUBk0XLzftGxUvt+A5HiMZU5uZAG9v2g8eOZeVRKEEJcLYB3JUt6Jzxzy0SzL2Md6CuccFhJZYmn7LfhjdW5awjg8lSQlSJhQqBHstSjZF4nzZB+oeamUxeINKAV890TLFoOXW+zZ1/7cB7Yw24LWnvt2i6WY7oZl7JW3EhVkSnsSLBkKS1hhECO9F15zxF7S4ohE/zklh9sg55zrS6Y5qVswyveuLI1Iw0s3TERWI2qytAK073VCltJyK8Xv2mBfxCTpXZQ4oTgd0PahfYSdHL8ahjKbzegbXWLpljNxP+cGUGBVBQj6m9A4vpVKRC57B+h7kLbpdZ6H4xa2MrvJiIVnyWOAcamJxXDv+lFCd/L4OPzpiyEpoHsjtR76C9UteuskQp/VttiHrivj1VveFrarIy3PBjOs7qlU6XKAWJ9Q42qtFZ127CLBBVm4NQsW1HEa2ae7kN21AZhRwpBcvcfYDTWXAawyDyrjQ+A2kgzpGIll8ZGswU5h79z8AJMx1Tc+UR1Si1Bfw6HOYY6TSYH9tZLrLaxwbMSoesxGJ3PGLpPdsyn/txMAv1zTbA1N4lgWSGFl8kLGHA6oojQdvmxrnr9P6MxPP55M3srGmd0OQ/V1N4tGESAmDHRiwgV/c4k=
+    tags: true
+  key: $BINTRAY_API_KEY
