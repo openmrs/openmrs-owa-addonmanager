@@ -1,6 +1,6 @@
 {
   "name": "openmrs-owa-addonmanager",
-  "version": "1.0.0",
+  "version": "1.0.0-beta",
   "description": "This will help in uploading the openmrs open web apps and omod files",
   "repository": {
     "type": "git",
