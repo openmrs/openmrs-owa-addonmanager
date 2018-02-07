@@ -4,11 +4,11 @@
 
 <img src="https://cloud.githubusercontent.com/assets/668093/12567089/0ac42774-c372-11e5-97eb-00baf0fccc37.jpg" alt="OpenMRS"/>
 
-# OpenMRS Add-Ons Manager
+# OpenMRS Add Ons Manager
 
 This repository contains the openmrs-addOnManager OpenMRS Open Web App.
 
-> The OpenMRS Add-Ons Manager is a tool used for uploading, listing, and deleting existing OWAs and modules.
+> The OpenMRS Add Ons Manager is a tool used for uploading, listing, and deleting existing OWAs and modules.
 
 For further documentation about OpenMRS Open Web Apps see
 [the wiki page](https://wiki.openmrs.org/display/docs/Open+Web+Apps+Module).

@@ -37,6 +37,7 @@ const app = {
   "resourceVersion": "1.8",
   "uid": "org.openmrs.module.reference-demo-data-module"
 }
+const title = "Add On Information";
 
 describe('<Addon />', () => {
   let component;
@@ -57,6 +58,11 @@ describe('<Addon />', () => {
 
   it('should have addon class', () => {
     expect(component.hasClass('addon')).to.equal(true);
+  });
+
+  it('should have addon back button', () => {
+    const backButton = "Back to all Add Ons"
+    expect(component.html()).to.contain(backButton);
   });
 
   it('should render a table', () => {
