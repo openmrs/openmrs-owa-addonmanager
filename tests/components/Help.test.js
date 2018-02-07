@@ -19,9 +19,9 @@ describe('<Help />', () => {
   it('should render its children', () => {
     expect(renderedComponent.find("div")).to.have.length(4)
     expect(renderedComponent.find("h2")).to.have.length(1)
-    expect(renderedComponent.find("img")).to.have.length(6)
+    expect(renderedComponent.find("img")).to.have.length(12)
     expect(renderedComponent.find("h2")).to.have.length(1)
-    expect(renderedComponent.find("p")).to.have.length(10)
+    expect(renderedComponent.find("p")).to.have.length(22)
     expect(renderedComponent.find("fieldset")).to.have.length(1)
     expect(renderedComponent.find("legend")).to.have.length(1)
   })
