@@ -26,6 +26,7 @@ class Addon extends Component {
       messageBody: '',
       messageType: 'success',
       showMessage: false,
+      appType: '',
     };
     this.apiHelper = new ApiHelper(null);
     this.fetchOwa = this.fetchOwa.bind(this);
@@ -58,6 +59,7 @@ class Addon extends Component {
   fetchAddon() {
     const fileName = this.props.params.addonName;
     const addonType = fileName.substr(0, fileName.indexOf('-'));
+    this.setState({ appType : addonType });
     if (addonType === 'module') {
       this.fetchModule(fileName);
     } else if (addonType === 'owa') {
@@ -77,7 +79,8 @@ class Addon extends Component {
       .then(response => {
         this.getAffectedModules(response.data.uuid);
         return axios.get(`${ApiHelper.getAddonUrl()}?modulePackage=${response.data.packageName}`)
-          .then(response => {
+          .then(maintainers => {
+            response.data.maintainers = maintainers.data.maintainers;
             this.setState({
               app: response.data,
               loadingComplete: true,
@@ -344,11 +347,12 @@ class Addon extends Component {
   render() {
     const {
       app,
-      isOpen,
       isAdmin,
-      showMessageDetail,
-      affectedModules,
-      action,
+      isOpen,
+      appType,
+      showMessageDetail, 
+      affectedModules, 
+      action, 
       loadingComplete,
       messageBody,
       enableDeleteAndStart,
@@ -411,7 +415,7 @@ class Addon extends Component {
             <h3 id="addon-name">{app.name}</h3>
             <p id="addon-description">{app.description}</p>
             <div className="row">
-              {app.uid ?
+              {appType === 'module' ?
                 <p className="alert-warning container-fluid" id="addon-description">
                   <div className="col-xs-1">
                     <span className="glyphicon glyphicon-warning-sign warning-message" />
@@ -453,7 +457,7 @@ class Addon extends Component {
                 <td className="row-title">Type:</td>
                 <td>
                   {
-                    app.uuid ? "Module" : "OWA"
+                    appType === 'module' ? "Module" : "OWA"
                   }
                 </td>
               </tr>
@@ -473,14 +477,14 @@ class Addon extends Component {
               <span>
                 <button
                   type="button"
-                  className="btn btn-danger btn-delete"
-                  onClick={(event) => this.handleAddonDelete(event)}
+                  className="btn btn-danger btn-delete btn-lower-margin"
+                  onClick={(event) => this.handleAddonAction(event, "delete")}
                 >
                   Delete
                 </button>
                 <span>
-                  { app.uuid ?
-                    app.started ?
+                  { appType === 'module' ?
+                      app.started ?
                       <button
                         type="button"
                         className="btn btn-primary module-control"
