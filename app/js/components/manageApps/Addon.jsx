@@ -87,7 +87,7 @@ class Addon extends Component {
             });
           });
       }).catch((error) => {
-        error && error.response && error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
+        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
         this.setState({ loadingComplete: true });
       });
 

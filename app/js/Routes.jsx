@@ -6,20 +6,22 @@
  * Copyright (C) OpenMRS Inc. OpenMRS is a registered trademark and the OpenMRS
  * graphic logo is a trademark of OpenMRS Inc.
  */
-import React from 'react';
-import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+import React, { Component } from 'react';
+import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
 import App from './components/App.jsx';
 
 import ManageApps from './components/manageApps/ManageApps.jsx';
 import ManageSettings from './components/manageApps/ManageSettings.jsx';
 import Addon from './components/manageApps/Addon.jsx';
 import Help from './components/manageApps/Help.jsx';
+import Login from './components/manageApps/Login.jsx';
 
 
 export default () => {
   return (
     <Router history={hashHistory}>
-      <Route path="/" component={App} >
+      <Route path="/login" component={Login} />
+      <Route path="/" component={App}>
         <IndexRoute component={ManageApps} />
         <Route path="manageSettings" component={ManageSettings} />
         <Route path="help" component={Help} />

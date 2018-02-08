@@ -7,6 +7,7 @@
  * graphic logo is a trademark of OpenMRS Inc.
  */
 import React from 'react';
+import { hashHistory } from 'react-router';
 import Header from '../components/common/Header.jsx';
 import { StickyContainer, Sticky } from 'react-sticky';
 import { ApiHelper } from '../helpers/apiHelper';
@@ -32,9 +33,7 @@ export default class App extends React.Component {
 
   checkLoginStatus(){
     this.fetchLocation('/v1/session').then((response) => {
-      !response.user ?
-        location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` :
-        this.setState({loggedIn: true, routeChanged: false});
+      !(response.authenticated) ? hashHistory.push('/login') : this.setState({loggedIn: true, routeChanged: false});
     });
   }
 

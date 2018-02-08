@@ -9,6 +9,7 @@
  */
 
 import React, { Component } from 'react';
+import { hashHistory } from 'react-router';
 import { ApiHelper } from '../../helpers/apiHelper';
 import BreadCrumbComponent from '../breadCrumb/BreadCrumbComponent';
 import axios from 'axios';
@@ -32,6 +33,7 @@ export default class Header extends Component {
     this.fetchLocation = this.fetchLocation.bind(this);
     this.getOpenmrsUrl = this.getOpenmrsUrl.bind(this);
     this.setOpenMRSLocation = this.setOpenMRSLocation.bind(this);
+    this.logOut = this.logOut.bind(this);
   }
 
   componentWillMount() {
@@ -85,7 +87,7 @@ export default class Header extends Component {
       let url = location.links[0].uri;
       let arrUrl = url.split("/"); 
       let applicationInUse = arrUrl[3].search('http:') == -1 ? arrUrl[3] : arrUrl[3].replace('http:', '');
-      let customUrl = `/${applicationInUse}/appui/header/logout.action?successUrl=${applicationInUse}`;
+      let customUrl = `/${applicationInUse}/logout`;
       this.setState((prevState, props) => {
         return {
           currentLogOutUrl: customUrl
@@ -174,6 +176,15 @@ export default class Header extends Component {
     return menuDisplay;
   }
 
+  logOut(event){
+    axios.get(this.state.currentLogOutUrl).then((response) => {
+      hashHistory.push('/login')
+    })
+    .catch(error => {
+      toastr.error(error.messsage);
+  });
+}
+
   render() {
     return (
       <div style={{...this.props.style, zIndex: 1}}>
@@ -208,7 +219,7 @@ export default class Header extends Component {
               </ul>
             </li>
             <li>
-              <a href={this.state.currentLogOutUrl}>Logout {' '}
+              <a onClick={(event) => this.logOut(event)}>Logout {' '}
                 <span className="glyphicon glyphicon-log-out"/></a>
             </li>
           </ul>
