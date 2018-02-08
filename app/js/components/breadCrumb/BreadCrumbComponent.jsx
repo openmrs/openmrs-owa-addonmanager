@@ -137,7 +137,7 @@ class BreadCrumbComponent extends Component {
             <span className="glyphicon glyphicon-chevron-right breadcrumb-item separator"
               aria-hidden="true" />
             <span className="title breadcrumb-item">
-              <strong>Add-On</strong>
+              <strong>Add On</strong>
             </span>
           </span>
         }

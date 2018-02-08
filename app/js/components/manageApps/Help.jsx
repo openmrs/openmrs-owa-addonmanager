@@ -102,40 +102,40 @@ export default class Help extends React.Component {
 
               <section>
                 <p><strong>1. How to check for running status of addons</strong></p>
-                <p> <img src={(runningStatus)} className="help-page-images" alt="Add-On manager homepage" /></p>
+                <p> <img src={(runningStatus)} className="help-page-images" alt="Add On manager homepage" /></p>
                     A list of all installed addons and their running status. The green icon indicates the addon is running while the red icon indicates addon not running.
               </section><br />
 
               <section>
                 <p><strong>2. Search the addon index</strong></p>
-                <p> <img src={(searchAddon)} className="help-page-images" alt="Add-On manager homepage" /></p>
+                <p> <img src={(searchAddon)} className="help-page-images" alt="Add On manager homepage" /></p>
                     You can search for addon by key words in name and description
               </section><br />
 
               <section>
                 <p><strong>3. Install Addon </strong></p>
-                <p> <img src={(installAddon)} className="help-page-images" alt="Add-On manager homepage" /></p>
+                <p> <img src={(installAddon)} className="help-page-images" alt="Add On manager homepage" /></p>
                     You can install an addon directly by clicking on the install button. This is the most effective way to install an addon.
               </section><br />
 
               <section>
                 <p><strong>4. Download an addon file </strong></p>
-                <p> <img src={(downloadAddon)} className="help-page-images" alt="Add-On manager homepage" /></p>
+                <p> <img src={(downloadAddon)} className="help-page-images" alt="Add On manager homepage" /></p>
                     You can download an addon to your local system by clicking the `Download` text.
               </section><br />
 
               <section>
                 <p><strong>5. Upload an addon file from the local system </strong></p>
-                <p> <img src={(dragAndDrop)} className="help-page-images" alt="Add-On manager homepage" /></p>
+                <p> <img src={(dragAndDrop)} className="help-page-images" alt="Add On manager homepage" /></p>
                     You can install an addon from your local system by simply drag and drop or by clicking the `Click to Select` text.
               </section><br />
 
               <section>
                 <p><strong>6. How do you check for updates?</strong></p>
                 <p>To check for newer versions of installed addons click on the check for updates button
-                  <img src={(checkforupdates)} className="help-page-images" alt="Add-On manager homepage" /><br />
+                  <img src={(checkforupdates)} className="help-page-images" alt="Add On manager homepage" /><br />
                   If any addons have updates they'll be in the resulting list e.g
-                  <img src={(updateslist)} className="help-page-images" alt="Add-On manager homepage" /></p>
+                  <img src={(updateslist)} className="help-page-images" alt="Add On manager homepage" /></p>
                 <p> The latest version will be displayed as shown above
                     A user can upgrade by clicking on the upgrade button or download the new file.
                     A user can decide to go back to the original addon list by clicking the back to all addons
@@ -145,20 +145,20 @@ export default class Help extends React.Component {
               <section>
                 <p><strong>7. What does the view button do?</strong></p>
                 <p>In order to view the interface of a particular module, you click on the view button as shown
-                  <img src={(view)} className="help-page-images" alt="Add-On manager homepage" /><br /></p>
+                  <img src={(view)} className="help-page-images" alt="Add On manager homepage" /><br /></p>
                 <p>When you click on a module, the resulting UI should be as shown below.Only modules have the stop and start button.When a module starts it is indicated by a green icon
                                 and when it stops, a red icon is displayed on the status.A stopped module is still loaded, it just doesn't have any effect on the system</p>
                 <p><strong>The start icon</strong></p>
-                <img src={(start)} className="help-page-images" alt="Add-On manager homepage" />
+                <img src={(start)} className="help-page-images" alt="Add On manager homepage" />
                 <p>If you start a module while the modules it depends on to run are not started, that module will not start.</p>
                 <p><strong>The stop icon</strong></p>
-                <img src={(stop)} className="help-page-images" alt="Add-On manager homepage" /><br />
+                <img src={(stop)} className="help-page-images" alt="Add On manager homepage" /><br />
                 <p><strong>The Delete button </strong></p>
-                <img src={(deleteAddon)} className="help-page-images" alt="Add-On manager homepage" />
+                <img src={(deleteAddon)} className="help-page-images" alt="Add On manager homepage" />
                 <p><strong>You can delete an installed addon by clicking the Delete Button.</strong></p> 
                 Additionally, stopping a module that is depended on by other modules will cause all dependent modules to stop
                 <p>You might want to start all the modules at once.This has been made possible by simply clicking on the start all modules button as shown</p>
-                <img src={(startingallmodules)} className="help-page-images" alt="Add-On manager homepage" />
+                <img src={(startingallmodules)} className="help-page-images" alt="Add On manager homepage" />
 
               </section>
             </fieldset>

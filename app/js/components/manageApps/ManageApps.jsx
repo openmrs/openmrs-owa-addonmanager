@@ -995,11 +995,11 @@ export default class ManageApps extends React.Component {
       return (
         <div className="main-home-page none-user-page" id="body-wrapper">
           <p>
-            You cannot View or Manage the Add-ons since you dont have the priviledges
+            You cannot view or manage the Add Ons since you dont have the privileges
             and you are not an admin.<br/>
             <br/>
 
-            To Gain the permissions contact  the system administrator.
+            To get the permissions contact  the system administrator.
             <br/>
             <a href="../../" className="btn btn-secondary"   id="startall-modules-btn">
                 Go back Home
