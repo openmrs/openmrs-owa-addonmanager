@@ -79,7 +79,7 @@ class Login extends Component {
                 <Modal.Title>OpenMRS login</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                Please contact system administrator
+                Please contact the system administrator for more information
               </Modal.Body>
               <Modal.Footer>
                 <Button onClick={(event) => this.handleClose}>Close</Button>
