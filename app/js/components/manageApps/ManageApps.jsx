@@ -87,6 +87,7 @@ export default class ManageApps extends React.Component {
     this.startAllModules = this.startAllModules.bind(this);
     this.getInstalled = this.getInstalled.bind(this);
     this.sortApplist = this.sortApplist.bind(this);
+    this.getInstalledOwa = this.getInstalledOwa.bind(this);
   }
 
   componentWillMount() {
@@ -916,18 +917,25 @@ export default class ManageApps extends React.Component {
     }, []);
 
     searchedAddons.forEach((addon) => {
-      (addon.appDetails.type === "OMOD") ?
+      if (addon.appDetails.type === "OMOD"){
         (installedUuid.includes(addon.appDetails.moduleId) || installedUuid.includes(addon.appDetails.uid)) ?
           addon.appDetails.moduleId ? installedSearchResults['modules'].push(addon.appDetails.moduleId)
             : installedSearchResults['modules'].push(addon.appDetails.uid)
           : null
-        :
-        (installedNames.includes(addon.appDetails.folderName) || installedNames.includes(addon.appDetails.name)) ?
-          addon.appDetails.folderName ? installedSearchResults['owas'].push(addon.appDetails.folderName)
-            : installedSearchResults['owas'].push(addon.appDetails.name)
+      } else {
+        let installedOwa = this.getInstalledOwa(installedNames, addon);
+        installedOwa ?
+          installedSearchResults['owas'].push(installedOwa)
           : null;
+      }
     });
     return installedSearchResults;
+  }
+
+  getInstalledOwa(installedList, app){
+    return installedList.find((installedApp) =>{
+      if (app.downloadUri.includes(installedApp)) return installedApp;
+    });
   }
 
   render() {
@@ -1099,6 +1107,7 @@ export default class ManageApps extends React.Component {
                           handleInstall={this.handleInstall}
                           handleUpgrade={this.handleUpgrade}
                           getInstalled={this.getInstalled}
+                          getInstalledOwa={this.getInstalledOwa}
                         />
                     }
                   </table>
