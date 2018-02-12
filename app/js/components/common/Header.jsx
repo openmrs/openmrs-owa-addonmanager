@@ -85,16 +85,16 @@ export default class Header extends Component {
   getUri() {
     this.state.locationTags.map((location) => {
       let url = location.links[0].uri;
-      let arrUrl = url.split("/"); 
+      let arrUrl = url.split("/");
       let applicationInUse = arrUrl[3].search('http:') == -1 ? arrUrl[3] : arrUrl[3].replace('http:', '');
-      let customUrl = `/${applicationInUse}/logout`;
+      let customUrl = `/${applicationInUse}/ws/rest/v1/session`;
       this.setState((prevState, props) => {
         return {
           currentLogOutUrl: customUrl
         };
       });
       return customUrl;
-        
+
     });
   }
 
@@ -177,7 +177,7 @@ export default class Header extends Component {
   }
 
   logOut(event){
-    axios.get(this.state.currentLogOutUrl).then((response) => {
+    axios.delete(this.state.currentLogOutUrl).then((response) => {
       hashHistory.push('/login')
     })
     .catch(error => {
