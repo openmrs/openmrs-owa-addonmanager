@@ -203,7 +203,7 @@ export default class Header extends Component {
               </a>
               <ul className="dropdown-menu user">
                 <li>
-                  <a href="#" id="current-user">My Account</a>
+                  <a href={`${this.getOpenmrsUrl()}/adminui/myaccount/myAccount.page`} id="current-user">My Account</a>
                 </li>
               </ul>
             </li>

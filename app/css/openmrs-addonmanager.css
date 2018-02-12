@@ -89,11 +89,12 @@ header>ul, a {
 #current-user {
     margin-top: 0;
     padding-left: 20px;
+    line-height: 30%;
 }
 
 #current-user:hover {
-    background-color: #007fff;
-    color: #ffffff;
+    background-color: transparent;
+    text-decoration: underline;
 }
 
 a > span.glyphicon {
