@@ -30,6 +30,7 @@ class Login extends Component {
     const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
     const requestUrl = 'v1/session';
     const auth = 'Basic ' + new Buffer(`${username}:${password}`).toString('base64');
+    const redirectUrl = location.href.split("redirect=")[1] || null;
 
     axios({
       url: `${urlPrefix}/${apiBaseUrl}/${requestUrl}`,
@@ -38,7 +39,15 @@ class Login extends Component {
         'Authorization': auth
       }
     }).then(response => {
-      (response.data.authenticated) ? hashHistory.push('/') : toastr.error('Invalid username or password');
+        if (response.data.authenticated) {
+          if (redirectUrl) {
+            window.location = redirectUrl;
+          } else {
+            hashHistory.push("/");
+          }
+        } else {
+          toastr.error("Invalid username or password");
+        }
     })
       .catch(error => {
         toastr.error(error.message);
