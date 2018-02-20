@@ -176,7 +176,7 @@ class Addon extends Component {
     });
   }
 
-  handleAction(moduleUuid, action, event=null) {
+  handleAction(event, moduleUuid, action) {
     event? event.preventDefault(): this.hideModal();
     if (action === 'stop') {
       this.setState((prevState, props) => {
@@ -496,7 +496,7 @@ class Addon extends Component {
                       <button
                         type="button"
                         className="btn btn-success module-control"
-                        onClick={(e) => this.handleAction(e, app.uuid, "start")}
+                        onClick={(event) => this.handleAction(event, app.uuid, "start")}
                       >
                           Start
                       </button>
