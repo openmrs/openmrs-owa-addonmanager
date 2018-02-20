@@ -1,22 +1,39 @@
 import React, { Component } from 'react';
 import { hashHistory } from 'react-router';
 import axios from 'axios';
-import { Form, Button, FormControl, FormGroup, Col, ControlLabel, Checkbox, Nav, Modal } from 'react-bootstrap';
+import { Form, Button, FormControl, FormGroup, Modal } from 'react-bootstrap';
 class Login extends Component {
+  static checkLoginStatus(url) {
+    const applicationDistribution = location.href.split('/')[3];
+    const apiBaseUrl = `/${applicationDistribution}/ws/rest${url}`;
+    const request = new XMLHttpRequest();
+    request.open('GET', apiBaseUrl, false);
+    request.send(null);
+    const response = JSON.parse(request.response);
+    response.authenticated ? hashHistory.push('/') : null;
+  }
+
   constructor(props) {
     super(props);
     this.state = {
       username: '',
       password: '',
-      show: false
-    }
+      show: false,
+    };
+
     this.handleLogin = this.handleLogin.bind(this);
     this.handleShow = this.handleShow.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
+
+  componentWillMount(){
+    Login.checkLoginStatus('/v1/session');
+  }
+
   handleClose() {
     this.setState({ show: false });
   }
+
   handleShow() {
     this.setState({ show: true });
   }
@@ -60,8 +77,8 @@ class Login extends Component {
         <a href="../../">
           <img src="img/openmrs-with-title-small.png" />
         </a>
-        <div className='form-group'>
-          <Form className='material-form' onSubmit={(event) => this.handleLogin(event)}>
+        <div className="form-group">
+          <Form className="material-form" onSubmit={(event) => this.handleLogin(event)}>
             <FormGroup controlId="formHorizontalUsername">
               <FormControl
                 input type="text"
