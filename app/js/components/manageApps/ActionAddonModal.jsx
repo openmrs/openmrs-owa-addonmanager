@@ -32,7 +32,7 @@ export default class ActionModal extends Component {
               className="btn btn-danger"
               data-dismiss="modal"
               id="cancel-btn"
-              onClick={() => (action === 'delete') ? handleAction(appUuid, app.name): handleAction(appUuid, action)}
+              onClick={(event) => (action === 'delete') ? handleAction(event, appUuid, app.name): handleAction(event, appUuid, action)}
             >{(action === 'delete') ? 'Delete' : 'Stop'}</button>
           </ModalFooter>
         </Modal>
@@ -52,7 +52,7 @@ export default class ActionModal extends Component {
               className="btn btn-danger"
               data-dismiss="modal"
               id="cancel-btn"
-              onClick={() => (action === 'delete') ? handleAction(appUuid, app.name) : handleAction(appUuid, action)}
+              onClick={(event) => (action === 'delete') ? handleAction(event, appUuid, app.name) : handleAction(event, appUuid, 'stop-confirmed')}
             >{(action === 'delete') ? 'Delete' : 'Stop'}</button>
           </ModalFooter>
         </Modal>
