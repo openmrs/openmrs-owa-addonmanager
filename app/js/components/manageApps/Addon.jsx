@@ -181,51 +181,60 @@ class Addon extends Component {
     if (action === 'stop') {
       this.setState((prevState, props) => {
         return {
-          stopping: true,
+          isOpen: true,
+          action
         };
       });
-    } else if (action === 'start') {
-      this.setState({
-        starting: true
-      });
-    }
-    const applicationDistribution = location.href.split('/')[2];
-    const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
-    const url = location.href.split('/')[3];
-    const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
-    this.requestUrl = '/v1/moduleaction';
-    let postData = {};
-
-    if (moduleUuid !== null) {
-      postData = {
-        "action": action,
-        "modules": [moduleUuid],
-      };
     }
 
-    axios.post(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`, postData)
-      .then(response => {
-        const moduleName = response.data.modules[0].display;
+    else if (action === 'stop-confirmed' || action === 'start') {
+      this.hideModal();
+      action === 'start' ?
         this.setState({
-          stopping: false,
-          starting: false,
-          messageBody: response.data.action == 'START' ?
-            `${moduleName} module has started`
-            :
-            `${moduleName} module has stopped`,
-          messageType: 'success',
-          showMessage: true,
-        });
-        this.fetchAddon();
-      }).catch((error) => {
-        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
+          starting: true
+        }):
         this.setState({
-          stopping: false,
-          starting: false,
+          stopping: true
         });
-        this.fetchAddon();
+      const applicationDistribution = location.href.split('/')[2];
+      const urlPrefix = location.href.substr(0, location.href.indexOf('//'));
+      const url = location.href.split('/')[3];
+      const apiBaseUrl = `/${applicationDistribution}/${url}/ws/rest`;
+      this.requestUrl = '/v1/moduleaction';
+      let postData = {};
+
+      if (moduleUuid !== null) {
+        postData = {
+          "action": action === 'start' ? 'start' : 'stop',
+          "modules": [moduleUuid],
+        };
       }
-      );
+
+      axios.post(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`, postData)
+        .then(response => {
+          const moduleName = response.data.modules[0].display;
+          this.setState({
+            stopping: false,
+            starting: false,
+            messageBody: response.data.action == 'START' ?
+              `${moduleName} module has started`
+              :
+              `${moduleName} module has stopped`,
+            messageType: 'success',
+            showMessage: true,
+          });
+          this.fetchAddon();
+        }).catch((error) => {
+          error.response.status === 401 ? location.href =
+            `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
+          this.setState({
+            stopping: false,
+            starting: false,
+          });
+          this.fetchAddon();
+        }
+        );
+    }
   }
 
   handleMessageClick(event) {
@@ -350,9 +359,9 @@ class Addon extends Component {
       isAdmin,
       isOpen,
       appType,
-      showMessageDetail, 
-      affectedModules, 
-      action, 
+      showMessageDetail,
+      affectedModules,
+      action,
       loadingComplete,
       messageBody,
       enableDeleteAndStart,
@@ -484,7 +493,7 @@ class Addon extends Component {
                 </button>
                 <span>
                   { appType === 'module' ?
-                      app.started ?
+                    app.started ?
                       <button
                         type="button"
                         className="btn btn-primary module-control"
