@@ -34,9 +34,12 @@ export default class Header extends Component {
     this.getOpenmrsUrl = this.getOpenmrsUrl.bind(this);
     this.setOpenMRSLocation = this.setOpenMRSLocation.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.getCurrentLocation = this.getCurrentLocation.bind(this)
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    this.getCurrentLocation();
+
     this.fetchLocation('/v1/location').then((response) => {
       this.setState((prevState, props) => {
         return {
@@ -46,7 +49,6 @@ export default class Header extends Component {
       this.setState((prevState, props) => {
         return {
           defaultLocation: response.results[0].display,
-          currentLocationTag: response.results[0].display,
         };
       });
       this.getUri();
@@ -58,6 +60,12 @@ export default class Header extends Component {
           currentUser: response.user ? response.user.display : ''
         };
       });
+    });
+  }
+
+  getCurrentLocation() {
+    this.fetchLocation('/v1/appui/session').then((response) => {
+      this.setState(() => ({ currentLocationTag: response.sessionLocation.name }))
     });
   }
 
