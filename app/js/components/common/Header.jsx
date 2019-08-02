@@ -64,8 +64,22 @@ export default class Header extends Component {
   }
 
   getCurrentLocation() {
-    this.fetchLocation('/v1/appui/session').then((response) => {
-      this.setState(() => ({ currentLocationTag: response.sessionLocation.name }))
+    this.fetchLocation('/v1/module').then((response) => {
+      if ((response.results.find(module => module.uuid == 'appui')? true : false)) {
+        let uploadUrl = this.getOpenmrsUrl()+"/ws/rest/v1/appui/session";
+        return this.fetchLocation('/v1/appui/session');
+      } else {
+        // Use a location that exists with platform
+        // see https://issues.openmrs.org/browse/AOM-160
+        return this.fetchLocation('/v1/location');
+      }
+    })
+    .then((response) => {
+      if (response.sessionLocation) {
+        this.setState(() => ({ currentLocationTag: response.sessionLocation.name }));
+      } else {
+        this.setState(() => ({ currentLocationTag: response.results[0].display }));
+      }
     });
   }
 
@@ -132,8 +146,17 @@ export default class Header extends Component {
   }
 
   setOpenMRSLocation(locationUuid,locationDisplay) {
-    let uploadUrl=this.getOpenmrsUrl()+"/ws/rest/v1/appui/session";
-    axios.post(`${uploadUrl}`, {"location" : locationUuid});
+    let modulesUrl = this.getOpenmrsUrl()+"/ws/rest/v1/module";
+    axios.get(modulesUrl)
+      .then(response => {
+        if ((response.data.results.find(module => module.uuid == 'appui')? true : false)) {
+          let uploadUrl = this.getOpenmrsUrl()+"/ws/rest/v1/appui/session";
+          return axios.post(`${uploadUrl}`, {"location" : locationUuid});
+        } else {
+          // Do nothing for the sake of platform distribution that does not have appui installed
+          // see https://issues.openmrs.org/browse/AOM-160
+        }
+      });
   }
 
   dropDownMenu(locationTags) {
@@ -205,15 +228,9 @@ export default class Header extends Component {
 
           <ul className="navbar-right nav-header">
             <li className="dropdown">
-              <a className="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+              <a href="#" role="button" >
                 <span className="glyphicon glyphicon-user"/> {' ' + this.state.currentUser + ' '}
-                <span className="caret"/>
               </a>
-              <ul className="dropdown-menu user">
-                <li>
-                  <a href={`${this.getOpenmrsUrl()}/adminui/myaccount/myAccount.page`} id="current-user">My Account</a>
-                </li>
-              </ul>
             </li>
             <li className="dropdown dropdown-large">
               <a className="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
