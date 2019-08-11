@@ -285,7 +285,8 @@ class Addon extends Component {
       });
   }
 
-  handleDelete(appUuid, name) {
+  handleDelete(event, appUuid, name) {
+    event? event.preventDefault(): this.hideModal();
     this.setState((prevState, props) => {
       return {
         deleting: true,
