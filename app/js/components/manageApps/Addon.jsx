@@ -258,7 +258,15 @@ class Addon extends Component {
     const url = location.href.split('/')[3];
     const apiBaseUrl = `/${applicationDistribution}/${url}`;
     this.requestUrl = '/admin/modules/manage/checkdependencies.form?moduleId=' + appUuid;
-    axios.get(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`)
+    
+    axios.get(`${urlPrefix}/${apiBaseUrl}/ws/rest/v1/module`)
+      .then(response => {
+        if ((response.data.results.find(module => module.uuid == 'legacyui')? true : false)) {
+          return axios.get(`${urlPrefix}/${apiBaseUrl}${this.requestUrl}`)
+        } else {
+          throw new Error('Legacyui module not installed');
+        }
+      })
       .then(response => {
         response.data ?
           this.setState({
@@ -267,12 +275,18 @@ class Addon extends Component {
           :
           null;
       }).catch((error) => {
-        error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
-        toastr.error(error);
+        if (error.message === 'Legacyui module not installed') {
+          // Do nothing when legacy module is not installed. 
+          // See https://issues.openmrs.org/browse/AOM-160
+        } else {
+          error.response.status === 401 ? location.href = `${location.href.substr(0, location.href.indexOf(location.href.split('/')[4]))}login.htm` : null;
+          toastr.error(error);
+        }
       });
   }
 
-  handleDelete(appUuid, name) {
+  handleDelete(event, appUuid, name) {
+    event? event.preventDefault(): this.hideModal();
     this.setState((prevState, props) => {
       return {
         deleting: true,
