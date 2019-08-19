@@ -6,8 +6,8 @@
     },
 
     "version": {
-        "name": "1.0.0",
-        "released": "2018-02-09"
+        "name": "1.1.0",
+        "released": "2019-08-19"
     },
 
     "files":[{"includePattern": "./(.*\\.zip)", "uploadPattern": "$1"}],
