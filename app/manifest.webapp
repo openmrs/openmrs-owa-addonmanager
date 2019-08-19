@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "name": "Add On Manager",
   "description": "This will help in uploading the openmrs open web apps and omod files",
   "launch_path": "index.html",
